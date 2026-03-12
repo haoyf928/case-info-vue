@@ -79,9 +79,18 @@ export default {
       alert('转专岗成功！')
     },
     handleTabChange(tab) {
+      console.log('导航栏点击:', tab)
       this.activeTab = tab
-      // 调用 CaseInfoForm 的 navigateToSection 方法
-      this.$refs.caseForm?.navigateToSection(tab)
+      
+      // 确保在 nextTick 中调用，因为 DOM 可能还未更新
+      this.$nextTick(() => {
+        console.log('caseForm 引用:', this.$refs.caseForm)
+        if (this.$refs.caseForm && this.$refs.caseForm.navigateToSection) {
+          this.$refs.caseForm.navigateToSection(tab)
+        } else {
+          console.error('CaseForm 组件或 navigateToSection 方法不存在')
+        }
+      })
     }
   }
 }

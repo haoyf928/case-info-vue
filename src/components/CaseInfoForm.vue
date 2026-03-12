@@ -1047,23 +1047,48 @@ export default {
     removeCaseDesc(index) {
       this.caseDescList.splice(index, 1)
     },
-
-    // ============ 导航到指定区块（Vue 3 兼容） ============
-    navigateToSection(section) {
-      const sectionKey = `${section}Expanded`
-      if (this.hasOwnProperty(sectionKey)) {
-        // 展开目标区块
-        this[sectionKey] = true
+// ============ 导航到指定区块 ============
+navigateToSection(section) {
+  console.log('导航到区块:', section)
+  
+  const sectionKey = `${section}Expanded`
+  
+  // 修复：使用 Object.prototype.hasOwnProperty.call 替代 this.hasOwnProperty
+  if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
+    // 展开目标区块
+    this[sectionKey] = true
+    
+    // 等待 DOM 更新后滚动
+    this.$nextTick(() => {
+      const sectionElement = document.getElementById(`section-${section}`)
+      if (sectionElement) {
+        console.log('找到区块元素:', sectionElement)
         
-        // 滚动到目标区块
-        this.$nextTick(() => {
-          const sectionElement = document.getElementById(`section-${section}`)
-          if (sectionElement) {
-            scrollToElement(sectionElement, 50)
-          }
-        })
+        // 获取滚动容器（.main-content）
+        const container = document.querySelector('.main-content')
+        
+        if (container) {
+          // 计算滚动位置
+          const offsetPosition = sectionElement.offsetTop - 50
+          container.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        } else {
+          // 降级方案：使用 window 滚动
+          window.scrollTo({
+            top: sectionElement.offsetTop - 50,
+            behavior: 'smooth'
+          })
+        }
+      } else {
+        console.error('未找到区块元素:', `section-${section}`)
       }
-    }
+    })
+  } else {
+    console.error('无效的区块:', section, sectionKey)
+  }
+}
   }
 }
 </script>
