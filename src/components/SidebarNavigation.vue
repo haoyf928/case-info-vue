@@ -1,10 +1,6 @@
 <!-- src/components/SidebarNavigation.vue -->
 <template>
   <div class="sidebar-navigation">
-    <div class="nav-header">
-      <h4>📑 导航菜单</h4>
-    </div>
-    
     <ul class="nav-list">
       <li 
         v-for="item in navItems" 
@@ -32,14 +28,14 @@ export default {
   data() {
     return {
       navItems: [
-        { id: 'policyInfo', text: '保单信息', icon: '📋' },
-        { id: 'reportInfo', text: '报案信息', icon: '📝' },
-        { id: 'vehicleInfo', text: '车辆信息', icon: '🚗' },
-        { id: 'contactInfo', text: '联系人信息', icon: '👤' },
-        { id: 'propertyLoss', text: '财产损失', icon: '💰' },
-        { id: 'personInjury', text: '人员伤亡', icon: '🏥' },
-        { id: 'accidentRescue', text: '事故救援', icon: '🚑' },
-        { id: 'caseDesc', text: '案件补充说明', icon: '📄' }
+        { id: 'policyInfo', text: '保单信息'},
+        { id: 'reportInfo', text: '报案信息' },
+        { id: 'vehicleInfo', text: '车辆信息' },
+        { id: 'contactInfo', text: '联系人信息' },
+        { id: 'propertyLoss', text: '财产损失' },
+        { id: 'personInjury', text: '人员伤亡' },
+        { id: 'accidentRescue', text: '事故救援' },
+        { id: 'caseDesc', text: '案件补充说明' }
       ]
     }
   },
@@ -94,8 +90,9 @@ export default {
 }
 
 .nav-item.active {
-  background-color: #007bff;
-  color: white;
+  background-color: #e6f7ff;
+  color: #007bff;
+  border-left: 3px solid #007bff;
 }
 
 .nav-icon {

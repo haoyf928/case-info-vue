@@ -798,12 +798,12 @@
       <button type="button" @click="handleTransfer" class="btn-transfer">
         📋 转专岗处理
       </button>
-      <button type="button" @click="expandAll" class="btn-secondary">
+      <!-- <button type="button" @click="expandAll" class="btn-secondary">
         ⊞ 全部展开
       </button>
       <button type="button" @click="collapseAll" class="btn-secondary">
         ⊟ 全部折叠
-      </button>
+      </button> -->
     </div>
 
     <!-- ============ 全局错误提示 ============ -->
