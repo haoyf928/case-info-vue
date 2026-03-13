@@ -73,6 +73,58 @@
       </div>
     </section>
 
+    <!-- ============ 历史报案记录区块 ============ -->
+    <section class="form-section" id="section-historyReport">
+      <div class="section-header" @click="toggleSection('historyReport')">
+        <h3>⏱️ 历史报案记录</h3>
+        <span class="toggle-icon">
+          {{ historyReportExpanded ? '▼' : '▶' }}
+        </span>
+      </div>
+      
+      <div v-show="historyReportExpanded" class="section-content">
+        <div class="history-report-container">
+          <div class="report-header">
+            <span class="report-title">历史报案记录</span>
+            <span class="record-count">3 条记录</span>
+          </div>
+          
+          <div class="report-table">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>报案号</th>
+                  <th>保单号</th>
+                  <th>出险时间</th>
+                  <th>报案时间</th>
+                  <th>报案人</th>
+                  <th>快赔案件编号</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in historyReports" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td>
+                    <a href="#" class="report-link">{{ item.reportNo }}</a>
+                  </td>
+                  <td>{{ item.policyNo }}</td>
+                  <td>{{ item.accidentTime }}</td>
+                  <td>{{ item.reportTime }}</td>
+                  <td>{{ item.reporter }}</td>
+                  <td>-</td>
+                  <td>
+                    <span class="status-badge status-submitted">已提交</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ 报案信息区块 ============ -->
     <section class="form-section" id="section-reportInfo">
       <div class="section-header" @click="toggleSection('reportInfo')">
@@ -838,6 +890,8 @@ export default {
       accidentRescueExpanded: false,
       contactInfoExpanded: true,
       caseDescExpanded: false,
+      historyReportExpanded: true, 
+
       
       // ============ 校验错误信息 ============
       validationErrors: {},
@@ -850,9 +904,40 @@ export default {
       rescueInfo: [
         { isNormalRun: '', fiftyKm: false },
         { isNormalRun: '', fiftyKm: false }
+      ],
+      // ============ 历史报案记录数据 ============
+      historyReports: [
+        {
+          reportNo: 'RDDH20260000000360994',
+          policyNo: '29932070365202500000008',
+          accidentTime: '2026-03-10 18:15:05',
+          reportTime: '2026-03-10 18:21:05',
+          reporter: '刘*',
+          fastClaimNo: '-',
+          status: '已提交'
+        },
+        {
+          reportNo: 'RDDH20260000000360998',
+          policyNo: '29932070330202500000008',
+          accidentTime: '2026-03-10 18:15:05',
+          reportTime: '2026-03-10 18:24:21',
+          reporter: '刘*',
+          fastClaimNo: '-',
+          status: '已提交'
+        },
+        {
+          reportNo: 'RDDH20260000000360993',
+          policyNo: '29932070365202500000008',
+          accidentTime: '2026-03-10 18:15:05',
+          reportTime: '2026-03-10 18:19:48',
+          reporter: '刘*',
+          fastClaimNo: '-',
+          status: '已提交'
+        }
       ]
     }
   },
+  
   methods: {
     // ============ 折叠/展开切换方法 ============
     toggleSection(section) {
@@ -1094,6 +1179,86 @@ navigateToSection(section) {
 </script>
 
 <style scoped>
+/* ============ 历史报案记录样式 ============ */
+.history-report-container {
+  margin: 16px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.report-title {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.record-count {
+  font-size: 12px;
+  color: #666;
+  background-color: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  color: #333;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #333;
+}
+
+.report-link {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.report-link:hover {
+  text-decoration: underline;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-submitted {
+  background-color: #e6f7ff;
+  color: #007bff;
+  border: 1px solid #b3d8ff;
+}
 /* ============ 必填标识样式 ============ */
 .required {
   color: #ff4d4f;

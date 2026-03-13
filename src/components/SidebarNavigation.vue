@@ -29,6 +29,7 @@ export default {
     return {
       navItems: [
         { id: 'policyInfo', text: '保单信息'},
+        { id: 'historyReport', text: '历史报案记录'},
         { id: 'reportInfo', text: '报案信息' },
         { id: 'vehicleInfo', text: '车辆信息' },
         { id: 'contactInfo', text: '联系人信息' },
