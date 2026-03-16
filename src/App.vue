@@ -121,7 +121,7 @@ html, body {
 
 .main-content {
   flex: 1;
-  overflow-y: hidden;
+  overflow-y: auto;
   padding: 20px;
   background-color: #f5f5f5;
 }
