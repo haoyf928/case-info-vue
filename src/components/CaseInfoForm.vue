@@ -16,8 +16,12 @@
     <div class="policy-card">
       <!-- 顶部信息行 -->
       <div class="policy-header">
-  <div class="policy-number-wrapper">
-    <span class="checkmark">✓</span>
+  <div class="policy-number-wrapper"> 
+    <input 
+                type="checkbox" 
+                v-model="caseInfo.selected" 
+                class="checkbox-input"
+      />
     <div class="policy-number">
       <div class="policy-no-row">
         <input 
@@ -31,14 +35,15 @@
         <span class="tag">一般客户</span>
         <span class="tag">新客户</span>
       </div>
+      
     </div>
   </div>
   <div class="policy-title">
     <span class="title-text">{{ caseInfo.insuranceName }}</span>
-    <button class="btn-collapse" @click="togglePolicyBody">
+    <!-- <button class="btn-collapse" @click="togglePolicyBody">
       <i class="icon">{{ policyBodyExpanded ? '▲' : '▼' }}</i>
       <span>{{ policyBodyExpanded ? '收起' : '展开' }}</span>
-    </button>
+    </button> -->
   </div>
 </div>
 
@@ -1240,13 +1245,14 @@ navigateToSection(section) {
 .policy-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 16px;
 }
 .policy-number-wrapper {
   display: flex;
-  gap: 8px;
-  align-items: flex-start;
+  flex-direction: row; /* 改为垂直排列 */
+  gap: 4px; /* 减小间距 */
+  align-items: center;
 }
 .policy-number {
   display: flex;
@@ -1256,7 +1262,7 @@ navigateToSection(section) {
 
 .policy-no-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
 }
 .checkmark {
@@ -1271,10 +1277,11 @@ navigateToSection(section) {
   font-size: 16px;
   font-weight: bold;
   color: #0066CC;
-  border: none;
-  background: transparent;
+  border: none !important;
+  background: transparent !important;
   padding: 0;
   margin: 0;
+  text-align: left;
 }
 
 .policy-tags {
@@ -1284,11 +1291,11 @@ navigateToSection(section) {
 
 .tag {
   padding: 4px 8px;
-  background-color: #f0f8ff;
-  color: #0066CC;
+  background-color: #f6f8f9;
+  color: #101111;
   border-radius: 4px;
   font-size: 12px;
-  border: 1px solid #d0e5ff;
+  border: 1px solid #f5f7fa;
 }
 
 .policy-title {
@@ -1343,6 +1350,7 @@ navigateToSection(section) {
   font-size: 12px;
   color: #666;
   font-weight: 500;
+  font-family: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   white-space: nowrap;
   margin: 0;
   justify-content: flex-start;
@@ -1367,14 +1375,11 @@ navigateToSection(section) {
 /* 图标样式（可替换为实际图标库） */
 .icon-user {
   display: inline-block;
-  width: 12px;
-  height: 12px;
+  width: 9px;
+  height: 14px;
   background-image: url('@/assets/icons/user.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-right: 4px;
-  vertical-align: middle;
+  background-size: 9px 14px;
+  
 }
 .icon-agent::before { content: "💼"; }
 .icon-insurance::before { content: "📄"; }
@@ -1617,6 +1622,34 @@ navigateToSection(section) {
 .radio-label input,
 .checkbox-label input {
   margin-right: 6px;
+}
+/* ============ 复选框样式 ============ */
+.checkbox-input {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  transition: all 0.2s ease;
+  margin-top: 6px; 
+}
+
+.checkbox-input:checked {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.checkbox-input:checked::after {
+  content: "✓";
+  display: block;
+  color: white;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
 }
 
 /* ============ 区块样式 ============ */
