@@ -3,75 +3,120 @@
   <div class="case-info-form">
     
     <!-- ============ 保单信息区块 ============ -->
-    <section class="form-section" id="section-policyInfo">
-      <div class="section-header" @click="toggleSection('policyInfo')">
-        <h3>📋 保单信息</h3>
-        <span class="toggle-icon">
-          {{ policyInfoExpanded ? '▼' : '▶' }}
-        </span>
+<section class="form-section" id="section-policyInfo">
+  <div class="section-header" @click="toggleSection('policyInfo')">
+    <h3>📋 保单信息</h3>
+    <span class="toggle-icon">
+      {{ policyInfoExpanded ? '▼' : '▶' }}
+    </span>
+  </div>
+
+  <div v-show="policyInfoExpanded" class="section-content">
+    <!-- 卡片容器 -->
+    <div class="policy-card">
+      <!-- 顶部信息行 -->
+      <div class="policy-header">
+  <div class="policy-number-wrapper">
+    <span class="checkmark">✓</span>
+    <div class="policy-number">
+      <div class="policy-no-row">
+        <input 
+          type="text" 
+          v-model="caseInfo.policyNo" 
+          readonly 
+          class="form-input policy-no"
+        />
       </div>
-      
-      <div v-show="policyInfoExpanded" class="section-content">
-        <div class="form-row">
-          <div class="form-group">
-            <label>保单号 <span class="required">*</span></label>
-            <input 
-              type="text" 
-              v-model="caseInfo.policyNo" 
-              ref="policyNo"
-              :class="{ 'input-error': validationErrors.policyNo }"
-              readonly 
-              class="form-input"
-            />
-            <span v-if="validationErrors.policyNo" class="error-message">
-              {{ validationErrors.policyNo }}
-            </span>
-          </div>
-          
-          <div class="form-group">
-            <label>投保人名称</label>
-            <input 
-              type="text" 
-              v-model="caseInfo.appliName" 
-              readonly 
-              class="form-input"
-            />
-          </div>
-        </div>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label>被保人名称</label>
-            <input 
-              type="text" 
-              v-model="caseInfo.insuredName" 
-              readonly 
-              class="form-input"
-            />
-          </div>
-          
-          <div class="form-group">
-            <label>保险起期</label>
-            <input 
-              type="text" 
-              v-model="caseInfo.policyStartDateStr" 
-              readonly 
-              class="form-input"
-            />
-          </div>
-          
-          <div class="form-group">
-            <label>保险止期</label>
-            <input 
-              type="text" 
-              v-model="caseInfo.policyEndDateStr" 
-              readonly 
-              class="form-input"
-            />
-          </div>
-        </div>
+      <div class="policy-tags">
+        <span class="tag">一般客户</span>
+        <span class="tag">新客户</span>
       </div>
-    </section>
+    </div>
+  </div>
+  <div class="policy-title">
+    <span class="title-text">{{ caseInfo.insuranceName }}</span>
+    <button class="btn-collapse" @click="togglePolicyBody">
+      <i class="icon">{{ policyBodyExpanded ? '▲' : '▼' }}</i>
+      <span>{{ policyBodyExpanded ? '收起' : '展开' }}</span>
+    </button>
+  </div>
+</div>
+
+      <!-- 主体信息网格 -->
+      <div class="policy-body" v-show="policyBodyExpanded">
+  <!-- 第 1 行：3 个字段 -->
+  <div class="info-item">
+    <label><i class="icon-user"></i> 投保人名称</label>
+    <div class="value">{{ caseInfo.appliName }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-user"></i> 被保人名称</label>
+    <div class="value">{{ caseInfo.insuredName }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-agent"></i> 代理人名称</label>
+    <div class="value">{{ caseInfo.agentName }}</div>
+  </div>
+
+  <!-- 第 2 行：3 个字段 -->
+  <div class="info-item">
+    <label><i class="icon-insurance"></i> 险种名称</label>
+    <div class="value">{{ caseInfo.insuranceName }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-calendar"></i> 保险起期</label>
+    <div class="value">{{ caseInfo.policyStartDateStr }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-calendar"></i> 保险止期</label>
+    <div class="value">{{ caseInfo.policyEndDateStr }}</div>
+  </div>
+
+  <!-- 第 3 行：3 个字段 -->
+   <div class="info-item">
+    <label><i class="icon-calendar"></i> 保险日期止期</label>
+    <div class="value">{{ caseInfo.policyEndDateStr }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-company"></i> 承保机构</label>
+    <div class="value">{{ caseInfo.insurerName }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-work"></i> 工作单位</label>
+    <div class="value">{{ caseInfo.workUnit || '-' }}</div>
+  </div>
+  
+  <!-- 第 4 行：3 个字段 -->
+   <div class="info-item">
+    <label><i class="icon-source"></i> 客户来源</label>
+    <div class="value">{{ caseInfo.customerSource || '-' }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-user"></i> 客户标识</label>
+    <div class="value">{{ caseInfo.customerTag || '-' }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-star"></i> 客户等级</label>
+    <div class="value">{{ caseInfo.customerLevel || '-' }}</div>
+  </div>
+
+  <!-- 第 5 行：3 个字段 -->
+ <div class="info-item">
+    <label><i class="icon-specialist"></i> 专员名称</label>
+    <div class="value">{{ caseInfo.specialistName || '-' }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-phone"></i> 专员电话</label>
+    <div class="value">{{ caseInfo.specialistPhone || '-' }}</div>
+  </div>
+  <div class="info-item">
+    <label><i class="icon-star"></i> 服务等级</label>
+    <div class="value">{{ caseInfo.serviceLevel || '-' }}</div>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
 
     <!-- ============ 历史报案记录区块 ============ -->
     <section class="form-section" id="section-historyReport">
@@ -883,6 +928,7 @@ export default {
     return {
       // ============ 折叠/展开状态 ============
       policyInfoExpanded: true,
+      policyBodyExpanded: true,
       reportInfoExpanded: true,
       vehicleInfoExpanded: true,
       propertyLossExpanded: false,
@@ -944,6 +990,9 @@ export default {
       const sectionKey = `${section}Expanded`
       this[sectionKey] = !this[sectionKey]
     },
+    togglePolicyBody() {
+    this.policyBodyExpanded = !this.policyBodyExpanded
+  },
 
     // ============ 全部展开 ============
     expandAll() {
@@ -1179,6 +1228,176 @@ navigateToSection(section) {
 </script>
 
 <style scoped>
+/* ============ 保单卡片样式 ============ */
+.policy-card {
+  border: 2px solid #0066CC;
+  border-radius: 8px;
+  background-color: white;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.policy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.policy-number-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.policy-number {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; 
+}
+
+.policy-no-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.checkmark {
+  font-size: 18px;
+  color: #007bff;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.policy-no {
+  font-size: 16px;
+  font-weight: bold;
+  color: #0066CC;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.policy-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.tag {
+  padding: 4px 8px;
+  background-color: #f0f8ff;
+  color: #0066CC;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid #d0e5ff;
+}
+
+.policy-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.btn-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #999;
+}
+
+.icon {
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.policy-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  
+  gap: 6px;
+  width: 100%;
+}
+
+.info-item label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  white-space: nowrap;
+  margin: 0;
+  justify-content: flex-start;
+}
+
+
+.info-item .value {
+  display: block;
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+
+/* 图标样式（可替换为实际图标库） */
+.icon-user {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-image: url('@/assets/icons/user.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.icon-agent::before { content: "💼"; }
+.icon-insurance::before { content: "📄"; }
+.icon-calendar::before { content: "📅"; }
+.icon-clock::before { content: "⏰"; }
+.icon-company::before { content: "🏢"; }
+.icon-work::before { content: "🏢"; }
+.icon-source::before { content: "📍"; }
+.icon-star::before { content: "⭐"; }
+.icon-specialist::before { content: "👨‍💼"; }
+.icon-phone::before { content: "📞"; }
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .policy-body,
+  .info-row {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    width: 100%;
+  }
+}
 /* ============ 历史报案记录样式 ============ */
 .history-report-container {
   margin: 16px 0;

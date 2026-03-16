@@ -36,11 +36,22 @@ export default {
   data() {
     return {
       caseInfo: {
-        policyNo: '2024110001',
-        appliName: '张三',
-        insuredName: '张三',
-        policyStartDateStr: '2024-01-01',
-        policyEndDateStr: '2024-12-31',
+      policyNo: '29932070365202500000008',
+      appliName: '吴*行',
+      insuredName: '吴*行',
+      agentName: '李祥荣',
+      insuranceName: '机动车、特种车商业保险2020版',
+      policyStartDateStr: '2025/11/27 00:00:00',
+      policyEndDateStr: '2026/11/26 23:59:59',
+      insurerName: '32070101-招商财产保险股份有限公司连云港中心支公司业务一部出单机构一',
+      workUnit: '',
+      customerSource: '',
+      customerTag: '一般客户',
+      customerLevel: '新客户',
+      specialistName: '',
+      specialistPhone: '',
+      serviceLevel: '',
+        
         accidentTime: '',
         reportTime: '',
         isfirstsiteFlag: '1',
