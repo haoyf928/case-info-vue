@@ -116,7 +116,7 @@
 
       <!-- ============ 历史报案记录区块 ============ -->
       <section class="form-section" id="section-historyReport">
-        <div class="section-header" >
+        <div class="section-header">
           <h3><i class="icon-history"></i> 历史报案记录</h3>
           <span class="record-count">{{ historyReports.length }} 条记录</span>
           <span class="toggle-icon" @click="toggleSection('historyReport')">
@@ -125,41 +125,49 @@
         </div>
 
         <div v-show="historyReportExpanded" class="section-content">
-            <div class="report-table">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>序号</th>
-                    <th>报案号</th>
-                    <th>保单号</th>
-                    <th>出险时间</th>
-                    <th>报案时间</th>
-                    <th>报案人</th>
-                    <th>快赔案件编号</th>
-                    <th>状态</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in historyReports" :key="index">
-                    <td>{{ index + 1 }}</td>
-                    <td>
-                        <a href="#" class="report-link" @click.prevent="handleReportClick(item.reportNo)">
-                        {{ item.reportNo }}
-                        <svg t="1773716425571" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="45920" width="10" height="10"><path d="M783.530667 861.013333H162.901333V240.554667h310.272V162.986667H85.333333V938.666667h775.68V550.826667h-77.482666z" fill="#0887FF" p-id="45921"></path><path d="M550.826667 85.333333v77.653334h255.146666L407.296 562.346667l54.272 54.357333 399.530667-398.677333v255.146666H938.666667V85.333333z" fill="#0887FF" p-id="45922"></path></svg>
-                        </a>
-                    </td>
-                    <td>{{ item.policyNo }}</td>
-                    <td>{{ item.accidentTime }}</td>
-                    <td>{{ item.reportTime }}</td>
-                    <td>{{ item.reporter }}</td>
-                    <td><span class="empty-cell">-</span></td>
-                    <td>
-                      <span class="status-badge status-submitted">已提交</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="report-table">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>报案号</th>
+                  <th>保单号</th>
+                  <th>出险时间</th>
+                  <th>报案时间</th>
+                  <th>报案人</th>
+                  <th>快赔案件编号</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in historyReports" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td>
+                    <a href="#" class="report-link" @click.prevent="handleReportClick(item.reportNo)">
+                      {{ item.reportNo }}
+                      <svg t="1773716425571" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="45920" width="10" height="10">
+                        <path
+                          d="M783.530667 861.013333H162.901333V240.554667h310.272V162.986667H85.333333V938.666667h775.68V550.826667h-77.482666z"
+                          fill="#0887FF" p-id="45921"></path>
+                        <path
+                          d="M550.826667 85.333333v77.653334h255.146666L407.296 562.346667l54.272 54.357333 399.530667-398.677333v255.146666H938.666667V85.333333z"
+                          fill="#0887FF" p-id="45922"></path>
+                      </svg>
+                    </a>
+                  </td>
+                  <td>{{ item.policyNo }}</td>
+                  <td>{{ item.accidentTime }}</td>
+                  <td>{{ item.reportTime }}</td>
+                  <td>{{ item.reporter }}</td>
+                  <td><span class="empty-cell">-</span></td>
+                  <td>
+                    <span class="status-badge status-submitted">已提交</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -376,17 +384,18 @@
         </div>
       </section>
 
-      <!-- ============ 联系人信息区块 ============ -->
+      <!-- ============ 报案人，联系人姓名区块 ============ -->
       <section class="form-section" id="section-contactInfo">
-        <div class="section-header" @click="toggleSection('contactInfo')">
-          <h3>👤 联系人信息</h3>
-          <span class="toggle-icon">
+        <div class="section-header">
+          <h3><i class="icon-user-t"></i>报案人姓名、联系人姓名</h3>
+          <span class="toggle-icon" @click="toggleSection('contactInfo')">
             {{ contactInfoExpanded ? '▼' : '▶' }}
           </span>
         </div>
 
         <div v-show="contactInfoExpanded" class="section-content">
-          <div class="form-row">
+          <!-- 第一行：4个字段 -->
+          <div class="contact-form-row">
             <div class="form-group">
               <label>报案人姓名 <span class="required">*</span></label>
               <input type="text" v-model="caseInfo.reportorName" ref="reportorName"
@@ -405,9 +414,45 @@
                 {{ validationErrors.reportorPhonenumber }}
               </span>
             </div>
+
+            <div class="form-group">
+              <label>报案人跟被保险人关系 <span class="required">*</span></label>
+              <select v-model="caseInfo.reporterRelation" ref="reporterRelation"
+                :class="{ 'input-error': validationErrors.reporterRelation }" class="form-input">
+                <option value="">请选择</option>
+                <option value="0">本人</option>
+                <option value="1">配偶</option>
+                <option value="2">子女</option>
+                <option value="3">父母</option>
+                <option value="4">其他</option>
+              </select>
+              <span v-if="validationErrors.reporterRelation" class="error-message">
+                {{ validationErrors.reporterRelation }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>报案人证件类型</label>
+              <select v-model="caseInfo.reporterCertType" class="form-input">
+                <option value="">请选择</option>
+                <option value="124001">身份证</option>
+                <option value="124002">护照</option>
+                <option value="124003">驾驶证</option>
+              </select>
+            </div>
           </div>
 
-          <div class="form-row">
+          <!-- 第二行：1个字段 -->
+          <div class="contact-form-row">
+            <div class="form-group">
+              <label>报案人证件号码</label>
+              <input type="text" v-model="caseInfo.reporterCertNo" class="form-input" />
+            </div>
+          </div>
+          <!-- 分割线 -->
+          <div class="divider-line"></div>
+          <!-- 第三行：4个字段 -->
+          <div class="contact-form-row">
             <div class="form-group">
               <label>现场联系人姓名 <span class="required">*</span></label>
               <input type="text" v-model="caseInfo.linkerName" ref="linkerName"
@@ -429,6 +474,10 @@
             <div class="form-group">
               <label>联系人手机</label>
               <input type="text" v-model="caseInfo.linkerMobile" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>受理人编码 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.handlerCode" class="form-input" />
             </div>
           </div>
         </div>
@@ -578,57 +627,58 @@
 
       <!-- ============ 事故救援区块 ============ -->
       <section class="form-section" id="section-accidentRescue">
-        <div class="section-header" @click="toggleSection('accidentRescue')">
-          <h3>🚑 事故救援</h3>
-          <span class="toggle-icon">
-            {{ accidentRescueExpanded ? '▼' : '▶' }}
-          </span>
+  <div class="section-header" @click="toggleSection('accidentRescue')">
+    <h3>🚑 事故救援</h3>
+    <span class="toggle-icon">▼</span>
+  </div>
+
+  <div v-show="accidentRescueExpanded" class="section-content">
+    <!-- 标的车信息 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>标的车能否正常行驶</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" v-model="rescueInfo[0].isNormalRun" value="1" /> 能
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="rescueInfo[0].isNormalRun" value="0" /> 不能
+          </label>
         </div>
+      </div>
+    </div>
 
-        <div v-show="accidentRescueExpanded" class="section-content">
-          <div class="form-row">
-            <div class="form-group">
-              <label>标的车能否正常行驶</label>
-              <div class="radio-group">
-                <label class="radio-label">
-                  <input type="radio" v-model="rescueInfo[0].isNormalRun" value="1" /> 能
-                </label>
-                <label class="radio-label">
-                  <input type="radio" v-model="rescueInfo[0].isNormalRun" value="0" /> 不能
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>三者车能否正常行驶</label>
-              <div class="radio-group">
-                <label class="radio-label">
-                  <input type="radio" v-model="rescueInfo[1].isNormalRun" value="1" /> 能
-                </label>
-                <label class="radio-label">
-                  <input type="radio" v-model="rescueInfo[1].isNormalRun" value="0" /> 不能
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>救援选项</label>
-              <div class="checkbox-group">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="rescueInfo[0].fiftyKm" /> 拖车 50KM 内
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.isLocalSurey" /> 需现场查勘
-                </label>
-              </div>
-            </div>
-          </div>
+    <!-- 三者车信息 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>三者车能否正常行驶</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" v-model="rescueInfo[1].isNormalRun" value="1" /> 能
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="rescueInfo[1].isNormalRun" value="0" /> 不能
+          </label>
         </div>
-      </section>
+      </div>
+    </div>
+
+    <!-- 救援选项 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>救援选项</label>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="rescueInfo[0].fiftyKm" /> 拖车 50KM 内
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.isLocalSurey" /> 需现场查勘
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       <!-- ============ 案件补充说明区块 ============ -->
       <section class="form-section" id="section-caseDesc">
@@ -781,11 +831,11 @@ export default {
   },
 
   methods: {
-     // 点击报案号时触发
-  handleReportClick(reportNo) {
-    alert(`查看报案号：${reportNo} 的详情`)
-    // 可替换为路由跳转、打开弹窗等逻辑
-  },
+    // 点击报案号时触发
+    handleReportClick(reportNo) {
+      alert(`查看报案号：${reportNo} 的详情`)
+      // 可替换为路由跳转、打开弹窗等逻辑
+    },
     // ============ 折叠/展开切换方法 ============
     toggleSection(section) {
       const sectionKey = `${section}Expanded`
@@ -1180,8 +1230,16 @@ export default {
   height: 14px;
   background-image: url('@/assets/icons/user.svg');
   background-size: 9px 14px;
-
 }
+
+.icon-user-t {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-image: url('@/assets/icons/user.svg');
+  background-size: 14px 14px;
+}
+
 .icon-history {
   display: inline-block;
   width: 15px;
@@ -1189,6 +1247,7 @@ export default {
   background-image: url('@/assets/icons/history.svg');
   background-size: 15px 15px;
 }
+
 .icon-agent::before {
   content: "💼";
 }
@@ -1268,6 +1327,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .data-table {
   min-width: 100%;
   table-layout: fixed;
@@ -1276,11 +1336,11 @@ export default {
 .data-table td {
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
-  font-size: 10px; 
+  font-size: 10px;
   color: #333;
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: left;
 }
 
@@ -1291,7 +1351,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 4px;
-  justify-content: flex-start; 
+  justify-content: flex-start;
 }
 
 .report-link:hover {
@@ -1320,6 +1380,126 @@ export default {
   background-color: #e4e5e6;
   color: #42dd69;
   border: 1px solid #b3d8ff;
+}
+
+/* ============ 联系人信息区块样式 ============ */
+.contact-info-section {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.contact-info-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s;
+  gap: 12px;
+}
+
+.contact-info-header:hover {
+  background-color: #e8f4fc;
+}
+
+.contact-info-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.toggle-icon {
+  font-size: 14px;
+  font-weight: bold;
+  color: #666;
+  transition: transform 0.3s ease;
+  user-select: none;
+  margin-left: auto;
+}
+
+.contact-info-content {
+  padding: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.contact-form-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(4, 1fr);
+
+}
+
+/* 分割线样式 */
+.divider-line {
+  height: 1px;
+  background-color: #ddd;
+  margin: 16px 0;
+  /* 上下间距 */
+}
+
+/* ============ 表单行样式 ============ */
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  min-width: 120px;
+}
+
+
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.form-input[readonly] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* ============ 响应式适配 ============ */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
 }
 
 /* ============ 必填标识样式 ============ */
@@ -1375,44 +1555,6 @@ export default {
   }
 }
 
-/* ============ 表单组样式 ============ */
-.form-group {
-  margin-bottom: 16px;
-  flex: 1;
-}
-
-.form-group.full-width {
-  flex: 100%;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
-}
-
-.form-input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-}
-
-.form-input[readonly] {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-}
-
 .textarea {
   resize: vertical;
   min-height: 80px;
@@ -1424,12 +1566,6 @@ export default {
 }
 
 /* ============ 表单行样式 ============ */
-.form-row {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
 
 .address-inputs {
   display: flex;
@@ -1510,7 +1646,7 @@ export default {
   cursor: pointer;
   border-bottom: 1px solid #ddd;
   transition: background-color 0.2s;
-   gap: 12px;
+  gap: 12px;
 }
 
 .section-header:hover {

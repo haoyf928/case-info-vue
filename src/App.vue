@@ -71,7 +71,11 @@ export default {
         linkerName: '',
         linkerPhone: '',
         propFlag: '',
-        woundFlag: ''
+        woundFlag: '',
+        reporterRelation: '', // 报案人跟被保险人关系
+      reporterCertType: '', // 报案人证件类型
+      reporterCertNo: '',   // 报案人证件号码
+      handlerCode: '133100013',
       },
       activeTab: 'reportInfo'
     }

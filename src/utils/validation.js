@@ -23,7 +23,23 @@ export const requiredFields = {
   linkerName: { required: true, message: '联系人姓名不能为空' },
   linkerPhone: { required: true, message: '联系人电话不能为空' },
   propFlag: { required: true, message: '请选择是否财产损失' },
-  woundFlag: { required: true, message: '请选择是否人员伤亡' }
+  woundFlag: { required: true, message: '请选择是否人员伤亡' },
+   reporterRelation: {
+    rule: 'required',
+    message: '请填写报案人跟被保险人关系'
+  },
+  reporterCertType: {
+    rule: 'required',
+    message: '请填写报案人证件类型'
+  },
+  reporterCertNo: {
+    rule: 'required',
+    message: '请填写报案人证件号码'
+  },
+  handlerCode: {
+    rule: 'required',
+    message: '请填写受理人编码'
+  }
 }
 
 /**
