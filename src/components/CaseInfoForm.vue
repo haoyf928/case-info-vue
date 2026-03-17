@@ -627,58 +627,95 @@
 
       <!-- ============ 事故救援区块 ============ -->
       <section class="form-section" id="section-accidentRescue">
-  <div class="section-header" @click="toggleSection('accidentRescue')">
-    <h3>🚑 事故救援</h3>
-    <span class="toggle-icon">▼</span>
-  </div>
-
-  <div v-show="accidentRescueExpanded" class="section-content">
-    <!-- 标的车信息 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>标的车能否正常行驶</label>
-        <div class="radio-group">
-          <label class="radio-label">
-            <input type="radio" v-model="rescueInfo[0].isNormalRun" value="1" /> 能
-          </label>
-          <label class="radio-label">
-            <input type="radio" v-model="rescueInfo[0].isNormalRun" value="0" /> 不能
-          </label>
+        <div class="section-header">
+          <h3>🚑 事故救援</h3>
+          <span class="toggle-icon" @click="toggleSection('accidentRescue')">
+            {{ accidentRescueExpanded ? '▼' : '▶' }}
+          </span>
         </div>
-      </div>
-    </div>
 
-    <!-- 三者车信息 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>三者车能否正常行驶</label>
-        <div class="radio-group">
-          <label class="radio-label">
-            <input type="radio" v-model="rescueInfo[1].isNormalRun" value="1" /> 能
-          </label>
-          <label class="radio-label">
-            <input type="radio" v-model="rescueInfo[1].isNormalRun" value="0" /> 不能
-          </label>
-        </div>
-      </div>
-    </div>
+        <div v-show="accidentRescueExpanded" class="section-content">
+          <div class="rescue-container">
+            <!-- 标的车区域 -->
+            <div class="rescue-vehicle-section">
+              <div class="rescue-vehicle-header">
+                <h4>标的车</h4>
+              </div>
 
-    <!-- 救援选项 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>救援选项</label>
-        <div class="checkbox-group">
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="rescueInfo[0].fiftyKm" /> 拖车 50KM 内
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="caseInfo.isLocalSurey" /> 需现场查勘
-          </label>
+              <!-- 标的车能否正常行驶 -->
+              <div class="form-group">
+                <label>标的车能否正常行驶</label>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[0].isNormalRun" value="1" /> 能
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[0].isNormalRun" value="0" /> 不能
+                  </label>
+                </div>
+              </div>
+
+              <!-- 标的车事故救援选项 -->
+              <div class="form-group">
+                <label>标的车事故救援</label>
+                <div class="rescue-checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].hasCarDamageInsurance" /> 标的车保有车损险
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].isFullLiability" /> 标的车全责
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].confirmedCompensation" /> 车损险确认理赔
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].fiftyKm" /> 拖车50KM内
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 三者车区域 -->
+            <div class="rescue-vehicle-section">
+              <div class="rescue-vehicle-header">
+                <h4>三者车</h4>
+              </div>
+
+              <!-- 三者车能否正常行驶 -->
+              <div class="form-group">
+                <label>三者车能否正常行驶</label>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[1].isNormalRun" value="1" /> 能
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[1].isNormalRun" value="0" /> 不能
+                  </label>
+                </div>
+              </div>
+
+              <!-- 三者车事故救援选项 -->
+              <div class="form-group">
+                <label>三者车事故救援</label>
+                <div class="rescue-t-checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].hasThirdPartyInsurance" /> 保有交强险及商业三者险
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].isNoFault" /> 三者车无责
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].confirmedThirdPartyCompensation" /> 商业三者险确认理赔
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].fiftyKm" /> 拖车50KM内
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
       <!-- ============ 案件补充说明区块 ============ -->
       <section class="form-section" id="section-caseDesc">
@@ -773,14 +810,14 @@ export default {
   data() {
     return {
       // ============ 折叠/展开状态 ============
-      policyInfoExpanded: true,
-      policyBodyExpanded: true,
-      reportInfoExpanded: true,
-      vehicleInfoExpanded: true,
+      policyInfoExpanded: false,
+      policyBodyExpanded: false,
+      reportInfoExpanded: false,
+      vehicleInfoExpanded: false,
       propertyLossExpanded: false,
       personInjuryExpanded: false,
-      accidentRescueExpanded: false,
-      contactInfoExpanded: true,
+      accidentRescueExpanded: true,
+      contactInfoExpanded: false,
       caseDescExpanded: false,
       historyReportExpanded: true,
 
@@ -794,8 +831,20 @@ export default {
       personInjuryList: [],
       caseDescList: [],
       rescueInfo: [
-        { isNormalRun: '', fiftyKm: false },
-        { isNormalRun: '', fiftyKm: false }
+        {
+          isNormalRun: '',
+          fiftyKm: false,
+          hasCarDamageInsurance: false,  // 标的车保有车损险
+          isFullLiability: false,        // 标的车全责
+          confirmedCompensation: false    // 车损险确认理赔
+        },
+        {
+          isNormalRun: '',
+          fiftyKm: false,
+          hasThirdPartyInsurance: false,           // 保有交强险及商业三者险
+          isNoFault: false,                       // 三者车无责
+          confirmedThirdPartyCompensation: false   // 商业三者险确认理赔
+        }
       ],
       // ============ 历史报案记录数据 ============
       historyReports: [
@@ -1443,6 +1492,106 @@ export default {
   margin: 16px 0;
   /* 上下间距 */
 }
+/* ============ 事故救援样式 ============ */
+.rescue-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.rescue-vehicle-section {
+  flex: 1;
+  min-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 16px;
+  background-color: #fafafa;
+  text-align: left; /* 确保内容左对齐 */
+}
+
+.rescue-vehicle-header {
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left; /* 确保标题左对齐 */
+}
+
+.rescue-vehicle-header h4 {
+  margin: 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left; /* 确保标题文字左对齐 */
+}
+.rescue-checkbox-group{
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(3, 1fr);
+}
+.rescue-t-checkbox-group{
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(2, 1fr);
+}
+.checkbox-group {
+ display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+/* 使用更具体的选择器来覆盖其他样式 */
+.rescue-checkbox-group .checkbox-label,
+.form-section .checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 12px;
+  color: #333;
+  margin-bottom: 0;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 10px;
+  color: #333;
+  margin-bottom: 0;
+  text-align: left; /* 确保标签文字左对齐 */
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+.checkbox-label input {
+  margin-right: 8px;
+}
+
+/* 单选框组也左对齐 */
+.radio-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  text-align: left; /* 确保文字左对齐 */
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  text-align: left; /* 确保标签文字左对齐 */
+}
+
+.radio-label input {
+  margin-right: 6px;
+}
 
 /* ============ 表单行样式 ============ */
 .form-row {
@@ -1465,6 +1614,7 @@ export default {
   font-size: 14px;
   color: #333;
   font-weight: 500;
+  text-align: left; 
 }
 
 .form-input {
