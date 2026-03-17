@@ -116,20 +116,15 @@
 
       <!-- ============ 历史报案记录区块 ============ -->
       <section class="form-section" id="section-historyReport">
-        <div class="section-header" @click="toggleSection('historyReport')">
-          <h3>⏱️ 历史报案记录</h3>
-          <span class="toggle-icon">
+        <div class="section-header" >
+          <h3><i class="icon-history"></i> 历史报案记录</h3>
+          <span class="record-count">{{ historyReports.length }} 条记录</span>
+          <span class="toggle-icon" @click="toggleSection('historyReport')">
             {{ historyReportExpanded ? '▼' : '▶' }}
           </span>
         </div>
 
         <div v-show="historyReportExpanded" class="section-content">
-          <div class="history-report-container">
-            <div class="report-header">
-              <span class="report-title">历史报案记录</span>
-              <span class="record-count">3 条记录</span>
-            </div>
-
             <div class="report-table">
               <table class="data-table">
                 <thead>
@@ -148,13 +143,16 @@
                   <tr v-for="(item, index) in historyReports" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>
-                      <a href="#" class="report-link">{{ item.reportNo }}</a>
+                        <a href="#" class="report-link" @click.prevent="handleReportClick(item.reportNo)">
+                        {{ item.reportNo }}
+                        <svg t="1773716425571" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="45920" width="10" height="10"><path d="M783.530667 861.013333H162.901333V240.554667h310.272V162.986667H85.333333V938.666667h775.68V550.826667h-77.482666z" fill="#0887FF" p-id="45921"></path><path d="M550.826667 85.333333v77.653334h255.146666L407.296 562.346667l54.272 54.357333 399.530667-398.677333v255.146666H938.666667V85.333333z" fill="#0887FF" p-id="45922"></path></svg>
+                        </a>
                     </td>
                     <td>{{ item.policyNo }}</td>
                     <td>{{ item.accidentTime }}</td>
                     <td>{{ item.reportTime }}</td>
                     <td>{{ item.reporter }}</td>
-                    <td>-</td>
+                    <td><span class="empty-cell">-</span></td>
                     <td>
                       <span class="status-badge status-submitted">已提交</span>
                     </td>
@@ -162,7 +160,6 @@
                 </tbody>
               </table>
             </div>
-          </div>
         </div>
       </section>
 
@@ -784,6 +781,11 @@ export default {
   },
 
   methods: {
+     // 点击报案号时触发
+  handleReportClick(reportNo) {
+    alert(`查看报案号：${reportNo} 的详情`)
+    // 可替换为路由跳转、打开弹窗等逻辑
+  },
     // ============ 折叠/展开切换方法 ============
     toggleSection(section) {
       const sectionKey = `${section}Expanded`
@@ -1180,7 +1182,13 @@ export default {
   background-size: 9px 14px;
 
 }
-
+.icon-history {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-image: url('@/assets/icons/history.svg');
+  background-size: 15px 15px;
+}
 .icon-agent::before {
   content: "💼";
 }
@@ -1235,28 +1243,6 @@ export default {
 }
 
 /* ============ 历史报案记录样式 ============ */
-.history-report-container {
-  margin: 16px 0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.report-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #eee;
-}
-
-.report-title {
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
-}
-
 .record-count {
   font-size: 12px;
   color: #666;
@@ -1268,11 +1254,7 @@ export default {
 .report-table {
   width: 100%;
   border-collapse: collapse;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
+  overflow-x: fixed;
 }
 
 .data-table th {
@@ -1280,38 +1262,63 @@ export default {
   padding: 12px 16px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #ddd;
-  font-size: 14px;
+  font-size: 10px;
   color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.data-table {
+  min-width: 100%;
+  table-layout: fixed;
 }
 
 .data-table td {
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
-  font-size: 14px;
+  font-size: 10px; 
   color: #333;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  text-align: left;
 }
 
 .report-link {
   color: #007bff;
   text-decoration: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-start; 
 }
 
 .report-link:hover {
   text-decoration: underline;
 }
 
+.icon-link {
+  font-size: 12px;
+  color: #007bff;
+}
+
+.empty-cell {
+  color: #999;
+  font-style: normal;
+}
+
 .status-badge {
   display: inline-block;
-  padding: 4px 8px;
+  padding: 2px 2px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
 }
 
 .status-submitted {
-  background-color: #e6f7ff;
-  color: #007bff;
+  background-color: #e4e5e6;
+  color: #42dd69;
   border: 1px solid #b3d8ff;
 }
 
@@ -1496,13 +1503,14 @@ export default {
 
 .section-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 12px 16px;
   background-color: #f8f9fa;
   cursor: pointer;
   border-bottom: 1px solid #ddd;
   transition: background-color 0.2s;
+   gap: 12px;
 }
 
 .section-header:hover {
@@ -1521,6 +1529,7 @@ export default {
   color: #666;
   transition: transform 0.3s ease;
   user-select: none;
+  margin-left: auto;
 }
 
 .section-content {
