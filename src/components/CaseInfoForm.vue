@@ -483,67 +483,81 @@
         </div>
       </section>
 
-      <!-- ============ 财产损失区块 ============ -->
-      <section class="form-section" id="section-propertyLoss">
-        <div class="section-header" @click="toggleSection('propertyLoss')">
-          <h3>💰 财产损失</h3>
-          <span class="toggle-icon">
-            {{ propertyLossExpanded ? '▼' : '▶' }}
-          </span>
+      <!-- ============ 损失类型区块 ============ -->
+<section class="form-section" id="section-lossType">
+  <div class="section-header" @click="toggleSection('lossType')">
+    <h3><i class="icon-warning"></i> 损失类型</h3>
+    <span class="toggle-icon">
+      {{ lossTypeExpanded ? '▼' : '▶' }}
+    </span>
+  </div>
+
+  <div v-show="lossTypeExpanded" class="section-content">
+    <div class="loss-type-container">
+      <!-- 第一行：7个选项 -->
+      <div class="loss-type-row">
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车损" />
+            本车车损
+          </label>
         </div>
-
-        <div v-show="propertyLossExpanded" class="section-content">
-          <div class="form-row">
-            <div class="form-group">
-              <label>是否财产损失 <span class="required">*</span></label>
-              <div class="radio-group">
-                <label class="radio-label">
-                  <input type="radio" v-model="caseInfo.propFlag" value="0" /> 无
-                </label>
-                <label class="radio-label">
-                  <input type="radio" v-model="caseInfo.propFlag" value="1" /> 有
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div v-if="caseInfo.propFlag === '1'" class="property-loss-list">
-            <div v-for="(item, index) in propertyLossList" :key="index" class="loss-item">
-              <div class="form-row">
-                <div class="form-group">
-                  <label>财产名称</label>
-                  <input type="text" v-model="item.propertyName" class="form-input" />
-                </div>
-
-                <div class="form-group">
-                  <label>归属</label>
-                  <select v-model="item.identityRec" class="form-input">
-                    <option value="">请选择</option>
-                    <option value="0">第三者物损</option>
-                    <option value="1">车上货物</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>损失情况</label>
-                  <input type="text" v-model="item.lossSituation" class="form-input" />
-                </div>
-
-                <div class="form-group">
-                  <label>&nbsp;</label>
-                  <button type="button" @click="removePropertyLoss(index)" class="btn-remove">
-                    删除
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <button type="button" @click="addPropertyLoss" class="btn-add">
-              + 添加财产损失
-            </button>
-          </div>
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="本车人伤" />
+            本车人伤
+          </label>
         </div>
-      </section>
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车载货物" />
+            本车车载货物
+          </label>
+        </div>
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="三者车损" />
+            三者车损
+          </label>
+        </div>
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="三者人伤" />
+            三者人伤
+          </label>
+        </div>
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="三者物损" />
+            三者物损
+          </label>
+        </div>
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="全车盗抢" />
+            全车盗抢
+          </label>
+        </div>
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="车身划痕" />
+            车身划痕
+          </label>
+        </div>
+      </div>
+
+      <!-- 第二行：1个选项 -->
+      <div class="loss-type-row">
+        <div class="loss-type-item">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="caseInfo.lossTypes" value="本车自燃" />
+            本车自燃
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       <!-- ============ 人员伤亡区块 ============ -->
       <section class="form-section" id="section-personInjury">
@@ -814,7 +828,7 @@ export default {
       policyBodyExpanded: false,
       reportInfoExpanded: false,
       vehicleInfoExpanded: false,
-      propertyLossExpanded: false,
+      lossTypeExpanded: false,
       personInjuryExpanded: false,
       accidentRescueExpanded: true,
       contactInfoExpanded: false,
@@ -827,7 +841,9 @@ export default {
       globalError: '',
 
       // ============ 动态列表数据 ============
-      propertyLossList: [],
+      caseInfo: {
+      lossTypes: [] 
+    },
       personInjuryList: [],
       caseDescList: [],
       rescueInfo: [
@@ -1429,6 +1445,25 @@ export default {
   background-color: #e4e5e6;
   color: #42dd69;
   border: 1px solid #b3d8ff;
+}
+/* ============ 损失类型信息区块样式 ============ */
+.loss-type-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loss-type-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.loss-type-item {
+  flex: 1;
+  min-width: 100px; /* 减小最小宽度 */
+  max-width: 150px; /* 添加最大宽度限制 */
 }
 
 /* ============ 联系人信息区块样式 ============ */
