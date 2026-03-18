@@ -1111,54 +1111,47 @@
       </section>
 
       <!-- ============ 案件补充说明区块 ============ -->
-      <section class="form-section" id="section-caseDesc">
-        <div class="section-header" @click="toggleSection('caseDesc')">
-          <h3>📄 案件补充说明</h3>
-          <span class="toggle-icon">
-            {{ caseDescExpanded ? '▼' : '▶' }}
-          </span>
-        </div>
+<section class="form-section" id="section-caseDesc">
+  <div class="section-header"">
+    <h3>📄 案件补充说明</h3>
+    <button type="button" @click="addCaseDesc" class="desc-add-icon float-right">
+            <span>+  添加说明</span>
+          </button>
+  </div>
 
-        <div v-show="caseDescExpanded" class="section-content">
-          <div class="form-group full-width">
-            <label>补充说明内容</label>
-            <textarea v-model="caseInfo.caseDesc" rows="4" class="form-input textarea"
-              placeholder="请输入案件补充说明..."></textarea>
-          </div>
-
-          <div class="case-desc-list">
-            <div v-for="(item, index) in caseDescList" :key="index" class="desc-item">
-              <div class="form-row">
-                <div class="form-group">
-                  <label>时间</label>
-                  <input type="datetime-local" v-model="item.disposeTime" class="form-input" />
-                </div>
-
-                <div class="form-group">
-                  <label>操作员</label>
-                  <input type="text" v-model="item.usercode" class="form-input" readonly />
-                </div>
-
-                <div class="form-group full-width">
-                  <label>内容</label>
-                  <textarea v-model="item.context" rows="2" class="form-input textarea"></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label>&nbsp;</label>
-                  <button type="button" @click="removeCaseDesc(index)" class="btn-remove">
-                    删除
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <button type="button" @click="addCaseDesc" class="btn-add">
-              + 添加补充说明
-            </button>
-          </div>
-        </div>
-      </section>
+  <div v-show="caseDescExpanded" class="section-content">
+    <!-- 使用表格布局的补充说明列表 -->
+    <div class="case-desc-list">
+      <div v-if="caseDescList.length === 0" class="empty-state">
+        <p style="color: #6c757d; text-align: center; padding: 20px;">暂无补充说明记录</p>
+      </div>
+      
+      <div v-else>
+        <table class="case-desc-table">
+        <thead>
+          <tr>
+            <th class="seq-column">序号</th>
+            <th class="time-column">时间</th>
+            <th class="operator-column">操作员</th>
+            <th class="content-column">内容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in caseDescList" :key="index">
+            <td class="seq-column">{{ index + 1 }}</td>
+            <td class="time-column">{{ item.disposeTime }}</td>
+            <td class="operator-column">{{ item.usercode }}</td>
+            <td class="content-column">
+              <input type="text" v-model="item.context" class="desc-input"
+                placeholder="请输入补充说明内容" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
 
       <!-- ============ 表单底部按钮 ============ -->
       <div class="form-actions">
@@ -1300,6 +1293,24 @@ export default {
     removePropertyLoss(index) {
       this.propertyLossList.splice(index, 1)
     },
+    // 添加补充说明
+  addCaseDesc() {
+    this.caseDescList.push({
+      disposeTime: new Date().toLocaleDateString(), // 默认当前时间
+      usercode: '当前用户',
+      context: ''
+    })
+  },
+  
+  // 删除补充说明
+  removeCaseDesc(index) {
+    this.caseDescList.splice(index, 1)
+  },
+  
+  // 清空所有补充说明
+  clearCaseDesc() {
+    this.caseDescList = []
+  },
     // ============ 全部展开 ============
     expandAll() {
       Object.keys(this.$data).forEach(key => {
@@ -1586,6 +1597,142 @@ export default {
   min-width: 0;
   flex: 1;
 }
+/* ============ 案件补充说明区块样式 ============ */
+.case-desc-container {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-top: 16px;
+}
+
+.case-desc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+}
+
+.case-desc-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-desc {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-desc:hover {
+  background-color: #f8f9fa;
+  border-color: #0056b3;
+  color: #0056b3;
+}
+
+/* 表格样式 */
+.case-desc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  border: none;
+}
+
+.case-desc-table th,
+.case-desc-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.case-desc-table th {
+  background-color: #f8f9fa;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.case-desc-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* 输入框样式 */
+.desc-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+
+.desc-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+/* 序号列样式 */
+.seq-column {
+  width: 60px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 时间列样式 */
+.time-column {
+  width: 180px;
+  color: #6c757d;
+}
+
+/* 操作员列样式 */
+.operator-column {
+  width: 120px;
+  color: #6c757d;
+}
+
+/* 内容列样式 */
+.content-column {
+  width: calc(100% - 360px);
+}
+.desc-add-icon {
+  /* 基础样式保留 */
+  background-color: #f2f4f7;
+  color: rgb(20, 19, 19);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  
+ 
+  width: 60px; 
+  height: 15px;
+  border-radius: 8px; 
+  display: flex;
+  justify-content: flex-start;
+  font-size: 12px; /* 加号大小，可按需改 */
+  font-weight: normal; /* 避免加号过粗 */
+  padding: 0; /* 取消内边距，防止圆形变形 */
+  margin-top: 8px; /* 保留原外边距，可删改 */
+}
+.desc-add-icon:focus {
+  outline: none;
+}
+
 
 /* 财产损失信息区块样式 */
 .property-loss-list {
