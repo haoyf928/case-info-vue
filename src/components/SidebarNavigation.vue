@@ -34,6 +34,7 @@ export default {
         { id: 'vehicleInfo', text: '车辆信息' },
         { id: 'contactInfo', text: '联系人信息' },
         { id: 'lossType', text: '损失类型' },
+        { id: 'propertyLoss', text: '财产损失' },
         { id: 'personInjury', text: '人员伤亡' },
         { id: 'accidentRescue', text: '事故救援' },
         { id: 'caseDesc', text: '案件补充说明' }

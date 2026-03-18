@@ -867,6 +867,77 @@
         </div>
       </section>
 
+      <!-- 财产损失信息区块 -->
+      <section class="form-section" id="section-propertyLoss">
+        <div class="section-header">
+          <h3><i class="icon-dollar"></i> 财产损失信息</h3>
+          <button type="button" @click="addPropertyLoss" class="btn-add-icon float-right">
+            <span>+</span>
+          </button>
+        </div>
+
+        <div v-show="propertyLossExpanded" class="section-content">
+          <!-- 是否财产损失 -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>是否财产损失</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.propFlag" value="0" /> 无
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.propFlag" value="1" /> 有
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 财产损失列表 -->
+          <div v-if="caseInfo.propFlag === '1'" class="property-loss-list">
+            <div v-for="(item, index) in propertyLossList" :key="index" class="property-loss-item">
+              <button type="button" @click="removePropertyLoss(index)" class="btn-remove-top">
+                -
+              </button>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>财产名称</label>
+                  <input type="text" v-model="item.propertyName" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                  <label>归属 *</label>
+                  <select v-model="item.identityRec" class="form-input"
+                    :class="{ 'input-error': validationErrors[`identityRec_${index}`] }">
+                    <option value="">请选择</option>
+                    <option value="0">第三者</option>
+                    <option value="1">车上人员</option>
+                    <option value="2">本车</option>
+                  </select>
+                  <span v-if="validationErrors[`identityRec_${index}`]" class="error-message">
+                    {{ validationErrors[`identityRec_${index}`] }}
+                  </span>
+                </div>
+
+                <div class="form-group">
+                  <label>损失情况</label>
+                  <select v-model="item.lossSituation" class="form-input"
+                    :class="{ 'input-error': validationErrors[`lossSituation_${index}`] }">
+                    <option value="">请选择</option>
+                    <option value="0">轻微损坏</option>
+                    <option value="1">中度损坏</option>
+                    <option value="2">严重损坏</option>
+                    <option value="3">完全损毁</option>
+                  </select>
+                  <span v-if="validationErrors[`lossSituation_${index}`]" class="error-message">
+                    {{ validationErrors[`lossSituation_${index}`] }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ============ 人员伤亡区块 ============ -->
       <section class="form-section" id="section-personInjury">
         <div class="section-header" @click="toggleSection('personInjury')">
@@ -1142,12 +1213,15 @@ export default {
       contactInfoExpanded: false,
       caseDescExpanded: false,
       historyReportExpanded: true,
+      propertyLossExpanded: true,
+
 
       // ============ 校验错误信息 ============
       validationErrors: {},
       globalError: '',
 
       // ============ 动态列表数据 ============
+      propertyLossList: [],
       lossTypes: [],
       personInjuryList: [],
       caseDescList: [],
@@ -1206,6 +1280,7 @@ export default {
       alert(`查看报案号：${reportNo} 的详情`)
       // 可替换为路由跳转、打开弹窗等逻辑
     },
+
     // ============ 折叠/展开切换方法 ============
     toggleSection(section) {
       const sectionKey = `${section}Expanded`
@@ -1214,7 +1289,17 @@ export default {
     togglePolicyBody() {
       this.policyBodyExpanded = !this.policyBodyExpanded
     },
-
+    // ============ 添加/删除财产损失 ============
+    addPropertyLoss() {
+      this.propertyLossList.push({
+        propertyName: '',
+        identityRec: '',
+        lossSituation: ''
+      })
+    },
+    removePropertyLoss(index) {
+      this.propertyLossList.splice(index, 1)
+    },
     // ============ 全部展开 ============
     expandAll() {
       Object.keys(this.$data).forEach(key => {
@@ -1246,6 +1331,25 @@ export default {
       } else {
         delete this.validationErrors[fieldName]
       }
+      if (fieldName.startsWith('identityRec_')) {
+        const index = fieldName.split('_')[1]
+        const item = this.propertyLossList[index]
+        if (!item.identityRec) {
+          this.validationErrors[fieldName] = '请选择归属'
+        } else {
+          delete this.validationErrors[fieldName]
+        }
+      }
+      if (fieldName.startsWith('lossSituation_')) {
+        const index = fieldName.split('_')[1]
+        const item = this.propertyLossList[index]
+        if (!item.lossSituation) {
+          this.validationErrors[fieldName] = '请选择损失情况'
+        } else {
+          delete this.validationErrors[fieldName]
+        }
+      }
+
     },
 
     // ============ 校验并提交（核心方法） ============
@@ -1472,7 +1576,7 @@ export default {
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 8px;
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
   border: 1px solid #dee2e6;
   border-radius: 12px;
   padding: 12px;
@@ -1483,6 +1587,142 @@ export default {
   flex: 1;
 }
 
+/* 财产损失信息区块样式 */
+.property-loss-list {
+  margin-top: 16px;
+}
+
+.property-loss-item {
+  position: relative;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  padding: 16px;
+  background-color: white;
+  transition: box-shadow 0.2s ease;
+  height: 100px; 
+  display: grid;
+}
+.btn-remove-top {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 24px;
+  border: none;
+  background: none;
+  color: #100f0f;
+  font-size: 25px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background-color: white;
+   z-index: 10;
+  transform: translateY(0);
+}
+
+.btn-remove-top:focus {
+  outline: none;
+}
+
+/* .btn-remove-top:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #d32f2f;
+} */
+.property-loss-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.property-loss-item .form-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.property-loss-item .form-group {
+  min-width: 0;
+}
+
+.property-loss-item .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+}
+
+.property-loss-item .form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.property-loss-item .form-input:focus {
+  outline: none;
+  border-color: #0887FF;
+  box-shadow: 0 0 0 2px rgba(8, 135, 255, 0.1);
+}
+
+.property-loss-item .btn-remove {
+  background-color: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.property-loss-item .btn-remove:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.btn-add-icon {
+  /* 基础样式保留 */
+  background-color: #f2f4f7;
+  color: rgb(20, 19, 19);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  
+ 
+  width: 30px; 
+  height: 30px;
+  border-radius: 8px; 
+  
+  /* 核心：加号垂直水平居中 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* 加号样式调整 */
+  font-size: 25px; /* 加号大小，可按需改 */
+  font-weight: normal; /* 避免加号过粗 */
+  padding: 0; /* 取消内边距，防止圆形变形 */
+  margin-top: 8px; /* 保留原外边距，可删改 */
+}
+.btn-add-icon:focus {
+  outline: none;
+}
+/* .property-loss-item .btn-add:hover {
+  background-color: #0066CC;
+} */
+
+.float-right {
+  float: right;
+  margin-left: auto;
+  margin-top: -15px; /* 调整垂直对齐 */
+}
 /* ============ 保单卡片样式 ============ */
 .policy-card {
   border: 2px solid #0066CC;
@@ -2006,10 +2246,12 @@ export default {
   font-weight: 500;
   text-align: left;
 }
+
 .form-group.full-width {
   width: 100%;
   flex: 1;
 }
+
 .form-input {
   width: 100%;
   padding: 8px 12px;
@@ -2192,6 +2434,7 @@ export default {
   transition: background-color 0.2s;
   gap: 12px;
 }
+
 
 .section-header:hover {
   background-color: #e8f4fc;
