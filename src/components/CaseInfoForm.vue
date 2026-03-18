@@ -245,7 +245,7 @@
 
           <!-- 第三行：出险地点（省市区街道门牌号）+ 路名索检 -->
           <div class="form-row">
-            <div class="form-group full-width">
+            <div class="form-group">
               <label>出险地点 <span class="required">*</span></label>
               <div class="address-inputs">
                 <select v-model="caseInfo.areaProvince" ref="areaProvince"
@@ -279,6 +279,17 @@
               <span v-if="validationErrors.damageAddress" class="error-message">
                 {{ validationErrors.damageAddress }}
               </span>
+            </div>
+            <div class="form-group">
+              <label>客户提供位置信息不准</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.isfirstsiteFlag" value="1" /> 是
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.isfirstsiteFlag" value="0" /> 否
+                </label>
+              </div>
             </div>
           </div>
 
@@ -352,13 +363,13 @@
           <div class="form-row">
             <div class="form-group full-width">
               <label>出险经过 <span class="required">*</span></label>
-              <textarea v-model="caseInfo.accidentDescription" rows="4" class="form-input textarea"
+              <textarea v-model="caseInfo.accidentDescription" rows="3" class="form-input"
                 placeholder="请详细描述出险经过..."></textarea>
             </div>
           </div>
 
           <!-- 第八行：多列下拉选择 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>险因类型 <span class="required">*</span></label>
               <select v-model="caseInfo.lsType" ref="lsType" :class="{ 'input-error': validationErrors.lsType }"
@@ -409,7 +420,7 @@
           </div>
 
           <!-- 第九行 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>事故处理类型 <span class="required">*</span></label>
               <select v-model="caseInfo.handleType" ref="handleType"
@@ -456,7 +467,7 @@
           </div>
 
           <!-- 第十行 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>紧急程度 <span class="required">*</span></label>
               <select v-model="caseInfo.emergencyLevel" ref="emergencyLevel"
@@ -503,7 +514,7 @@
           </div>
 
           <!-- 第十一行：是否报警、报警时间 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>是否报警 <span class="required">*</span></label>
               <div class="radio-group">
@@ -524,7 +535,7 @@
           </div>
 
           <!-- 第十二行：是否巨灾、巨灾类型、巨灾名称 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>是否巨灾 <span class="required">*</span></label>
               <div class="radio-group">
@@ -557,7 +568,7 @@
           </div>
 
           <!-- 第十三行：是否需现场查勘 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>是否需现场查勘 <span class="required">*</span></label>
               <div class="radio-group">
@@ -1458,9 +1469,18 @@ export default {
 
 .tag-container {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
   margin-top: 8px;
+  background-color: #f8f9fa; 
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
 }
 
 /* ============ 保单卡片样式 ============ */
@@ -1956,7 +1976,6 @@ export default {
   font-size: 14px;
   color: #333;
   text-align: left;
-  /* 确保标签文字左对齐 */
 }
 
 .radio-label input {
@@ -1969,11 +1988,12 @@ export default {
   gap: 16px;
   margin-bottom: 16px;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .form-group {
   margin-bottom: 16px;
-  min-width: 120px;
+  min-width: 80px;
 }
 
 
@@ -1981,19 +2001,23 @@ export default {
 .form-group label {
   display: block;
   margin-bottom: 6px;
-  font-size: 14px;
+  font-size: 11px;
   color: #333;
   font-weight: 500;
   text-align: left;
 }
-
+.form-group.full-width {
+  width: 100%;
+  flex: 1;
+}
 .form-input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 11px;
   transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
 }
 
 .form-input:focus {
