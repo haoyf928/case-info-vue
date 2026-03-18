@@ -4,21 +4,13 @@
     <!-- 左侧主内容区 -->
     <main class="main-content">
       <!-- 添加 ref="caseForm" -->
-      <CaseInfoForm 
-        ref="caseForm"
-        :case-info="caseInfo"
-        @submit="handleSubmit"
-        @save="handleSave"
-        @transfer="handleTransfer"
-      />
+      <CaseInfoForm ref="caseForm" :case-info="caseInfo" @submit="handleSubmit" @save="handleSave"
+        @transfer="handleTransfer" />
     </main>
-    
+
     <!-- 右侧导航栏 -->
     <aside class="sidebar">
-      <SidebarNavigation 
-        :active-tab="activeTab"
-        @tab-change="handleTabChange"
-      />
+      <SidebarNavigation :active-tab="activeTab" @tab-change="handleTabChange" />
     </aside>
   </div>
 </template>
@@ -36,22 +28,51 @@ export default {
   data() {
     return {
       caseInfo: {
-      policyNo: '29932070365202500000008',
-      appliName: '吴*行',
-      insuredName: '吴*行',
-      agentName: '李祥荣',
-      insuranceName: '机动车、特种车商业保险2020版',
-      policyStartDateStr: '2025/11/27 00:00:00',
-      policyEndDateStr: '2026/11/26 23:59:59',
-      insurerName: '32070101-招商财产保险股份有限公司连云港中心支公司业务一部出单机构一',
-      workUnit: '',
-      customerSource: '',
-      customerTag: '一般客户',
-      customerLevel: '新客户',
-      specialistName: '',
-      specialistPhone: '',
-      serviceLevel: '',
-        
+        policyNo: '29932070365202500000008',
+        appliName: '吴*行',
+        insuredName: '吴*行',
+        agentName: '李祥荣',
+        insuranceName: '机动车、特种车商业保险2020版',
+        policyStartDateStr: '2025/11/27 00:00:00',
+        policyEndDateStr: '2026/11/26 23:59:59',
+        insurerName: '32070101-招商财产保险股份有限公司连云港中心支公司业务一部出单机构一',
+        workUnit: '',
+        customerSource: '',
+        customerTag: '一般客户',
+        customerLevel: '新客户',
+        specialistName: '',
+        specialistPhone: '',
+        serviceLevel: '',
+        damageLocationType: '',
+        street: '',
+        doorNumber: '',
+        longitude: '',
+        latitude: '',
+        currentAreaProvince: '',
+        currentAreaCity: '',
+        currentAreaDistrict: '',
+        currentStreet: '',
+        currentDoorNumber: '',
+        currentLongitude: '',
+        currentLatitude: '',
+        accidentDescription: '',
+        accidentCause: '',
+        handleDepartment: '',
+        handleType: '',
+        responsibility: '',
+        driverIsInsured: '',
+        insuredCertType: '',
+        emergencyLevel: '',
+        isOutProvince: '',
+        isWeChatClaim: '',
+        accidentReason: '',
+        isAlarm: '',
+        alarmTime: '',
+        isDisaster: '',
+        disasterType: '',
+        disasterName: '',
+        isOnSiteSurvey: '',
+        tags: [],
         accidentTime: '',
         reportTime: '',
         isfirstsiteFlag: '1',
@@ -73,9 +94,9 @@ export default {
         propFlag: '',
         woundFlag: '',
         reporterRelation: '', // 报案人跟被保险人关系
-      reporterCertType: '', // 报案人证件类型
-      reporterCertNo: '',   // 报案人证件号码
-      handlerCode: '133100013',
+        reporterCertType: '', // 报案人证件类型
+        reporterCertNo: '',   // 报案人证件号码
+        handlerCode: '133100013',
       },
       activeTab: 'reportInfo'
     }
@@ -96,7 +117,7 @@ export default {
     handleTabChange(tab) {
       console.log('导航栏点击:', tab)
       this.activeTab = tab
-      
+
       // 确保在 nextTick 中调用，因为 DOM 可能还未更新
       this.$nextTick(() => {
         console.log('caseForm 引用:', this.$refs.caseForm)
@@ -119,7 +140,8 @@ export default {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
@@ -171,7 +193,7 @@ html, body {
   .app-container {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
     height: auto;

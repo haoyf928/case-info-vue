@@ -39,7 +39,36 @@ export const requiredFields = {
   handlerCode: {
     rule: 'required',
     message: '请填写受理人编码'
-  }
+  },
+  damageLocationType: { required: true, message: '请选择出险地点分类' },
+  street: { required: true, message: '请输入街道' },
+  doorNumber: { required: true, message: '请输入门牌号' },
+  longitude: { required: true, message: '请输入经度' },
+  latitude: { required: true, message: '请输入纬度' },
+  currentAreaProvince: { required: true, message: '请选择车辆目前所在省' },
+  currentAreaCity: { required: true, message: '请选择车辆目前所在市' },
+  currentAreaDistrict: { required: true, message: '请选择车辆目前所在区' },
+  currentStreet: { required: true, message: '请输入车辆目前所在街道' },
+  currentDoorNumber: { required: true, message: '请输入车辆目前所在门牌号' },
+  currentLongitude: { required: true, message: '请输入车辆目前所在地经度' },
+  currentLatitude: { required: true, message: '请输入车辆目前所在地纬度' },
+  accidentDescription: { required: true, message: '请填写出险经过' },
+  accidentCause: { required: true, message: '请选择出险原因' },
+  handleDepartment: { required: true, message: '请选择事故处理部门' },
+  handleType: { required: true, message: '请选择事故处理类型' },
+  responsibility: { required: true, message: '请选择事故责任' },
+  driverIsInsured: { required: true, message: '请选择驾驶员是否被保险人' },
+  insuredCertType: { required: true, message: '请选择被保险人证件类型' },
+  emergencyLevel: { required: true, message: '请选择紧急程度' },
+  isOutProvince: { required: true, message: '请选择是否异地' },
+  isWeChatClaim: { required: true, message: '请选择是否微信理赔' },
+  accidentReason: { required: true, message: '请选择事故原因' },
+  isAlarm: { required: true, message: '请选择是否报警' },
+  alarmTime: { required: true, message: '请输入报警时间' },
+  isDisaster: { required: true, message: '请选择是否巨灾' },
+  disasterType: { required: true, message: '请选择巨灾类型' },
+  disasterName: { required: true, message: '请输入巨灾名称' },
+  isOnSiteSurvey: { required: true, message: '请选择是否需现场查勘' }
 }
 
 /**
