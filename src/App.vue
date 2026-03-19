@@ -97,6 +97,17 @@ export default {
         reporterCertType: '', // 报案人证件类型
         reporterCertNo: '',   // 报案人证件号码
         handlerCode: '133100013',
+        isSubrogation: '0',           // 是否要求代位
+        currentLicenseNumber: '',     // 现有车牌号
+        damageStatus: '1',            // 损失情况：损/无损
+        driverName: '',               // 驾驶员姓名
+        driverCertType: '',           // 驾驶员证件类型
+        driverCertNo: '',             // 驾驶员证件号码
+        damageDegree: '',             // 损坏程度
+        vehicleCanRun: '1',           // 车辆能否正常行驶
+        vehicleStatus: '1',           // 车辆状态：需要拖车 / 气囊弹出
+        engineNumber: '',             // 发动机号
+        frameNumber: ''               // 车架号
       },
       activeTab: 'reportInfo'
     }

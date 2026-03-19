@@ -42,11 +42,11 @@
             <div class="policy-body" v-show="policyBodyExpanded">
               <!-- 第 1 行：3 个字段 -->
               <div class="info-item">
-                <label><i class="icon-user"></i> 投保人名称</label>
+                <label><i class="iconfont icon-yonghu"></i> 投保人名称</label>
                 <div class="value">{{ caseInfo.appliName }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-user"></i> 被保人名称</label>
+                <label><i class="iconfont icon-yonghu"></i> 被保人名称</label>
                 <div class="value">{{ caseInfo.insuredName }}</div>
               </div>
               <div class="info-item">
@@ -173,11 +173,8 @@
 
       <!-- ============ 报案信息区块 ============ -->
       <section class="form-section" id="section-reportInfo">
-        <div class="section-header" @click="toggleSection('reportInfo')">
+        <div class="section-header"">
           <h3>📝 报案信息</h3>
-          <span class="toggle-icon">
-            {{ reportInfoExpanded ? '▼' : '▶' }}
-          </span>
         </div>
 
         <div v-show="reportInfoExpanded" class="section-content">
@@ -612,15 +609,31 @@
 
       <!-- ============ 车辆信息区块 ============ -->
       <section class="form-section" id="section-vehicleInfo">
-        <div class="section-header" @click="toggleSection('vehicleInfo')">
-          <h3>🚗 车辆信息</h3>
-          <span class="toggle-icon">
-            {{ vehicleInfoExpanded ? '▼' : '▶' }}
-          </span>
+        <div class="section-header">
+          <h3>🚗 涉案车辆信息</h3>
+          <button type="button" class="btn-add-icon float-right">
+            <span>+</span>
+          </button>
         </div>
 
         <div v-show="vehicleInfoExpanded" class="section-content">
-          <div class="form-row">
+          <!-- 第一行：是否要求代位 -->
+          <div class="contact-form-row">
+            <div class="form-group">
+              <label>是否要求代位</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.isSubrogation" value="1" /> 是
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.isSubrogation" value="0" /> 否
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 第二行：标的车车牌、现有车牌号、损失情况 -->
+          <div class="contact-form-row">
             <div class="form-group">
               <label>标的车车牌 <span class="required">*</span></label>
               <input type="text" v-model="caseInfo.licenseNumber" ref="licenseNumber"
@@ -632,25 +645,25 @@
             </div>
 
             <div class="form-group">
-              <label>发动机号 <span class="required">*</span></label>
-              <input type="text" v-model="caseInfo.engineNumber" ref="engineNumber"
-                :class="{ 'input-error': validationErrors.engineNumber }" class="form-input" />
-              <span v-if="validationErrors.engineNumber" class="error-message">
-                {{ validationErrors.engineNumber }}
-              </span>
+              <label>现有车牌号</label>
+              <input type="text" v-model="caseInfo.currentLicenseNumber" class="form-input" />
             </div>
 
             <div class="form-group">
-              <label>车架号 <span class="required">*</span></label>
-              <input type="text" v-model="caseInfo.frameNumber" ref="frameNumber"
-                :class="{ 'input-error': validationErrors.frameNumber }" class="form-input" />
-              <span v-if="validationErrors.frameNumber" class="error-message">
-                {{ validationErrors.frameNumber }}
-              </span>
+              <label>损失情况 <span class="required">*</span></label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.damageStatus" value="1" /> 损
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.damageStatus" value="0" /> 无损
+                </label>
+              </div>
             </div>
           </div>
 
-          <div class="form-row">
+          <!-- 第三行：驾驶员姓名、证件类型、证件号码、损坏程度 -->
+          <div class="contact-form-row">
             <div class="form-group">
               <label>驾驶员姓名 <span class="required">*</span></label>
               <input type="text" v-model="caseInfo.driverName" ref="driverName"
@@ -674,9 +687,15 @@
               <label>驾驶员证件号码</label>
               <input type="text" v-model="caseInfo.driverCertNo" class="form-input" />
             </div>
+
+            <div class="form-group">
+              <label>损坏程度</label>
+              <input type="text" v-model="caseInfo.damageDegree" class="form-input" />
+            </div>
           </div>
 
-          <div class="form-row">
+          <!-- 第四行：车辆能否正常行驶、车辆状态、发动机号、车架号 -->
+          <div class="contact-form-row">
             <div class="form-group">
               <label>车辆能否正常行驶 <span class="required">*</span></label>
               <div class="radio-group">
@@ -688,6 +707,36 @@
                 </label>
               </div>
             </div>
+
+            <div class="form-group">
+              <label>车辆状态 <span class="required">*</span></label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.vehicleStatus" value="1" /> 需要拖车
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.vehicleStatus" value="2" /> 气囊弹出
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>发动机号 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.engineNumber" ref="engineNumber"
+                :class="{ 'input-error': validationErrors.engineNumber }" class="form-input" />
+              <span v-if="validationErrors.engineNumber" class="error-message">
+                {{ validationErrors.engineNumber }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>车架号 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.frameNumber" ref="frameNumber"
+                :class="{ 'input-error': validationErrors.frameNumber }" class="form-input" />
+              <span v-if="validationErrors.frameNumber" class="error-message">
+                {{ validationErrors.frameNumber }}
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -696,9 +745,6 @@
       <section class="form-section" id="section-contactInfo">
         <div class="section-header">
           <h3><i class="icon-user-t"></i>报案人姓名、联系人姓名</h3>
-          <span class="toggle-icon" @click="toggleSection('contactInfo')">
-            {{ contactInfoExpanded ? '▼' : '▶' }}
-          </span>
         </div>
 
         <div v-show="contactInfoExpanded" class="section-content">
@@ -793,11 +839,8 @@
 
       <!-- ============ 损失类型区块 ============ -->
       <section class="form-section" id="section-lossType">
-        <div class="section-header" @click="toggleSection('lossType')">
+        <div class="section-header" >
           <h3><i class="icon-warning"></i> 损失类型</h3>
-          <span class="toggle-icon">
-            {{ lossTypeExpanded ? '▼' : '▶' }}
-          </span>
         </div>
 
         <div v-show="lossTypeExpanded" class="section-content">
@@ -940,15 +983,15 @@
 
       <!-- ============ 人员伤亡区块 ============ -->
       <section class="form-section" id="section-personInjury">
-        <div class="section-header" @click="toggleSection('personInjury')">
+        <div class="section-header">
           <h3>🏥 人员伤亡</h3>
-          <span class="toggle-icon">
-            {{ personInjuryExpanded ? '▼' : '▶' }}
-          </span>
+          <button type="button" class="btn-add-icon float-right">
+            <span>+</span>
+          </button>
         </div>
 
         <div v-show="personInjuryExpanded" class="section-content">
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>是否人员伤亡 <span class="required">*</span></label>
               <div class="radio-group">
@@ -974,7 +1017,7 @@
             </div>
           </div>
 
-          <div v-if="caseInfo.woundFlag === '1'" class="person-injury-list">
+          <!-- <div v-if="caseInfo.woundFlag === '1'" class="person-injury-list">
             <div v-for="(item, index) in personInjuryList" :key="index" class="injury-item">
               <div class="form-row">
                 <div class="form-group">
@@ -1014,7 +1057,7 @@
             <button type="button" @click="addPersonInjury" class="btn-add">
               + 添加人员伤亡
             </button>
-          </div>
+          </div> -->
         </div>
       </section>
 
@@ -1022,9 +1065,6 @@
       <section class="form-section" id="section-accidentRescue">
         <div class="section-header">
           <h3>🚑 事故救援</h3>
-          <span class="toggle-icon" @click="toggleSection('accidentRescue')">
-            {{ accidentRescueExpanded ? '▼' : '▶' }}
-          </span>
         </div>
 
         <div v-show="accidentRescueExpanded" class="section-content">
@@ -1111,47 +1151,46 @@
       </section>
 
       <!-- ============ 案件补充说明区块 ============ -->
-<section class="form-section" id="section-caseDesc">
-  <div class="section-header"">
+      <section class="form-section" id="section-caseDesc">
+        <div class="section-header"">
     <h3>📄 案件补充说明</h3>
-    <button type="button" @click="addCaseDesc" class="desc-add-icon float-right">
-            <span>+  添加说明</span>
+    <button type=" button" @click="addCaseDesc" class="desc-add-icon float-right">
+          <span>+ 添加说明</span>
           </button>
-  </div>
+        </div>
 
-  <div v-show="caseDescExpanded" class="section-content">
-    <!-- 使用表格布局的补充说明列表 -->
-    <div class="case-desc-list">
-      <div v-if="caseDescList.length === 0" class="empty-state">
-        <p style="color: #6c757d; text-align: center; padding: 20px;">暂无补充说明记录</p>
-      </div>
-      
-      <div v-else>
-        <table class="case-desc-table">
-        <thead>
-          <tr>
-            <th class="seq-column">序号</th>
-            <th class="time-column">时间</th>
-            <th class="operator-column">操作员</th>
-            <th class="content-column">内容</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in caseDescList" :key="index">
-            <td class="seq-column">{{ index + 1 }}</td>
-            <td class="time-column">{{ item.disposeTime }}</td>
-            <td class="operator-column">{{ item.usercode }}</td>
-            <td class="content-column">
-              <input type="text" v-model="item.context" class="desc-input"
-                placeholder="请输入补充说明内容" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
-  </div>
-</section>
+        <div v-show="caseDescExpanded" class="section-content">
+          <!-- 使用表格布局的补充说明列表 -->
+          <div class="case-desc-list">
+            <div v-if="caseDescList.length === 0" class="empty-state">
+              <p style="color: #6c757d; text-align: center; padding: 20px;">暂无补充说明记录</p>
+            </div>
+
+            <div v-else>
+              <table class="case-desc-table">
+                <thead>
+                  <tr>
+                    <th class="seq-column">序号</th>
+                    <th class="time-column">时间</th>
+                    <th class="operator-column">操作员</th>
+                    <th class="content-column">内容</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in caseDescList" :key="index">
+                    <td class="seq-column">{{ index + 1 }}</td>
+                    <td class="time-column">{{ item.disposeTime }}</td>
+                    <td class="operator-column">{{ item.usercode }}</td>
+                    <td class="content-column">
+                      <input type="text" v-model="item.context" class="desc-input" placeholder="请输入补充说明内容" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- ============ 表单底部按钮 ============ -->
       <div class="form-actions">
@@ -1198,13 +1237,13 @@ export default {
       // ============ 折叠/展开状态 ============
       policyInfoExpanded: true,
       policyBodyExpanded: true,
-      reportInfoExpanded: false,
-      vehicleInfoExpanded: false,
-      lossTypeExpanded: false,
-      personInjuryExpanded: false,
+      reportInfoExpanded: true,
+      vehicleInfoExpanded: true,
+      lossTypeExpanded: true,
+      personInjuryExpanded: true,
       accidentRescueExpanded: true,
-      contactInfoExpanded: false,
-      caseDescExpanded: false,
+      contactInfoExpanded: true,
+      caseDescExpanded: true,
       historyReportExpanded: true,
       propertyLossExpanded: true,
 
@@ -1294,23 +1333,23 @@ export default {
       this.propertyLossList.splice(index, 1)
     },
     // 添加补充说明
-  addCaseDesc() {
-    this.caseDescList.push({
-      disposeTime: new Date().toLocaleDateString(), // 默认当前时间
-      usercode: '当前用户',
-      context: ''
-    })
-  },
-  
-  // 删除补充说明
-  removeCaseDesc(index) {
-    this.caseDescList.splice(index, 1)
-  },
-  
-  // 清空所有补充说明
-  clearCaseDesc() {
-    this.caseDescList = []
-  },
+    addCaseDesc() {
+      this.caseDescList.push({
+        disposeTime: new Date().toLocaleDateString(), // 默认当前时间
+        usercode: '当前用户',
+        context: ''
+      })
+    },
+
+    // 删除补充说明
+    removeCaseDesc(index) {
+      this.caseDescList.splice(index, 1)
+    },
+
+    // 清空所有补充说明
+    clearCaseDesc() {
+      this.caseDescList = []
+    },
     // ============ 全部展开 ============
     expandAll() {
       Object.keys(this.$data).forEach(key => {
@@ -1597,6 +1636,7 @@ export default {
   min-width: 0;
   flex: 1;
 }
+
 /* ============ 案件补充说明区块样式 ============ */
 .case-desc-container {
   border: 1px solid #e9ecef;
@@ -1710,6 +1750,7 @@ export default {
 .content-column {
   width: calc(100% - 360px);
 }
+
 .desc-add-icon {
   /* 基础样式保留 */
   background-color: #f2f4f7;
@@ -1717,18 +1758,23 @@ export default {
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  
- 
-  width: 60px; 
+
+
+  width: 60px;
   height: 15px;
-  border-radius: 8px; 
+  border-radius: 8px;
   display: flex;
   justify-content: flex-start;
-  font-size: 12px; /* 加号大小，可按需改 */
-  font-weight: normal; /* 避免加号过粗 */
-  padding: 0; /* 取消内边距，防止圆形变形 */
-  margin-top: 8px; /* 保留原外边距，可删改 */
+  font-size: 12px;
+  /* 加号大小，可按需改 */
+  font-weight: normal;
+  /* 避免加号过粗 */
+  padding: 0;
+  /* 取消内边距，防止圆形变形 */
+  margin-top: 8px;
+  /* 保留原外边距，可删改 */
 }
+
 .desc-add-icon:focus {
   outline: none;
 }
@@ -1747,9 +1793,10 @@ export default {
   padding: 16px;
   background-color: white;
   transition: box-shadow 0.2s ease;
-  height: 100px; 
+  height: 100px;
   display: grid;
 }
+
 .btn-remove-top {
   position: absolute;
   top: 12px;
@@ -1767,7 +1814,7 @@ export default {
   justify-content: center;
   transition: all 0.2s ease;
   background-color: white;
-   z-index: 10;
+  z-index: 10;
   transform: translateY(0);
 }
 
@@ -1841,26 +1888,23 @@ export default {
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  
- 
-  width: 30px; 
-  height: 30px;
-  border-radius: 8px; 
-  
+  width: 30px;
+  height: 40px;
+  border-radius: 8px;
   /* 核心：加号垂直水平居中 */
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* 加号样式调整 */
-  font-size: 25px; /* 加号大小，可按需改 */
-  font-weight: normal; /* 避免加号过粗 */
-  padding: 0; /* 取消内边距，防止圆形变形 */
-  margin-top: 8px; /* 保留原外边距，可删改 */
+  font-size: 25px;
+  font-weight: normal;
+  padding: 0;
+  margin-top: 8px;
 }
+
 .btn-add-icon:focus {
   outline: none;
 }
+
 /* .property-loss-item .btn-add:hover {
   background-color: #0066CC;
 } */
@@ -1868,8 +1912,10 @@ export default {
 .float-right {
   float: right;
   margin-left: auto;
-  margin-top: -15px; /* 调整垂直对齐 */
+  margin-top: -15px;
+  /* 调整垂直对齐 */
 }
+
 /* ============ 保单卡片样式 ============ */
 .policy-card {
   border: 2px solid #0066CC;

@@ -68,7 +68,14 @@ export const requiredFields = {
   isDisaster: { required: true, message: '请选择是否巨灾' },
   disasterType: { required: true, message: '请选择巨灾类型' },
   disasterName: { required: true, message: '请输入巨灾名称' },
-  isOnSiteSurvey: { required: true, message: '请选择是否需现场查勘' }
+  isOnSiteSurvey: { required: true, message: '请选择是否需现场查勘' },
+  licenseNumber: { required: true, message: '请输入标的车车牌' },
+  driverName: { required: true, message: '请输入驾驶员姓名' },
+  engineNumber: { required: true, message: '请输入发动机号' },
+  frameNumber: { required: true, message: '请输入车架号' },
+  damageStatus: { required: true, message: '请选择损失情况' },
+  vehicleCanRun: { required: true, message: '请选择车辆能否正常行驶' },
+  vehicleStatus: { required: true, message: '请选择车辆状态' }
 }
 
 /**
