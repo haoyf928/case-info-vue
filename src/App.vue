@@ -1,17 +1,35 @@
 <!-- src/App.vue -->
 <template>
-  <div class="app-container">
-    <!-- 左侧主内容区 -->
-    <main class="main-content">
-      <!-- 添加 ref="caseForm" -->
-      <CaseInfoForm ref="caseForm" :case-info="caseInfo" @submit="handleSubmit" @save="handleSave"
-        @transfer="handleTransfer" />
-    </main>
+  <div class="app-wrapper">
+    <!-- 新增：顶部系统标题栏 -->
+    <header class="app-header">
+      <div class="header-left">
+        <i class="iconfont icon-shield .system-icon " ></i>
+        <h2 class="system-title">保险理赔管理系统</h2>
+      </div>
+    </header>
 
-    <!-- 右侧导航栏 -->
-    <aside class="sidebar">
-      <SidebarNavigation :active-tab="activeTab" @tab-change="handleTabChange" />
-    </aside>
+    <!-- 原有双栏布局容器 -->
+    <div class="app-container">
+      <!-- 左侧主内容区 -->
+      <main class="main-content">
+        <CaseInfoForm 
+          ref="caseForm" 
+          :case-info="caseInfo" 
+          @submit="handleSubmit" 
+          @save="handleSave"
+          @transfer="handleTransfer" 
+        />
+      </main>
+
+      <!-- 右侧导航栏 -->
+      <aside class="sidebar">
+        <SidebarNavigation 
+          :active-tab="activeTab" 
+          @tab-change="handleTabChange" 
+        />
+      </aside>
+    </div>
   </div>
 </template>
 
@@ -93,21 +111,21 @@ export default {
         linkerPhone: '',
         propFlag: '',
         woundFlag: '',
-        reporterRelation: '', // 报案人跟被保险人关系
-        reporterCertType: '', // 报案人证件类型
-        reporterCertNo: '',   // 报案人证件号码
+        reporterRelation: '',
+        reporterCertType: '',
+        reporterCertNo: '',
         handlerCode: '133100013',
-        isSubrogation: '0',           // 是否要求代位
-        currentLicenseNumber: '',     // 现有车牌号
-        damageStatus: '1',            // 损失情况：损/无损
-        driverName: '',               // 驾驶员姓名
-        driverCertType: '',           // 驾驶员证件类型
-        driverCertNo: '',             // 驾驶员证件号码
-        damageDegree: '',             // 损坏程度
-        vehicleCanRun: '1',           // 车辆能否正常行驶
-        vehicleStatus: '1',           // 车辆状态：需要拖车 / 气囊弹出
-        engineNumber: '',             // 发动机号
-        frameNumber: ''               // 车架号
+        isSubrogation: '0',
+        currentLicenseNumber: '',
+        damageStatus: '1',
+        driverName: '',
+        driverCertType: '',
+        driverCertNo: '',
+        damageDegree: '',
+        vehicleCanRun: '1',
+        vehicleStatus: '1',
+        engineNumber: '',
+        frameNumber: ''
       },
       activeTab: 'reportInfo'
     }
@@ -128,10 +146,7 @@ export default {
     handleTabChange(tab) {
       console.log('导航栏点击:', tab)
       this.activeTab = tab
-
-      // 确保在 nextTick 中调用，因为 DOM 可能还未更新
       this.$nextTick(() => {
-        console.log('caseForm 引用:', this.$refs.caseForm)
         if (this.$refs.caseForm && this.$refs.caseForm.navigateToSection) {
           this.$refs.caseForm.navigateToSection(tab)
         } else {
@@ -143,8 +158,8 @@ export default {
 }
 </script>
 
-<style>
-/* 保持原有样式不变 */
+<style scoped>
+/* 全局重置 */
 * {
   margin: 0;
   padding: 0;
@@ -160,46 +175,88 @@ body {
   background-color: #f5f5f5;
 }
 
+/* 整体页面容器：垂直布局（顶部栏 + 双栏内容） */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* 新增：顶部系统标题栏样式 */
+.app-header {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  z-index: 200;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.system-icon {
+  font-size: 24px; /* 图标大小，按需调整（推荐20-28px） */
+  color: #0056a4; /* 替代行内style，统一管理 */
+  vertical-align: middle;
+}
+
+.system-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* 双栏布局容器：占满剩余高度 */
 .app-container {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  flex: 1;
   overflow: hidden;
 }
 
+/* 左侧主内容区 */
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
-  background-color: #f5f5f5;
+  overflow-x: hidden;
+  padding: 24px;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
+/* 右侧导航栏 */
 .sidebar {
-  width: 220px;
+  width: 240px;
   flex-shrink: 0;
-  background-color: #fff;
-  border-left: 1px solid #ddd;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9fafb;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
+  overflow-x: hidden;
   z-index: 100;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.main-content::-webkit-scrollbar,
-.sidebar::-webkit-scrollbar {
-  width: 8px;
+/* 隐藏滚动条 */
+::v-deep .main-content::-webkit-scrollbar,
+::v-deep .sidebar::-webkit-scrollbar {
+  display: none;
 }
 
-.main-content::-webkit-scrollbar-thumb,
-.sidebar::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 4px;
-}
-
-.main-content::-webkit-scrollbar-thumb:hover,
-.sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: #999;
-}
-
+/* 响应式适配 */
 @media (max-width: 1024px) {
   .app-container {
     flex-direction: column;
@@ -207,9 +264,16 @@ body {
 
   .sidebar {
     width: 100%;
-    height: auto;
-    border-left: none;
-    border-top: 1px solid #ddd;
+    height: 120px;
+    border-right: none;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .main-content {
+    height: calc(100vh - 60px - 120px); /* 扣除顶部栏和导航栏高度 */
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
   }
 }
 </style>
