@@ -4,10 +4,10 @@
 
       <!-- ============ 保单信息区块 ============ -->
       <section class="form-section" id="section-policyInfo">
-        <div class="section-header" @click="toggleSection('policyInfo')">
-          <h3>📋 保单信息</h3>
-          <span class="toggle-icon">
-            {{ policyInfoExpanded ? '▼' : '▶' }}
+        <div class="section-header">
+          <h3> 保单信息</h3>
+          <span class="toggle-icon" @click="toggleSection('policyInfo')">
+            <i :class="policyInfoExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
           </span>
         </div>
 
@@ -31,15 +31,14 @@
               </div>
               <div class="policy-title">
                 <span class="title-text">{{ caseInfo.insuranceName }}</span>
-                <!-- <button class="btn-collapse" @click="togglePolicyBody">
-        <i class="icon">{{ policyBodyExpanded ? '▲' : '▼' }}</i>
-        <span>{{ policyBodyExpanded ? '收起' : '展开' }}</span>
-      </button> -->
+                <span class="toggle-icon" @click="toggleSection('policyBody')">
+                  <i :class="policyBodyExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
+                </span>
               </div>
             </div>
 
             <!-- 主体信息网格 -->
-            <div class="policy-body" v-show="policyBodyExpanded">
+            <div class="policy-body" v-show="policyBodyExpanded" id="policyBody">
               <!-- 第 1 行：3 个字段 -->
               <div class="info-item">
                 <label><i class="iconfont icon-yonghu"></i> 投保人名称</label>
@@ -50,63 +49,63 @@
                 <div class="value">{{ caseInfo.insuredName }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-agent"></i> 代理人名称</label>
+                <label><i class="iconfont icon-shield"></i> 代理人名称</label>
                 <div class="value">{{ caseInfo.agentName }}</div>
               </div>
 
               <!-- 第 2 行：3 个字段 -->
               <div class="info-item">
-                <label><i class="icon-insurance"></i> 险种名称</label>
+                <label><i class="iconfont icon-wendang"></i> 险种名称</label>
                 <div class="value">{{ caseInfo.insuranceName }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-calendar"></i> 保险起期</label>
+                <label><i class="iconfont icon-shijiankaishishijian"></i> 保险起期</label>
                 <div class="value">{{ caseInfo.policyStartDateStr }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-calendar"></i> 保险止期</label>
+                <label><i class="iconfont icon-shijiankaishishijian"></i> 保险止期</label>
                 <div class="value">{{ caseInfo.policyEndDateStr }}</div>
               </div>
 
               <!-- 第 3 行：3 个字段 -->
               <div class="info-item">
-                <label><i class="icon-calendar"></i> 保险日期止期</label>
+                <label><i class="iconfont icon-shijiankaishishijian"></i> 保险日期止期</label>
                 <div class="value">{{ caseInfo.policyEndDateStr }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-company"></i> 承保机构</label>
+                <label><i class="iconfont icon-jigou"></i> 承保机构</label>
                 <div class="value">{{ caseInfo.insurerName }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-work"></i> 工作单位</label>
+                <label><i class="iconfont icon-commpany"></i> 工作单位</label>
                 <div class="value">{{ caseInfo.workUnit || '-' }}</div>
               </div>
 
               <!-- 第 4 行：3 个字段 -->
               <div class="info-item">
-                <label><i class="icon-source"></i> 客户来源</label>
+                <label><i class="iconfont icon-dingwei"></i> 客户来源</label>
                 <div class="value">{{ caseInfo.customerSource || '-' }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-user"></i> 客户标识</label>
+                <label><i class="iconfont icon-yonghu"></i> 客户标识</label>
                 <div class="value">{{ caseInfo.customerTag || '-' }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-star"></i> 客户等级</label>
+                <label><i class="iconfont icon-shoucang"></i> 客户等级</label>
                 <div class="value">{{ caseInfo.customerLevel || '-' }}</div>
               </div>
 
               <!-- 第 5 行：3 个字段 -->
               <div class="info-item">
-                <label><i class="icon-specialist"></i> 专员名称</label>
+                <label><i class="iconfont icon-yonghu"></i> 专员名称</label>
                 <div class="value">{{ caseInfo.specialistName || '-' }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-phone"></i> 专员电话</label>
+                <label><i class="iconfont icon-Telephone"></i> 专员电话</label>
                 <div class="value">{{ caseInfo.specialistPhone || '-' }}</div>
               </div>
               <div class="info-item">
-                <label><i class="icon-star"></i> 服务等级</label>
+                <label><i class="iconfont icon-shoucang"></i> 服务等级</label>
                 <div class="value">{{ caseInfo.serviceLevel || '-' }}</div>
               </div>
             </div>
@@ -120,7 +119,7 @@
           <h3><i class="icon-history"></i> 历史报案记录</h3>
           <span class="record-count">{{ historyReports.length }} 条记录</span>
           <span class="toggle-icon" @click="toggleSection('historyReport')">
-            {{ historyReportExpanded ? '▼' : '▶' }}
+            <i :class="historyReportExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
           </span>
         </div>
 
@@ -174,23 +173,22 @@
       <!-- ============ 报案信息区块 ============ -->
       <section class="form-section" id="section-reportInfo">
         <div class="section-header"">
-          <h3>📝 报案信息</h3>
+          <h3><i class=" iconfont icon-bianji-wenjian-bianji" style="color: #0056a4 ;"></i> 报案信息</h3>
         </div>
 
         <div v-show="reportInfoExpanded" class="section-content">
           <!-- 第一行：出险时间 & 报案时间 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
-              <label>出险时间 <span class="required">*</span></label>
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 出险时间 <span class="required">*</span></label>
               <input type="datetime-local" v-model="caseInfo.accidentTime" ref="accidentTime"
                 :class="{ 'input-error': validationErrors.accidentTime }" class="form-input" />
               <span v-if="validationErrors.accidentTime" class="error-message">
                 {{ validationErrors.accidentTime }}
               </span>
             </div>
-
             <div class="form-group">
-              <label>报案时间 <span class="required">*</span></label>
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 报案时间 <span class="required">*</span></label>
               <input type="datetime-local" v-model="caseInfo.reportTime" ref="reportTime"
                 :class="{ 'input-error': validationErrors.reportTime }" class="form-input" />
               <span v-if="validationErrors.reportTime" class="error-message">
@@ -200,7 +198,7 @@
           </div>
 
           <!-- 第二行：是否现场报案、天气情况、出险地点分类 -->
-          <div class="form-row">
+          <div class="contact-form-row">
             <div class="form-group">
               <label>是否现场报案 <span class="required">*</span></label>
               <div class="radio-group">
@@ -214,7 +212,7 @@
             </div>
 
             <div class="form-group">
-              <label>天气情况 <span class="required">*</span></label>
+              <label><i class="iconfont icon-yun"></i> 天气情况 <span class="required">*</span></label>
               <select v-model="caseInfo.weatherSituation" ref="weatherSituation"
                 :class="{ 'input-error': validationErrors.weatherSituation }" class="form-input">
                 <option value="">请选择</option>
@@ -228,7 +226,7 @@
             </div>
 
             <div class="form-group">
-              <label>出险地点分类 <span class="required">*</span></label>
+              <label><i class="iconfont icon-tishi"></i> 出险地点分类 <span class="required">*</span></label>
               <select v-model="caseInfo.damageLocationType" ref="damageLocationType"
                 :class="{ 'input-error': validationErrors.damageLocationType }" class="form-input">
                 <option value="">请选择</option>
@@ -243,7 +241,7 @@
           <!-- 第三行：出险地点（省市区街道门牌号）+ 路名索检 -->
           <div class="form-row">
             <div class="form-group">
-              <label>出险地点 <span class="required">*</span></label>
+              <label><i class="iconfont icon-dingwei"></i> 出险地点 <span class="required">*</span></label>
               <div class="address-inputs">
                 <select v-model="caseInfo.areaProvince" ref="areaProvince"
                   :class="{ 'input-error': validationErrors.areaProvince }" class="form-input select-sm">
@@ -270,7 +268,7 @@
                   :class="{ 'input-error': validationErrors.doorNumber }" placeholder="门牌号" class="form-input" />
 
                 <button type="button" class="btn-search" @click="searchAddress">
-                  📍 路名索检
+                  <i class="iconfont icon-dingwei"></i> 路名索检
                 </button>
               </div>
               <span v-if="validationErrors.damageAddress" class="error-message">
@@ -308,7 +306,7 @@
           <!-- 第五行：车辆目前所在地 -->
           <div class="form-row">
             <div class="form-group full-width">
-              <label>车辆目前所在地 <span class="required">*</span></label>
+              <label><i class="iconfont icon-dingwei"></i> 车辆目前所在地 <span class="required">*</span></label>
               <div class="address-inputs">
                 <select v-model="caseInfo.currentAreaProvince" ref="currentAreaProvince"
                   :class="{ 'input-error': validationErrors.currentAreaProvince }" class="form-input select-sm">
@@ -335,7 +333,7 @@
                   :class="{ 'input-error': validationErrors.currentDoorNumber }" placeholder="门牌号" class="form-input" />
 
                 <button type="button" class="btn-search" @click="searchCurrentAddress">
-                  📍 路名索检
+                  <i class="iconfont icon-dingwei"></i> 路名索检
                 </button>
               </div>
             </div>
@@ -607,10 +605,193 @@
         </div>
       </section>
 
+      <!-- ============ 事故救援区块 ============ -->
+      <section class="form-section" id="section-accidentRescue">
+        <div class="section-header">
+          <h3><i class="iconfont icon-wuliuqiache" style="color: #0056a4 ;"></i> 事故救援</h3>
+        </div>
+        <div v-show="accidentRescueExpanded" class="section-content">
+          <div class="rescue-container">
+            <!-- 标的车区域 -->
+            <div class="rescue-vehicle-section">
+              <div class="rescue-vehicle-header">
+                <h4>标的车</h4>
+              </div>
+
+              <!-- 标的车能否正常行驶 -->
+              <div class="form-group">
+                <label>标的车能否正常行驶</label>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[0].isNormalRun" value="1" /> 能
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[0].isNormalRun" value="0" /> 不能
+                  </label>
+                </div>
+              </div>
+
+              <!-- 标的车事故救援选项 -->
+              <div class="form-group">
+                <label>标的车事故救援</label>
+                <div class="rescue-checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].hasCarDamageInsurance" /> 标的车保有车损险
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].isFullLiability" /> 标的车全责
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].confirmedCompensation" /> 车损险确认理赔
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[0].fiftyKm" /> 拖车50KM内
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 三者车区域 -->
+            <div class="rescue-vehicle-section">
+              <div class="rescue-vehicle-header">
+                <h4>三者车</h4>
+              </div>
+
+              <!-- 三者车能否正常行驶 -->
+              <div class="form-group">
+                <label>三者车能否正常行驶</label>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[1].isNormalRun" value="1" /> 能
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" v-model="rescueInfo[1].isNormalRun" value="0" /> 不能
+                  </label>
+                </div>
+              </div>
+
+              <!-- 三者车事故救援选项 -->
+              <div class="form-group">
+                <label>三者车事故救援</label>
+                <div class="rescue-t-checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].hasThirdPartyInsurance" /> 保有交强险及商业三者险
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].isNoFault" /> 三者车无责
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].confirmedThirdPartyCompensation" /> 商业三者险确认理赔
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" v-model="rescueInfo[1].fiftyKm" /> 拖车50KM内
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 报案人，联系人姓名区块 ============ -->
+      <section class="form-section" id="section-contactInfo">
+        <div class="section-header">
+          <h3><i class="iconfont icon-yonghu" style="color: #0056a4 ;"></i> 报案人姓名、联系人姓名</h3>
+        </div>
+
+        <div v-show="contactInfoExpanded" class="section-content">
+          <!-- 第一行：4个字段 -->
+          <div class="contact-form-row">
+            <div class="form-group">
+              <label>报案人姓名 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.reportorName" ref="reportorName"
+                :class="{ 'input-error': validationErrors.reportorName }" class="form-input" />
+              <span v-if="validationErrors.reportorName" class="error-message">
+                {{ validationErrors.reportorName }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>报案电话 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.reportorPhonenumber" ref="reportorPhonenumber"
+                :class="{ 'input-error': validationErrors.reportorPhonenumber }" class="form-input"
+                placeholder="手机号或固定电话" />
+              <span v-if="validationErrors.reportorPhonenumber" class="error-message">
+                {{ validationErrors.reportorPhonenumber }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>报案人跟被保险人关系 <span class="required">*</span></label>
+              <select v-model="caseInfo.reporterRelation" ref="reporterRelation"
+                :class="{ 'input-error': validationErrors.reporterRelation }" class="form-input">
+                <option value="">请选择</option>
+                <option value="0">本人</option>
+                <option value="1">配偶</option>
+                <option value="2">子女</option>
+                <option value="3">父母</option>
+                <option value="4">其他</option>
+              </select>
+              <span v-if="validationErrors.reporterRelation" class="error-message">
+                {{ validationErrors.reporterRelation }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>报案人证件类型</label>
+              <select v-model="caseInfo.reporterCertType" class="form-input">
+                <option value="">请选择</option>
+                <option value="124001">身份证</option>
+                <option value="124002">护照</option>
+                <option value="124003">驾驶证</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 第二行：1个字段 -->
+          <div class="contact-form-row">
+            <div class="form-group">
+              <label>报案人证件号码</label>
+              <input type="text" v-model="caseInfo.reporterCertNo" class="form-input" />
+            </div>
+          </div>
+          <!-- 分割线 -->
+          <div class="divider-line"></div>
+          <!-- 第三行：4个字段 -->
+          <div class="contact-form-row">
+            <div class="form-group">
+              <label>现场联系人姓名 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.linkerName" ref="linkerName"
+                :class="{ 'input-error': validationErrors.linkerName }" class="form-input" />
+              <span v-if="validationErrors.linkerName" class="error-message">
+                {{ validationErrors.linkerName }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>现场联系人电话 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.linkerPhone" ref="linkerPhone"
+                :class="{ 'input-error': validationErrors.linkerPhone }" class="form-input" />
+              <span v-if="validationErrors.linkerPhone" class="error-message">
+                {{ validationErrors.linkerPhone }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>联系人手机</label>
+              <input type="text" v-model="caseInfo.linkerMobile" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label>受理人编码 <span class="required">*</span></label>
+              <input type="text" v-model="caseInfo.handlerCode" class="form-input" />
+            </div>
+          </div>
+        </div>
+      </section>
       <!-- ============ 车辆信息区块 ============ -->
       <section class="form-section" id="section-vehicleInfo">
         <div class="section-header">
-          <h3>🚗 涉案车辆信息</h3>
+          <h3><i class="iconfont icon-qicheSUV" style="color: #0056a4 ;"></i> 涉案车辆信息</h3>
           <button type="button" class="btn-add-icon float-right">
             <span>+</span>
           </button>
@@ -741,179 +922,10 @@
         </div>
       </section>
 
-      <!-- ============ 报案人，联系人姓名区块 ============ -->
-      <section class="form-section" id="section-contactInfo">
-        <div class="section-header">
-          <h3><i class="icon-user-t"></i>报案人姓名、联系人姓名</h3>
-        </div>
-
-        <div v-show="contactInfoExpanded" class="section-content">
-          <!-- 第一行：4个字段 -->
-          <div class="contact-form-row">
-            <div class="form-group">
-              <label>报案人姓名 <span class="required">*</span></label>
-              <input type="text" v-model="caseInfo.reportorName" ref="reportorName"
-                :class="{ 'input-error': validationErrors.reportorName }" class="form-input" />
-              <span v-if="validationErrors.reportorName" class="error-message">
-                {{ validationErrors.reportorName }}
-              </span>
-            </div>
-
-            <div class="form-group">
-              <label>报案电话 <span class="required">*</span></label>
-              <input type="text" v-model="caseInfo.reportorPhonenumber" ref="reportorPhonenumber"
-                :class="{ 'input-error': validationErrors.reportorPhonenumber }" class="form-input"
-                placeholder="手机号或固定电话" />
-              <span v-if="validationErrors.reportorPhonenumber" class="error-message">
-                {{ validationErrors.reportorPhonenumber }}
-              </span>
-            </div>
-
-            <div class="form-group">
-              <label>报案人跟被保险人关系 <span class="required">*</span></label>
-              <select v-model="caseInfo.reporterRelation" ref="reporterRelation"
-                :class="{ 'input-error': validationErrors.reporterRelation }" class="form-input">
-                <option value="">请选择</option>
-                <option value="0">本人</option>
-                <option value="1">配偶</option>
-                <option value="2">子女</option>
-                <option value="3">父母</option>
-                <option value="4">其他</option>
-              </select>
-              <span v-if="validationErrors.reporterRelation" class="error-message">
-                {{ validationErrors.reporterRelation }}
-              </span>
-            </div>
-
-            <div class="form-group">
-              <label>报案人证件类型</label>
-              <select v-model="caseInfo.reporterCertType" class="form-input">
-                <option value="">请选择</option>
-                <option value="124001">身份证</option>
-                <option value="124002">护照</option>
-                <option value="124003">驾驶证</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- 第二行：1个字段 -->
-          <div class="contact-form-row">
-            <div class="form-group">
-              <label>报案人证件号码</label>
-              <input type="text" v-model="caseInfo.reporterCertNo" class="form-input" />
-            </div>
-          </div>
-          <!-- 分割线 -->
-          <div class="divider-line"></div>
-          <!-- 第三行：4个字段 -->
-          <div class="contact-form-row">
-            <div class="form-group">
-              <label>现场联系人姓名 <span class="required">*</span></label>
-              <input type="text" v-model="caseInfo.linkerName" ref="linkerName"
-                :class="{ 'input-error': validationErrors.linkerName }" class="form-input" />
-              <span v-if="validationErrors.linkerName" class="error-message">
-                {{ validationErrors.linkerName }}
-              </span>
-            </div>
-
-            <div class="form-group">
-              <label>现场联系人电话 <span class="required">*</span></label>
-              <input type="text" v-model="caseInfo.linkerPhone" ref="linkerPhone"
-                :class="{ 'input-error': validationErrors.linkerPhone }" class="form-input" />
-              <span v-if="validationErrors.linkerPhone" class="error-message">
-                {{ validationErrors.linkerPhone }}
-              </span>
-            </div>
-
-            <div class="form-group">
-              <label>联系人手机</label>
-              <input type="text" v-model="caseInfo.linkerMobile" class="form-input" />
-            </div>
-            <div class="form-group">
-              <label>受理人编码 <span class="required">*</span></label>
-              <input type="text" v-model="caseInfo.handlerCode" class="form-input" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ 损失类型区块 ============ -->
-      <section class="form-section" id="section-lossType">
-        <div class="section-header" >
-          <h3><i class="icon-warning"></i> 损失类型</h3>
-        </div>
-
-        <div v-show="lossTypeExpanded" class="section-content">
-          <div class="loss-type-container">
-            <!-- 第一行：7个选项 -->
-            <div class="loss-type-row">
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车损" />
-                  本车车损
-                </label>
-              </div>
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车人伤" />
-                  本车人伤
-                </label>
-              </div>
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车载货物" />
-                  本车车载货物
-                </label>
-              </div>
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="三者车损" />
-                  三者车损
-                </label>
-              </div>
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="三者人伤" />
-                  三者人伤
-                </label>
-              </div>
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="三者物损" />
-                  三者物损
-                </label>
-              </div>
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="全车盗抢" />
-                  全车盗抢
-                </label>
-              </div>
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="车身划痕" />
-                  车身划痕
-                </label>
-              </div>
-            </div>
-
-            <!-- 第二行：1个选项 -->
-            <div class="loss-type-row">
-              <div class="loss-type-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车自燃" />
-                  本车自燃
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- 财产损失信息区块 -->
       <section class="form-section" id="section-propertyLoss">
         <div class="section-header">
-          <h3><i class="icon-dollar"></i> 财产损失信息</h3>
+          <h3><i class="iconfont icon-meiyuan" style="color: #0056a4 ;"></i> 财产损失信息</h3>
           <button type="button" @click="addPropertyLoss" class="btn-add-icon float-right">
             <span>+</span>
           </button>
@@ -980,11 +992,10 @@
           </div>
         </div>
       </section>
-
       <!-- ============ 人员伤亡区块 ============ -->
       <section class="form-section" id="section-personInjury">
         <div class="section-header">
-          <h3>🏥 人员伤亡</h3>
+          <h3><i class="iconfont icon-aixin" style="color: #0056a4 ;"></i> 人员伤亡</h3>
           <button type="button" class="btn-add-icon float-right">
             <span>+</span>
           </button>
@@ -1060,102 +1071,84 @@
           </div> -->
         </div>
       </section>
-
-      <!-- ============ 事故救援区块 ============ -->
-      <section class="form-section" id="section-accidentRescue">
+      <!-- ============ 损失类型区块 ============ -->
+      <section class="form-section" id="section-lossType">
         <div class="section-header">
-          <h3>🚑 事故救援</h3>
+          <h3><i class="iconfont icon-shield" style="color: #0056a4 ;"></i>损失类型</h3>
         </div>
 
-        <div v-show="accidentRescueExpanded" class="section-content">
-          <div class="rescue-container">
-            <!-- 标的车区域 -->
-            <div class="rescue-vehicle-section">
-              <div class="rescue-vehicle-header">
-                <h4>标的车</h4>
+        <div v-show="lossTypeExpanded" class="section-content">
+          <div class="loss-type-container">
+            <!-- 第一行：7个选项 -->
+            <div class="loss-type-row">
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车损" />
+                  本车车损
+                </label>
               </div>
-
-              <!-- 标的车能否正常行驶 -->
-              <div class="form-group">
-                <label>标的车能否正常行驶</label>
-                <div class="radio-group">
-                  <label class="radio-label">
-                    <input type="radio" v-model="rescueInfo[0].isNormalRun" value="1" /> 能
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" v-model="rescueInfo[0].isNormalRun" value="0" /> 不能
-                  </label>
-                </div>
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车人伤" />
+                  本车人伤
+                </label>
               </div>
-
-              <!-- 标的车事故救援选项 -->
-              <div class="form-group">
-                <label>标的车事故救援</label>
-                <div class="rescue-checkbox-group">
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[0].hasCarDamageInsurance" /> 标的车保有车损险
-                  </label>
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[0].isFullLiability" /> 标的车全责
-                  </label>
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[0].confirmedCompensation" /> 车损险确认理赔
-                  </label>
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[0].fiftyKm" /> 拖车50KM内
-                  </label>
-                </div>
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车载货物" />
+                  本车车载货物
+                </label>
+              </div>
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="三者车损" />
+                  三者车损
+                </label>
+              </div>
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="三者人伤" />
+                  三者人伤
+                </label>
+              </div>
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="三者物损" />
+                  三者物损
+                </label>
+              </div>
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="全车盗抢" />
+                  全车盗抢
+                </label>
+              </div>
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="车身划痕" />
+                  车身划痕
+                </label>
               </div>
             </div>
 
-            <!-- 三者车区域 -->
-            <div class="rescue-vehicle-section">
-              <div class="rescue-vehicle-header">
-                <h4>三者车</h4>
-              </div>
-
-              <!-- 三者车能否正常行驶 -->
-              <div class="form-group">
-                <label>三者车能否正常行驶</label>
-                <div class="radio-group">
-                  <label class="radio-label">
-                    <input type="radio" v-model="rescueInfo[1].isNormalRun" value="1" /> 能
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" v-model="rescueInfo[1].isNormalRun" value="0" /> 不能
-                  </label>
-                </div>
-              </div>
-
-              <!-- 三者车事故救援选项 -->
-              <div class="form-group">
-                <label>三者车事故救援</label>
-                <div class="rescue-t-checkbox-group">
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[1].hasThirdPartyInsurance" /> 保有交强险及商业三者险
-                  </label>
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[1].isNoFault" /> 三者车无责
-                  </label>
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[1].confirmedThirdPartyCompensation" /> 商业三者险确认理赔
-                  </label>
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="rescueInfo[1].fiftyKm" /> 拖车50KM内
-                  </label>
-                </div>
+            <!-- 第二行：1个选项 -->
+            <div class="loss-type-row">
+              <div class="loss-type-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" v-model="caseInfo.lossTypes" value="本车自燃" />
+                  本车自燃
+                </label>
               </div>
             </div>
           </div>
         </div>
       </section>
-
       <!-- ============ 案件补充说明区块 ============ -->
       <section class="form-section" id="section-caseDesc">
         <div class="section-header"">
-    <h3>📄 案件补充说明</h3>
-    <button type=" button" @click="addCaseDesc" class="desc-add-icon float-right">
-          <span>+ 添加说明</span>
+          <h3><i class=" iconfont icon-008duihuakuang-6" style="color: #0056a4 ;"></i>案件补充说明</h3>
+          <button type=" button" @click="addCaseDesc" class="desc-add-icon float-right">
+            <span>+ 添加说明</span>
           </button>
         </div>
 
@@ -1312,7 +1305,10 @@ export default {
       alert(`查看报案号：${reportNo} 的详情`)
       // 可替换为路由跳转、打开弹窗等逻辑
     },
-
+    openCalendar() {
+      // 这里可以添加打开日历的选择逻辑
+      this.$refs.accidentTime.focus();
+    },
     // ============ 折叠/展开切换方法 ============
     toggleSection(section) {
       const sectionKey = `${section}Expanded`
@@ -1606,6 +1602,31 @@ export default {
 </script>
 
 <style scoped>
+.date-time-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #0887FF;
+  padding: 0;
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.calendar-icon:hover {
+  color: #0056b3;
+}
+
 .btn-search {
   padding: 6px 12px;
   background-color: #0887FF;
