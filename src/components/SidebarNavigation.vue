@@ -2,13 +2,8 @@
 <template>
   <div class="sidebar-navigation">
     <ul class="nav-list">
-      <li 
-        v-for="item in navItems" 
-        :key="item.id"
-        :class="{ active: activeTab === item.id }"
-        @click="onTabClick(item.id)"
-        class="nav-item"
-      >
+      <li v-for="item in navItems" :key="item.id" :class="{ active: activeTab === item.id }"
+        @click="onTabClick(item.id)" class="nav-item">
         <span class="nav-icon">{{ item.icon }}</span>
         <span class="nav-text">{{ item.text }}</span>
       </li>
@@ -28,15 +23,14 @@ export default {
   data() {
     return {
       navItems: [
-        { id: 'policyInfo', text: '保单信息'},
-        { id: 'historyReport', text: '历史报案记录'},
+        { id: 'policyInfo', text: '保单信息' },
+        { id: 'historyReport', text: '历史报案记录' },
         { id: 'reportInfo', text: '报案信息' },
-        { id: 'vehicleInfo', text: '车辆信息' },
-        { id: 'contactInfo', text: '联系人信息' },
-        { id: 'lossType', text: '损失类型' },
-        { id: 'propertyLoss', text: '财产损失' },
-        { id: 'personInjury', text: '人员伤亡' },
         { id: 'accidentRescue', text: '事故救援' },
+        { id: 'vehicleInfo', text: '涉案车辆信息' },
+        { id: 'propertyLoss', text: '财产损失信息' },
+        { id: 'personInjury', text: '人员伤亡信息' },
+        { id: 'lossType', text: '损失类型' },
         { id: 'caseDesc', text: '案件补充说明' }
       ]
     }

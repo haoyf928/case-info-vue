@@ -3,10 +3,7 @@
 // ============ 必填字段规则定义 ============
 export const requiredFields = {
   policyNo: { required: true, message: '保单号不能为空' },
-  accidentTime: { required: true, message: '出险时间不能为空' },
-  reportTime: { required: true, message: '报案时间不能为空' },
   isfirstsiteFlag: { required: true, message: '请选择是否现场报案' },
-  weatherSituation: { required: true, message: '请选择天气情况' },
   damageAddress: { required: true, message: '出险地点不能为空' },
   lsType: { required: true, message: '请选择险因类型' },
   damageCode: { required: true, message: '请选择保险事故分类' },
@@ -40,7 +37,6 @@ export const requiredFields = {
     rule: 'required',
     message: '请填写受理人编码'
   },
-  damageLocationType: { required: true, message: '请选择出险地点分类' },
   street: { required: true, message: '请输入街道' },
   doorNumber: { required: true, message: '请输入门牌号' },
   longitude: { required: true, message: '请输入经度' },
@@ -64,7 +60,6 @@ export const requiredFields = {
   isWeChatClaim: { required: true, message: '请选择是否微信理赔' },
   accidentReason: { required: true, message: '请选择事故原因' },
   isAlarm: { required: true, message: '请选择是否报警' },
-  alarmTime: { required: true, message: '请输入报警时间' },
   isDisaster: { required: true, message: '请选择是否巨灾' },
   disasterType: { required: true, message: '请选择巨灾类型' },
   disasterName: { required: true, message: '请输入巨灾名称' },

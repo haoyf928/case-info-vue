@@ -178,24 +178,45 @@
 
         <div v-show="reportInfoExpanded" class="section-content">
           <!-- 第一行：出险时间 & 报案时间 -->
-          <div class="contact-form-row">
-            <div class="form-group">
-              <label><i class="iconfont icon-shijiankaishishijian"></i> 出险时间 <span class="required">*</span></label>
-              <input type="datetime-local" v-model="caseInfo.accidentTime" ref="accidentTime"
-                :class="{ 'input-error': validationErrors.accidentTime }" class="form-input" />
-              <span v-if="validationErrors.accidentTime" class="error-message">
-                {{ validationErrors.accidentTime }}
-              </span>
-            </div>
-            <div class="form-group">
-              <label><i class="iconfont icon-shijiankaishishijian"></i> 报案时间 <span class="required">*</span></label>
-              <input type="datetime-local" v-model="caseInfo.reportTime" ref="reportTime"
-                :class="{ 'input-error': validationErrors.reportTime }" class="form-input" />
-              <span v-if="validationErrors.reportTime" class="error-message">
-                {{ validationErrors.reportTime }}
-              </span>
-            </div>
+        <div class="contact-form-row">
+          <!-- 出险时间 - 使用 ElDatePicker -->
+          <div class="form-group">
+            <label><i class="iconfont icon-shijiankaishishijian"></i> 出险时间 </label>
+            <el-date-picker
+              v-model="caseInfo.accidentTime"
+              type="datetime"
+              format="YYYY/MM/DD HH:mm:ss"
+              value-format="YYYY/MM/DD HH:mm:ss"
+              placeholder="选择出险时间"
+              prefix-icon="_"
+              clear-icon="_"
+              :class="{ 'input-error': validationErrors.accidentTime }"
+              style="width: 100%;">
+            </el-date-picker>
+            <span v-if="validationErrors.accidentTime" class="error-message">
+              {{ validationErrors.accidentTime }}
+            </span>
           </div>
+
+          <!-- 报案时间 - 同样可以使用 ElDatePicker -->
+          <div class="form-group">
+            <label><i class="iconfont icon-shijiankaishishijian"></i> 报案时间</label>
+            <el-date-picker
+              v-model="caseInfo.reportTime"
+              type="datetime"
+              format="YYYY/MM/DD HH:mm:ss"
+              value-format="YYYY/MM/DD HH:mm:ss"
+              placeholder="选择报案时间"
+              prefix-icon="_"
+              clear-icon="_"
+              :class="{ 'input-error': validationErrors.reportTime }"
+              style="width: 100%;">
+            </el-date-picker>
+            <span v-if="validationErrors.reportTime" class="error-message">
+              {{ validationErrors.reportTime }}
+            </span>
+          </div>
+        </div>
 
           <!-- 第二行：是否现场报案、天气情况、出险地点分类 -->
           <div class="contact-form-row">
@@ -212,7 +233,7 @@
             </div>
 
             <div class="form-group">
-              <label><i class="iconfont icon-yun"></i> 天气情况 <span class="required">*</span></label>
+              <label><i class="iconfont icon-yun"></i> 天气情况</label>
               <select v-model="caseInfo.weatherSituation" ref="weatherSituation"
                 :class="{ 'input-error': validationErrors.weatherSituation }" class="form-input">
                 <option value="">请选择</option>
@@ -226,7 +247,7 @@
             </div>
 
             <div class="form-group">
-              <label><i class="iconfont icon-tishi"></i> 出险地点分类 <span class="required">*</span></label>
+              <label><i class="iconfont icon-tishi"></i> 出险地点分类 </label>
               <select v-model="caseInfo.damageLocationType" ref="damageLocationType"
                 :class="{ 'input-error': validationErrors.damageLocationType }" class="form-input">
                 <option value="">请选择</option>
@@ -521,12 +542,23 @@
                 </label>
               </div>
             </div>
-
-            <div class="form-group">
-              <label>报警时间 <span class="required">*</span></label>
-              <input type="datetime-local" v-model="caseInfo.alarmTime" ref="alarmTime"
-                :class="{ 'input-error': validationErrors.alarmTime }" class="form-input" />
-            </div>
+<div class="form-group">
+            <label><i class="iconfont icon-shijiankaishishijian"></i> 报警时间 </label>
+            <el-date-picker
+              v-model="caseInfo.alarmTime"
+              type="datetime"
+              format="YYYY/MM/DD HH:mm:ss"
+              value-format="YYYY/MM/DD HH:mm:ss"
+              placeholder="选择报警时间"
+              prefix-icon="_"
+              clear-icon="_"
+              :class="{ 'input-error': validationErrors.alarmTime }"
+              style="width: 100%;">
+            </el-date-picker>
+            <span v-if="validationErrors.alarmTime" class="error-message">
+              {{ validationErrors.alarmTime }}
+            </span>
+          </div>
           </div>
 
           <!-- 第十二行：是否巨灾、巨灾类型、巨灾名称 -->
@@ -878,7 +910,7 @@
           <!-- 第四行：车辆能否正常行驶、车辆状态、发动机号、车架号 -->
           <div class="contact-form-row">
             <div class="form-group">
-              <label>车辆能否正常行驶 <span class="required">*</span></label>
+              <label>车辆能否正常行驶 </label>
               <div class="radio-group">
                 <label class="radio-label">
                   <input type="radio" v-model="caseInfo.vehicleCanRun" value="1" /> 能
@@ -890,7 +922,7 @@
             </div>
 
             <div class="form-group">
-              <label>车辆状态 <span class="required">*</span></label>
+              <label>车辆状态 </label>
               <div class="radio-group">
                 <label class="radio-label">
                   <input type="radio" v-model="caseInfo.vehicleStatus" value="1" /> 需要拖车
@@ -1004,7 +1036,7 @@
         <div v-show="personInjuryExpanded" class="section-content">
           <div class="contact-form-row">
             <div class="form-group">
-              <label>是否人员伤亡 <span class="required">*</span></label>
+              <label>是否人员伤亡 </label>
               <div class="radio-group">
                 <label class="radio-label">
                   <input type="radio" v-model="caseInfo.woundFlag" value="0" /> 无
@@ -1188,13 +1220,13 @@
       <!-- ============ 表单底部按钮 ============ -->
       <div class="form-actions">
         <button type="button" @click="validateAndSubmit" class="btn-submit">
-          ✓ 提交
+          <i class=" iconfont icon-fasong"></i> 提交
         </button>
         <button type="button" @click="handleSave" class="btn-save">
-          💾 暂存
+          <i class=" iconfont icon-icon-zancun"></i> 暂存
         </button>
         <button type="button" @click="handleTransfer" class="btn-transfer">
-          📋 转专岗处理
+          <i class=" iconfont icon-arrow-1-right"></i> 转专岗处理
         </button>
         <!-- <button type="button" @click="expandAll" class="btn-secondary">
           ⊞ 全部展开
@@ -1305,9 +1337,27 @@ export default {
       alert(`查看报案号：${reportNo} 的详情`)
       // 可替换为路由跳转、打开弹窗等逻辑
     },
-    openCalendar() {
-      // 这里可以添加打开日历的选择逻辑
-      this.$refs.accidentTime.focus();
+    onAccidentTimeChange(value) {
+      console.log('出险时间已更改:', value);
+      // 触发验证
+      this.$nextTick(() => {
+        this.validateField('accidentTime');
+      });
+    },
+
+    onReportTimeChange(value) {
+      console.log('报案时间已更改:', value);
+      // 触发验证
+      this.$nextTick(() => {
+        this.validateField('reportTime');
+      });
+    },
+    onAlarmTimeChange(value) {
+      console.log('报警时间已更改:', value);
+      // 触发验证
+      this.$nextTick(() => {
+        this.validateField('alarmTime');
+      });
     },
     // ============ 折叠/展开切换方法 ============
     toggleSection(section) {
@@ -1442,8 +1492,6 @@ export default {
     expandSectionsWithErrors(errors) {
       const fieldSectionMap = {
         policyNo: 'policyInfo',
-        accidentTime: 'reportInfo',
-        reportTime: 'reportInfo',
         isfirstsiteFlag: 'reportInfo',
         weatherSituation: 'reportInfo',
         damageAddress: 'reportInfo',
@@ -1480,23 +1528,142 @@ export default {
     },
 
     // ============ 滚动到第一个错误字段 ============
-    async scrollToFirstError(errors) {
-      const firstErrorField = Object.keys(errors)[0]
-      if (!firstErrorField) return
+   // ============ 滚动到第一个错误字段 ============
+async scrollToFirstError(errors) {
+  const firstErrorField = Object.keys(errors)[0]
+  if (!firstErrorField) return
 
-      // 等待 DOM 更新
-      await this.$nextTick()
+  // 等待 DOM 更新
+  await this.$nextTick()
+  await this.$nextTick() // 确保展开的区块DOM已渲染
 
-      // 获取字段引用
-      const element = this.$refs[firstErrorField]
-      if (element) {
-        // 滚动到错误位置
-        scrollToElement(element, 100)
-        // 高亮错误字段
-        highlightError(element)
+  // 获取字段引用
+  let element = null
+  
+  // 尝试获取普通的 ref
+  if (this.$refs[firstErrorField]) {
+    element = this.$refs[firstErrorField]
+    if (Array.isArray(element)) {
+      element = element[0]
+    }
+  }
+  
+  // 如果没有找到普通 ref，则查找 Element Plus 组件的包装元素
+  if (!element) {
+    // 查找具有对应类名的 Element Plus 组件
+    const elDatePickerElements = document.querySelectorAll('.el-date-editor')
+    for (let i = 0; i < elDatePickerElements.length; i++) {
+      const el = elDatePickerElements[i]
+      // 检查这个日期选择器是否对应于错误字段
+      if (el.querySelector('input') && 
+          (el.querySelector('input').name === firstErrorField || 
+           el.querySelector('input').id === firstErrorField ||
+           el.closest('.form-group')?.querySelector('label')?.textContent.includes(firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase()))) {
+        element = el
+        break
       }
-    },
+    }
+  }
+  
+  // 最后尝试通过查询特定的选择器来查找
+  if (!element) {
+    // 尝试通过标签文本关联字段
+    const labels = document.querySelectorAll('label')
+    for (let i = 0; i < labels.length; i++) {
+      if (labels[i].textContent.toLowerCase().includes(
+        firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase().replace('time', '').trim())) {
+        
+        const formGroup = labels[i].closest('.form-group')
+        if (formGroup) {
+          const datePicker = formGroup.querySelector('.el-date-editor')
+          if (datePicker) {
+            element = datePicker
+            break
+          }
+        }
+      }
+    }
+  }
 
+  if (element) {
+    // 添加错误样式
+    element.classList.add('input-error')
+    
+    // 滚动到元素
+    element.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'center',
+      inline: 'nearest'
+    })
+    
+    // 添加视觉反馈
+    element.style.transition = 'box-shadow 0.3s ease'
+    element.style.boxShadow = '0 0 0 2px rgba(255, 77, 79, 0.5)'
+    
+    // 3秒后移除视觉反馈
+    setTimeout(() => {
+      if (element.style) {
+        element.style.boxShadow = ''
+      }
+    }, 3000)
+  } else {
+    console.warn('找不到错误字段元素:', firstErrorField)
+    
+    // 如果真的找不到元素，至少展开包含错误字段的部分
+    const fieldSectionMap = {
+      policyNo: 'policyInfo',
+      accidentTime: 'reportInfo',
+      reportTime: 'reportInfo',
+      alarmTime: 'reportInfo',
+      isfirstsiteFlag: 'reportInfo',
+      weatherSituation: 'reportInfo',
+      damageAddress: 'reportInfo',
+      areaProvince: 'reportInfo',
+      areaCity: 'reportInfo',
+      areaDistrict: 'reportInfo',
+      lsType: 'reportInfo',
+      damageCode: 'reportInfo',
+      licenseNumber: 'vehicleInfo',
+      engineNumber: 'vehicleInfo',
+      frameNumber: 'vehicleInfo',
+      driverName: 'vehicleInfo',
+      vehicleCanRun: 'vehicleInfo',
+      reportorName: 'contactInfo',
+      reportorPhonenumber: 'contactInfo',
+      linkerName: 'contactInfo',
+      linkerPhone: 'contactInfo',
+      propFlag: 'propertyLoss',
+      woundFlag: 'personInjury'
+    }
+    
+    const section = fieldSectionMap[firstErrorField]
+    if (section) {
+      const sectionKey = `${section}Expanded`
+      this[sectionKey] = true
+      
+      // 滚动到对应区块
+      this.$nextTick(() => {
+        const sectionElement = document.getElementById(`section-${section}`)
+        if (sectionElement) {
+          sectionElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          })
+        }
+      })
+    }
+  }
+},
+ highlightError(element) {
+    if (element) {
+      // 如果是 input 元素，添加错误类
+      if (element.classList) {
+        element.classList.add('input-error')
+      } else if (element.parentNode && element.parentNode.querySelector('input')) {
+        element.parentNode.querySelector('input').classList.add('input-error')
+      }
+    }
+  },
     // ============ 清除错误高亮 ============
     clearErrorHighlights() {
       Object.keys(this.$refs).forEach(ref => {
@@ -1602,29 +1769,58 @@ export default {
 </script>
 
 <style scoped>
-.date-time-input-container {
-  position: relative;
+/* 日期选择器样式 */
+.el-date-editor {
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 0;
+  background-color: white;
+}
+
+.el-date-editor .el-input__inner {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  height: 36px;
+  line-height: 36px;
+  text-align: left;
+}
+
+.el-date-editor .el-input__icon {
+  font-size: 16px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.el-date-editor .el-input__suffix {
   display: flex;
   align-items: center;
-}
-
-.calendar-icon {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #0887FF;
+  justify-content: center;
   padding: 0;
-  margin: 0;
-  width: 16px;
-  height: 16px;
 }
 
-.calendar-icon:hover {
-  color: #0056b3;
+.el-date-editor .el-input__suffix-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.el-date-editor .el-input__prefix {
+  display: none;
+}
+
+/* 确保图标显示正确 */
+.el-date-editor .el-input__icon {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.el-date-editor .el-input__icon:hover {
+  color: #007bff;
 }
 
 .btn-search {
