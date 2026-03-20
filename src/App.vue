@@ -4,7 +4,7 @@
     <!-- 新增：顶部系统标题栏 -->
     <header class="app-header">
       <div class="header-left">
-        <i class="iconfont icon-shield .system-icon"></i>
+        <i class="iconfont icon-shield"></i>
         <h2 class="system-title">保险理赔管理系统</h2>
       </div>
     </header>
@@ -29,6 +29,19 @@
           @tab-change="handleTabChange" 
         />
       </aside>
+    </div>
+    
+    <!-- 固定在底部的按钮区域 - 从 CaseInfoForm 移至此处 -->
+    <div class="form-actions-sticky">
+      <button type="button" @click="validateAndSubmit" class="btn-submit">
+        <i class="iconfont icon-fasong"></i> 提交
+      </button>
+      <button type="button" @click="handleSaveFromApp" class="btn-save">
+        <i class="iconfont icon-icon-zancun"></i> 暂存
+      </button>
+      <button type="button" @click="handleTransferFromApp" class="btn-transfer">
+        <i class="iconfont icon-arrow-1-right"></i> 转专岗处理
+      </button>
     </div>
   </div>
 </template>
@@ -143,6 +156,26 @@ export default {
       console.log('转专岗数据:', caseInfo)
       alert('转专岗成功！')
     },
+    
+    // 从 App.vue 触发的事件处理方法
+    validateAndSubmit() {
+      if (this.$refs.caseForm) {
+        this.$refs.caseForm.validateAndSubmit()
+      }
+    },
+    
+    handleSaveFromApp() {
+      if (this.$refs.caseForm) {
+        this.$refs.caseForm.handleSave()
+      }
+    },
+    
+    handleTransferFromApp() {
+      if (this.$refs.caseForm) {
+        this.$refs.caseForm.handleTransfer()
+      }
+    },
+    
     handleTabChange(tab) {
       console.log('导航栏点击:', tab)
       this.activeTab = tab
@@ -174,7 +207,6 @@ body {
   color: #333;
   background-color: #f5f5f5;
   overflow-y: auto; /* 允许整页垂直滚动 */
-
 }
 
 /* 整体页面容器：垂直布局（顶部栏 + 内容） */
@@ -190,6 +222,7 @@ body {
 .app-header {
   height: 40px;
   line-height: 40px;
+  width: 100%;
   padding: 0 24px;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
@@ -198,7 +231,7 @@ body {
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   z-index: 200;
-  position: sticky;
+  position: fixed;
   top: 0;
 }
 
@@ -234,7 +267,7 @@ body {
 
 /* 主内容区 */
 .main-content {
-  flex: 2;
+  flex: 1;
   padding: 24px;
   background-color: #ffffff;
   border-radius: 8px;
@@ -243,7 +276,6 @@ body {
   max-width: calc(100% - 180px); /* 减去右侧导航栏宽度 */
   width: 100%;
   margin-left: 0; /* 确保没有额外的左边距 */
-
 }
 
 /* 固定的右侧导航栏 */
@@ -272,6 +304,67 @@ body {
   display: none;
 }
 
+/* 固定在底部的按钮区域 */
+.form-actions-sticky {
+  position: fixed;
+  bottom: 20px;
+  left: 24px;              /* 与主内容区左边距一致 */
+  right: 174px;            /* 与右侧导航栏宽度相加，给导航栏留出空间 */
+  z-index: 200;
+  height: 40px;
+  background-color: #ffffff;
+  border-top: 1px solid #858789;
+  border-bottom: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+  border-radius: 8px;
+}
+
+/* 按钮样式 */
+.btn-submit, .btn-save, .btn-transfer {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.btn-submit {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-submit:hover {
+  background-color: #0056b3;
+}
+
+.btn-save {
+  background-color: #e6efe8;
+  color: rgb(21, 20, 20);
+}
+
+.btn-save:hover {
+  background-color: #e6efe8;
+}
+
+.btn-transfer {
+  background-color: #e6e4de;
+  color: #212529;
+}
+
+.btn-transfer:hover {
+  background-color: #52e000;
+}
+
 /* 响应式适配 */
 @media (max-width: 1024px) {
   .app-container {
@@ -279,7 +372,7 @@ body {
     padding: 12px;
   }
 
-  .main-content-centered {
+  .main-content {
     max-width: 100%;
     margin-right: 0; /* 小屏幕上去掉右边距 */
     margin-bottom: 120px; /* 为固定导航留出空间 */
@@ -301,6 +394,12 @@ body {
   
   .app-header {
     position: static; /* 在小屏幕上取消sticky定位 */
+  }
+  
+  .form-actions-sticky {
+    left: 12px;
+    right: 12px;
+    border-radius: 8px 8px 0 0;
   }
 }
 </style>

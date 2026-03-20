@@ -2,160 +2,148 @@
   <template>
     <div class="case-info-form">
 
- <!-- ============ 保单信息区块 ============ -->
-  <section class="form-section" id="section-policyInfo">
-    <div class="section-header">
-      <div class="section-header-left">
-        <!-- 主题色竖条装饰 -->
-        <div class="section-decorator"></div>
-        <h3>保单信息</h3>
-        <!-- 已选择保单标签 -->
-        <el-tag type="primary" size="small" class="selected-count-tag">
-          已选择 {{ selectedPoliciesCount }} 份保单
-        </el-tag>
-      </div>
-      <div class="section-header-right">
-        <!-- 信息展示按钮 -->
-        <button type="button" class="btn-info-display" @click="toggleInfoDisplay">
-          <i class="iconfont icon-yanjing"></i>
-          {{ infoDisplayExpanded ? '收起详情' : '信息展示' }}
-        </button>
-        <span class="toggle-icon" @click="toggleSection('policyInfo')">
-          <i :class="policyInfoExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
-        </span>
-      </div>
-    </div>
+      <!-- ============ 保单信息区块 ============ -->
+      <section class="form-section" id="section-policyInfo">
+        <div class="section-header">
+          <div class="section-header-left">
+            <!-- 主题色竖条装饰 -->
+            <div class="section-decorator"></div>
+            <h3>保单信息</h3>
+            <!-- 已选择保单标签 -->
+            <el-tag type="primary" size="small" class="selected-count-tag">
+              已选择 {{ selectedPoliciesCount }} 份保单
+            </el-tag>
+          </div>
+          <div class="section-header-right">
+            <!-- 信息展示按钮 -->
+            <button type="button" class="btn-info-display" @click="toggleInfoDisplay">
+              <i class="iconfont icon-yanjing"></i>
+              {{ infoDisplayExpanded ? '收起详情' : '信息展示' }}
+            </button>
+            <span class="toggle-icon" @click="toggleSection('policyInfo')">
+              <i :class="policyInfoExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
+            </span>
+          </div>
+        </div>
 
-    <div v-show="policyInfoExpanded" class="section-content">
-      <!-- 保单卡片列表 -->
-      <div class="policy-cards-container">
-        <div 
-          v-for="(policy, index) in policies" 
-          :key="policy.policyNo"
-          :class="['policy-card', { 'selected': policy.selected, 'hovered': policy.hovered }]"
-          @click="selectPolicy(policy, $event)"
-          @mouseenter="policy.hovered = true"
-          @mouseleave="policy.hovered = false"
-        >
-          <!-- 顶部信息行 -->
-          <div class="policy-header">
-            <div class="policy-number-wrapper">
-              <!-- 复选框 -->
-              <input 
-                type="checkbox" 
-                :checked="policy.selected" 
-                class="checkbox-input" 
-                @click.stop="togglePolicySelection(policy)"
-              />
-              <div class="policy-info">
-                <!-- 保单号链接 -->
-                <a 
-                  href="#" 
-                  class="policy-no-link"
-                  @click.prevent="handlePolicyClick(policy.policyNo)"
-                >
-                  {{ policy.policyNo }}
-                </a>
-                
-                <!-- 客户信息标签 - 在保单号下方 -->
-                <div class="policy-tags-row">
-                  <el-tag type="info" size="small" class="policy-tag">
-                    {{ policy.customerTag }}
+        <div v-show="policyInfoExpanded" class="section-content">
+          <!-- 保单卡片列表 -->
+          <div class="policy-cards-container">
+            <div v-for="(policy, index) in policies" :key="policy.policyNo"
+              :class="['policy-card', { 'selected': policy.selected, 'hovered': policy.hovered }]"
+              @click="selectPolicy(policy, $event)" @mouseenter="policy.hovered = true"
+              @mouseleave="policy.hovered = false">
+              <!-- 顶部信息行 -->
+              <div class="policy-header">
+                <div class="policy-number-wrapper">
+                  <!-- 复选框 -->
+                  <input type="checkbox" :checked="policy.selected" class="checkbox-input"
+                    @click.stop="togglePolicySelection(policy)" />
+                  <div class="policy-info">
+                    <!-- 保单号链接 -->
+                    <a href="#" class="policy-no-link" @click.prevent="handlePolicyClick(policy.policyNo)">
+                      {{ policy.policyNo }}
+                    </a>
+
+                    <!-- 客户信息标签 - 在保单号下方 -->
+                    <div class="policy-tags-row">
+                      <el-tag type="info" size="small" class="policy-tag">
+                        {{ policy.customerTag }}
+                      </el-tag>
+                      <el-tag type="warning" size="small" class="policy-tag">
+                        {{ policy.customerLevel }}
+                      </el-tag>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 险种名称标签 - 右上角 -->
+                <div class="policy-title">
+                  <el-tag type="success" size="medium" class="insurance-name-tag">
+                    {{ truncateText(policy.insuranceName, 15) }}
                   </el-tag>
-                  <el-tag type="warning" size="small" class="policy-tag">
-                    {{ policy.customerLevel }}
-                  </el-tag>
+                  <span class="toggle-icon" @click.stop="togglePolicyBodyByIndex(index)">
+                    <i :class="policy.bodyExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
+                  </span>
+                </div>
+              </div>
+
+              <!-- 主体信息网格 -->
+              <div class="policy-body" v-show="policy.bodyExpanded" :id="'policyBody-' + index">
+                <!-- 第 1 行：3 个字段 -->
+                <div class="info-item">
+                  <label><i class="iconfont icon-yonghu"></i> 投保人名称</label>
+                  <div class="value">{{ policy.appliName }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-yonghu"></i> 被保人名称</label>
+                  <div class="value">{{ policy.insuredName }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-shield"></i> 代理人名称</label>
+                  <div class="value">{{ policy.agentName }}</div>
+                </div>
+
+                <!-- 第 2 行：3 个字段 -->
+                <div class="info-item">
+                  <label><i class="iconfont icon-wendang"></i> 险种名称</label>
+                  <div class="value">{{ policy.insuranceName }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-shijiankaishishijian"></i> 保险起期</label>
+                  <div class="value">{{ policy.policyStartDateStr }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-shijiankaishishijian"></i> 保险止期</label>
+                  <div class="value">{{ policy.policyEndDateStr }}</div>
+                </div>
+
+                <!-- 第 3 行：3 个字段 -->
+                <div class="info-item">
+                  <label><i class="iconfont icon-shijiankaishishijian"></i> 保险日期止期</label>
+                  <div class="value">{{ policy.policyEndDateStr }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-jigou"></i> 承保机构</label>
+                  <div class="value">{{ policy.insurerName }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-commpany"></i> 工作单位</label>
+                  <div class="value">{{ policy.workUnit || '-' }}</div>
+                </div>
+
+                <!-- 第 4 行：3 个字段 -->
+                <div class="info-item">
+                  <label><i class="iconfont icon-dingwei"></i> 客户来源</label>
+                  <div class="value">{{ policy.customerSource || '-' }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-yonghu"></i> 客户标识</label>
+                  <div class="value">{{ policy.customerTag || '-' }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-shoucang"></i> 客户等级</label>
+                  <div class="value">{{ policy.customerLevel || '-' }}</div>
+                </div>
+
+                <!-- 第 5 行：3 个字段 -->
+                <div class="info-item">
+                  <label><i class="iconfont icon-yonghu"></i> 专员名称</label>
+                  <div class="value">{{ policy.specialistName || '-' }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-Telephone"></i> 专员电话</label>
+                  <div class="value">{{ policy.specialistPhone || '-' }}</div>
+                </div>
+                <div class="info-item">
+                  <label><i class="iconfont icon-shoucang"></i> 服务等级</label>
+                  <div class="value">{{ policy.serviceLevel || '-' }}</div>
                 </div>
               </div>
             </div>
-            
-            <!-- 险种名称标签 - 右上角 -->
-            <div class="policy-title">
-              <el-tag type="success" size="medium" class="insurance-name-tag">
-                {{ truncateText(policy.insuranceName, 15) }}
-              </el-tag>
-              <span class="toggle-icon" @click.stop="togglePolicyBodyByIndex(index)">
-                <i :class="policy.bodyExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
-              </span>
-            </div>
-          </div>
-
-          <!-- 主体信息网格 -->
-          <div class="policy-body" v-show="policy.bodyExpanded" :id="'policyBody-' + index">
-            <!-- 第 1 行：3 个字段 -->
-            <div class="info-item">
-              <label><i class="iconfont icon-yonghu"></i> 投保人名称</label>
-              <div class="value">{{ policy.appliName }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-yonghu"></i> 被保人名称</label>
-              <div class="value">{{ policy.insuredName }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-shield"></i> 代理人名称</label>
-              <div class="value">{{ policy.agentName }}</div>
-            </div>
-
-            <!-- 第 2 行：3 个字段 -->
-            <div class="info-item">
-              <label><i class="iconfont icon-wendang"></i> 险种名称</label>
-              <div class="value">{{ policy.insuranceName }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-shijiankaishishijian"></i> 保险起期</label>
-              <div class="value">{{ policy.policyStartDateStr }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-shijiankaishishijian"></i> 保险止期</label>
-              <div class="value">{{ policy.policyEndDateStr }}</div>
-            </div>
-
-            <!-- 第 3 行：3 个字段 -->
-            <div class="info-item">
-              <label><i class="iconfont icon-shijiankaishishijian"></i> 保险日期止期</label>
-              <div class="value">{{ policy.policyEndDateStr }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-jigou"></i> 承保机构</label>
-              <div class="value">{{ policy.insurerName }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-commpany"></i> 工作单位</label>
-              <div class="value">{{ policy.workUnit || '-' }}</div>
-            </div>
-
-            <!-- 第 4 行：3 个字段 -->
-            <div class="info-item">
-              <label><i class="iconfont icon-dingwei"></i> 客户来源</label>
-              <div class="value">{{ policy.customerSource || '-' }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-yonghu"></i> 客户标识</label>
-              <div class="value">{{ policy.customerTag || '-' }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-shoucang"></i> 客户等级</label>
-              <div class="value">{{ policy.customerLevel || '-' }}</div>
-            </div>
-
-            <!-- 第 5 行：3 个字段 -->
-            <div class="info-item">
-              <label><i class="iconfont icon-yonghu"></i> 专员名称</label>
-              <div class="value">{{ policy.specialistName || '-' }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-Telephone"></i> 专员电话</label>
-              <div class="value">{{ policy.specialistPhone || '-' }}</div>
-            </div>
-            <div class="info-item">
-              <label><i class="iconfont icon-shoucang"></i> 服务等级</label>
-              <div class="value">{{ policy.serviceLevel || '-' }}</div>
-            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
       <!-- ============ 历史报案记录区块 ============ -->
       <section class="form-section" id="section-historyReport" v-show="infoDisplayExpanded">
@@ -222,45 +210,31 @@
 
         <div v-show="reportInfoExpanded" class="section-content">
           <!-- 第一行：出险时间 & 报案时间 -->
-        <div class="contact-form-row">
-          <!-- 出险时间 - 使用 ElDatePicker -->
-          <div class="form-group">
-            <label><i class="iconfont icon-shijiankaishishijian"></i> 出险时间 </label>
-            <el-date-picker
-              v-model="caseInfo.accidentTime"
-              type="datetime"
-              format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss"
-              placeholder="选择出险时间"
-              prefix-icon="_"
-              clear-icon="_"
-              :class="{ 'input-error': validationErrors.accidentTime }"
-              style="width: 100%;">
-            </el-date-picker>
-            <span v-if="validationErrors.accidentTime" class="error-message">
-              {{ validationErrors.accidentTime }}
-            </span>
-          </div>
+          <div class="contact-form-row">
+            <!-- 出险时间 - 使用 ElDatePicker -->
+            <div class="form-group">
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 出险时间 </label>
+              <el-date-picker v-model="caseInfo.accidentTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
+                value-format="YYYY/MM/DD HH:mm:ss" placeholder="选择出险时间" prefix-icon="_" clear-icon="_"
+                :class="{ 'input-error': validationErrors.accidentTime }" style="width: 100%;">
+              </el-date-picker>
+              <span v-if="validationErrors.accidentTime" class="error-message">
+                {{ validationErrors.accidentTime }}
+              </span>
+            </div>
 
-          <!-- 报案时间 - 同样可以使用 ElDatePicker -->
-          <div class="form-group">
-            <label><i class="iconfont icon-shijiankaishishijian"></i> 报案时间</label>
-            <el-date-picker
-              v-model="caseInfo.reportTime"
-              type="datetime"
-              format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss"
-              placeholder="选择报案时间"
-              prefix-icon="_"
-              clear-icon="_"
-              :class="{ 'input-error': validationErrors.reportTime }"
-              style="width: 100%;">
-            </el-date-picker>
-            <span v-if="validationErrors.reportTime" class="error-message">
-              {{ validationErrors.reportTime }}
-            </span>
+            <!-- 报案时间 - 同样可以使用 ElDatePicker -->
+            <div class="form-group">
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 报案时间</label>
+              <el-date-picker v-model="caseInfo.reportTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
+                value-format="YYYY/MM/DD HH:mm:ss" placeholder="选择报案时间" prefix-icon="_" clear-icon="_"
+                :class="{ 'input-error': validationErrors.reportTime }" style="width: 100%;">
+              </el-date-picker>
+              <span v-if="validationErrors.reportTime" class="error-message">
+                {{ validationErrors.reportTime }}
+              </span>
+            </div>
           </div>
-        </div>
 
           <!-- 第二行：是否现场报案、天气情况、出险地点分类 -->
           <div class="contact-form-row">
@@ -586,23 +560,16 @@
                 </label>
               </div>
             </div>
-<div class="form-group">
-            <label><i class="iconfont icon-shijiankaishishijian"></i> 报警时间 </label>
-            <el-date-picker
-              v-model="caseInfo.alarmTime"
-              type="datetime"
-              format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss"
-              placeholder="选择报警时间"
-              prefix-icon="_"
-              clear-icon="_"
-              :class="{ 'input-error': validationErrors.alarmTime }"
-              style="width: 100%;">
-            </el-date-picker>
-            <span v-if="validationErrors.alarmTime" class="error-message">
-              {{ validationErrors.alarmTime }}
-            </span>
-          </div>
+            <div class="form-group">
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 报警时间 </label>
+              <el-date-picker v-model="caseInfo.alarmTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
+                value-format="YYYY/MM/DD HH:mm:ss" placeholder="选择报警时间" prefix-icon="_" clear-icon="_"
+                :class="{ 'input-error': validationErrors.alarmTime }" style="width: 100%;">
+              </el-date-picker>
+              <span v-if="validationErrors.alarmTime" class="error-message">
+                {{ validationErrors.alarmTime }}
+              </span>
+            </div>
           </div>
 
           <!-- 第十二行：是否巨灾、巨灾类型、巨灾名称 -->
@@ -1261,19 +1228,6 @@
         </div>
       </section>
 
-      <!-- ============ 表单底部按钮 ============ -->
-    <div class="form-actions-sticky">
-      <button type="button" @click="validateAndSubmit" class="btn-submit">
-        <i class=" iconfont icon-fasong"></i> 提交
-      </button>
-      <button type="button" @click="handleSave" class="btn-save">
-        <i class=" iconfont icon-icon-zancun"></i> 暂存
-      </button>
-      <button type="button" @click="handleTransfer" class="btn-transfer">
-        <i class=" iconfont icon-arrow-1-right"></i> 转专岗处理
-      </button>
-    </div>
-
       <!-- ============ 全局错误提示 ============ -->
       <div v-if="globalError" class="global-error-toast">
         {{ globalError }}
@@ -1432,21 +1386,21 @@ export default {
       ],
     }
   },
-computed: {
-     // 计算选中保单数量
+  computed: {
+    // 计算选中保单数量
     selectedPoliciesCount() {
       return this.policies.filter(policy => policy.selected).length;
     },
   },
   methods: {
- // 保单号点击处理
+    // 保单号点击处理
     handlePolicyClick(policyNo) {
       console.log(`点击保单号: ${policyNo}`);
       // 这里可以添加实际的业务逻辑，如打开详情页面等
       // 示例：this.$router.push(`/policy/${policyNo}`);
     },
 
-// 选择单个保单
+    // 选择单个保单
     selectPolicy(policy, event) {
       // 如果按住Ctrl键则多选，否则单选
       if (!event?.ctrlKey) {
@@ -1457,21 +1411,21 @@ computed: {
           }
         });
       }
-      
+
       // 切换当前保单选择状态
       policy.selected = !policy.selected;
     },
-    
+
     // 切换保单选择状态（复选框）
     togglePolicySelection(policy) {
       policy.selected = !policy.selected;
     },
-    
+
     // 切换保单详情展开状态 - 通过索引
     togglePolicyBodyByIndex(index) {
       this.policies[index].bodyExpanded = !this.policies[index].bodyExpanded;
     },
-    
+
     // 保留原来的 togglePolicyBody 方法用于兼容
     togglePolicyBody() {
       // 如果是旧的调用方式，可以选择默认处理第一个保单或什么都不做
@@ -1482,10 +1436,10 @@ computed: {
       if (!text) return '';
       return text.length > length ? text.substring(0, length) + '...' : text;
     },
-     // 切换信息展示（保单详情 + 历史报案记录）
+    // 切换信息展示（保单详情 + 历史报案记录）
     toggleInfoDisplay() {
       this.infoDisplayExpanded = !this.infoDisplayExpanded;
-      
+
       // 同时控制保单详情的展开状态
       if (this.infoDisplayExpanded) {
         // 展开时也展开保单详情
@@ -1692,142 +1646,142 @@ computed: {
       })
     },
 
-   // ============ 滚动到第一个错误字段 ============
-async scrollToFirstError(errors) {
-  const firstErrorField = Object.keys(errors)[0]
-  if (!firstErrorField) return
+    // ============ 滚动到第一个错误字段 ============
+    async scrollToFirstError(errors) {
+      const firstErrorField = Object.keys(errors)[0]
+      if (!firstErrorField) return
 
-  // 等待 DOM 更新
-  await this.$nextTick()
-  await this.$nextTick() // 确保展开的区块DOM已渲染
+      // 等待 DOM 更新
+      await this.$nextTick()
+      await this.$nextTick() // 确保展开的区块DOM已渲染
 
-  // 获取字段引用
-  let element = null
-  
-  // 尝试获取普通的 ref
-  if (this.$refs[firstErrorField]) {
-    element = this.$refs[firstErrorField]
-    if (Array.isArray(element)) {
-      element = element[0]
-    }
-  }
-  
-  // 如果没有找到普通 ref，则查找 Element Plus 组件的包装元素
-  if (!element) {
-    // 查找具有对应类名的 Element Plus 组件
-    const elDatePickerElements = document.querySelectorAll('.el-date-editor')
-    for (let i = 0; i < elDatePickerElements.length; i++) {
-      const el = elDatePickerElements[i]
-      // 检查这个日期选择器是否对应于错误字段
-      if (el.querySelector('input') && 
-          (el.querySelector('input').name === firstErrorField || 
-           el.querySelector('input').id === firstErrorField ||
-           el.closest('.form-group')?.querySelector('label')?.textContent.includes(firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase()))) {
-        element = el
-        break
+      // 获取字段引用
+      let element = null
+
+      // 尝试获取普通的 ref
+      if (this.$refs[firstErrorField]) {
+        element = this.$refs[firstErrorField]
+        if (Array.isArray(element)) {
+          element = element[0]
+        }
       }
-    }
-  }
-  
-  // 最后尝试通过查询特定的选择器来查找
-  if (!element) {
-    // 尝试通过标签文本关联字段
-    const labels = document.querySelectorAll('label')
-    for (let i = 0; i < labels.length; i++) {
-      if (labels[i].textContent.toLowerCase().includes(
-        firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase().replace('time', '').trim())) {
-        
-        const formGroup = labels[i].closest('.form-group')
-        if (formGroup) {
-          const datePicker = formGroup.querySelector('.el-date-editor')
-          if (datePicker) {
-            element = datePicker
+
+      // 如果没有找到普通 ref，则查找 Element Plus 组件的包装元素
+      if (!element) {
+        // 查找具有对应类名的 Element Plus 组件
+        const elDatePickerElements = document.querySelectorAll('.el-date-editor')
+        for (let i = 0; i < elDatePickerElements.length; i++) {
+          const el = elDatePickerElements[i]
+          // 检查这个日期选择器是否对应于错误字段
+          if (el.querySelector('input') &&
+            (el.querySelector('input').name === firstErrorField ||
+              el.querySelector('input').id === firstErrorField ||
+              el.closest('.form-group')?.querySelector('label')?.textContent.includes(firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase()))) {
+            element = el
             break
           }
         }
       }
-    }
-  }
 
-  if (element) {
-    // 添加错误样式
-    element.classList.add('input-error')
-    
-    // 滚动到元素
-    element.scrollIntoView({ 
-      behavior: 'smooth', 
-      block: 'center',
-      inline: 'nearest'
-    })
-    
-    // 添加视觉反馈
-    element.style.transition = 'box-shadow 0.3s ease'
-    element.style.boxShadow = '0 0 0 2px rgba(255, 77, 79, 0.5)'
-    
-    // 3秒后移除视觉反馈
-    setTimeout(() => {
-      if (element.style) {
-        element.style.boxShadow = ''
+      // 最后尝试通过查询特定的选择器来查找
+      if (!element) {
+        // 尝试通过标签文本关联字段
+        const labels = document.querySelectorAll('label')
+        for (let i = 0; i < labels.length; i++) {
+          if (labels[i].textContent.toLowerCase().includes(
+            firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase().replace('time', '').trim())) {
+
+            const formGroup = labels[i].closest('.form-group')
+            if (formGroup) {
+              const datePicker = formGroup.querySelector('.el-date-editor')
+              if (datePicker) {
+                element = datePicker
+                break
+              }
+            }
+          }
+        }
       }
-    }, 3000)
-  } else {
-    console.warn('找不到错误字段元素:', firstErrorField)
-    
-    // 如果真的找不到元素，至少展开包含错误字段的部分
-    const fieldSectionMap = {
-      policyNo: 'policyInfo',
-      accidentTime: 'reportInfo',
-      reportTime: 'reportInfo',
-      alarmTime: 'reportInfo',
-      isfirstsiteFlag: 'reportInfo',
-      weatherSituation: 'reportInfo',
-      damageAddress: 'reportInfo',
-      areaProvince: 'reportInfo',
-      areaCity: 'reportInfo',
-      areaDistrict: 'reportInfo',
-      lsType: 'reportInfo',
-      damageCode: 'reportInfo',
-      licenseNumber: 'vehicleInfo',
-      engineNumber: 'vehicleInfo',
-      frameNumber: 'vehicleInfo',
-      driverName: 'vehicleInfo',
-      vehicleCanRun: 'vehicleInfo',
-      reportorName: 'contactInfo',
-      reportorPhonenumber: 'contactInfo',
-      linkerName: 'contactInfo',
-      linkerPhone: 'contactInfo',
-      propFlag: 'propertyLoss',
-      woundFlag: 'personInjury'
-    }
-    
-    const section = fieldSectionMap[firstErrorField]
-    if (section) {
-      const sectionKey = `${section}Expanded`
-      this[sectionKey] = true
-      
-      // 滚动到对应区块
-      this.$nextTick(() => {
-        const sectionElement = document.getElementById(`section-${section}`)
-        if (sectionElement) {
-          sectionElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
+
+      if (element) {
+        // 添加错误样式
+        element.classList.add('input-error')
+
+        // 滚动到元素
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        })
+
+        // 添加视觉反馈
+        element.style.transition = 'box-shadow 0.3s ease'
+        element.style.boxShadow = '0 0 0 2px rgba(255, 77, 79, 0.5)'
+
+        // 3秒后移除视觉反馈
+        setTimeout(() => {
+          if (element.style) {
+            element.style.boxShadow = ''
+          }
+        }, 3000)
+      } else {
+        console.warn('找不到错误字段元素:', firstErrorField)
+
+        // 如果真的找不到元素，至少展开包含错误字段的部分
+        const fieldSectionMap = {
+          policyNo: 'policyInfo',
+          accidentTime: 'reportInfo',
+          reportTime: 'reportInfo',
+          alarmTime: 'reportInfo',
+          isfirstsiteFlag: 'reportInfo',
+          weatherSituation: 'reportInfo',
+          damageAddress: 'reportInfo',
+          areaProvince: 'reportInfo',
+          areaCity: 'reportInfo',
+          areaDistrict: 'reportInfo',
+          lsType: 'reportInfo',
+          damageCode: 'reportInfo',
+          licenseNumber: 'vehicleInfo',
+          engineNumber: 'vehicleInfo',
+          frameNumber: 'vehicleInfo',
+          driverName: 'vehicleInfo',
+          vehicleCanRun: 'vehicleInfo',
+          reportorName: 'contactInfo',
+          reportorPhonenumber: 'contactInfo',
+          linkerName: 'contactInfo',
+          linkerPhone: 'contactInfo',
+          propFlag: 'propertyLoss',
+          woundFlag: 'personInjury'
+        }
+
+        const section = fieldSectionMap[firstErrorField]
+        if (section) {
+          const sectionKey = `${section}Expanded`
+          this[sectionKey] = true
+
+          // 滚动到对应区块
+          this.$nextTick(() => {
+            const sectionElement = document.getElementById(`section-${section}`)
+            if (sectionElement) {
+              sectionElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              })
+            }
           })
         }
-      })
-    }
-  }
-},
- highlightError(element) {
-    if (element) {
-      // 如果是 input 元素，添加错误类
-      if (element.classList) {
-        element.classList.add('input-error')
-      } else if (element.parentNode && element.parentNode.querySelector('input')) {
-        element.parentNode.querySelector('input').classList.add('input-error')
       }
-    }
-  },
+    },
+    highlightError(element) {
+      if (element) {
+        // 如果是 input 元素，添加错误类
+        if (element.classList) {
+          element.classList.add('input-error')
+        } else if (element.parentNode && element.parentNode.querySelector('input')) {
+          element.parentNode.querySelector('input').classList.add('input-error')
+        }
+      }
+    },
     // ============ 清除错误高亮 ============
     clearErrorHighlights() {
       Object.keys(this.$refs).forEach(ref => {
@@ -1902,7 +1856,7 @@ async scrollToFirstError(errors) {
             const sectionElement = document.getElementById(`section-${section}`)
             if (sectionElement) {
               console.log('找到区块元素:', sectionElement)
-              
+
               // 使用 element.scrollIntoView 方法，它会自动处理滚动
               sectionElement.scrollIntoView({
                 behavior: 'smooth',
@@ -1946,7 +1900,7 @@ async scrollToFirstError(errors) {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto; 
+  margin-left: auto;
 
 }
 
@@ -1954,7 +1908,8 @@ async scrollToFirstError(errors) {
 .section-decorator {
   width: 4px;
   height: 32px;
-  background-color: #0066cc; /* 主题色 */
+  background-color: #0066cc;
+  /* 主题色 */
   border-radius: 2px;
 }
 
@@ -1974,7 +1929,7 @@ async scrollToFirstError(errors) {
   padding: 6px 12px;
   background-color: #e4f1f9;
   color: #111111;
-  border:none;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
@@ -1988,6 +1943,7 @@ async scrollToFirstError(errors) {
   background-color: #e6f7ff;
   border-color: #91d5ff;
 }
+
 /* 日期选择器样式 */
 .el-date-editor {
   width: 100%;
@@ -2363,21 +2319,28 @@ async scrollToFirstError(errors) {
 
 /* 选中状态的保单卡片 */
 .policy-card.selected {
-  border: 2px solid #0066CC; /* 选中时的主题色边框 */
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2); /* 外发光效果 */
-  background-color: #f0f8ff; /* 选中背景色 */
+  border: 2px solid #0066CC;
+  /* 选中时的主题色边框 */
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+  /* 外发光效果 */
+  background-color: #f0f8ff;
+  /* 选中背景色 */
 }
 
 /* 鼠标悬停状态 */
 .policy-card.hovered {
-  border-color: #0052A3; /* 悬停时加深边框颜色 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  border-color: #0052A3;
+  /* 悬停时加深边框颜色 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* 添加阴影效果 */
 }
 
 /* 选中且悬停的状态 */
 .policy-card.selected.hovered {
-  border-color: #004080; /* 选中状态下悬停更深的颜色 */
+  border-color: #004080;
+  /* 选中状态下悬停更深的颜色 */
 }
+
 /* ============ 保单卡片样式 ============ */
 .policy-card {
   border: 2px solid #0066CC;
@@ -2393,24 +2356,29 @@ async scrollToFirstError(errors) {
   align-items: flex-start;
   margin-bottom: 16px;
 }
+
 .policy-info {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 /* 保单号链接样式 */
 .policy-no-link {
   font-size: 12px;
   font-weight: bold;
-  color: #0066CC; /* 主题色 */
-  text-decoration: underline; /* 添加下划线 */
+  color: #0066CC;
+  /* 主题色 */
+  text-decoration: underline;
+  /* 添加下划线 */
   margin-bottom: 8px;
   display: inline-block;
   transition: color 0.2s ease;
 }
 
 .policy-no-link:hover {
-  color: #0052A3; /* 悬停时加深颜色 */
+  color: #0052A3;
+  /* 悬停时加深颜色 */
   text-decoration: underline;
 }
 
@@ -2434,7 +2402,8 @@ async scrollToFirstError(errors) {
   border-radius: 8px;
   font-size: 10px;
   font-weight: 500;
-  max-width: 200px; /* 限制最大宽度 */
+  max-width: 200px;
+  /* 限制最大宽度 */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2442,6 +2411,7 @@ async scrollToFirstError(errors) {
   color: #0066CC;
   background-color: #afcbe9;
 }
+
 .policy-number-wrapper {
   display: flex;
   gap: 8px;
@@ -2652,8 +2622,10 @@ async scrollToFirstError(errors) {
 }
 
 .section-header.no-border:hover {
-  background-color: #f8f9fa; /* 保持原始背景色，无变化 */
+  background-color: #f8f9fa;
+  /* 保持原始背景色，无变化 */
 }
+
 .record-count {
   font-size: 12px;
   color: #666;
@@ -2661,6 +2633,7 @@ async scrollToFirstError(errors) {
   padding: 2px 8px;
   border-radius: 4px;
 }
+
 /* 表格容器 */
 .report-table-container {
   border: 1px solid #e1e5e9;
@@ -2680,7 +2653,8 @@ async scrollToFirstError(errors) {
 .data-table th {
   text-align: left;
   padding: 12px 16px;
-  background-color: #f8f9fa; /* 表头背景色 */
+  background-color: #f8f9fa;
+  /* 表头背景色 */
   border-bottom: 1px solid #e1e5e9;
   font-size: 12px;
   color: #333;
@@ -2688,7 +2662,8 @@ async scrollToFirstError(errors) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-width: 20px; /* 为每列设置最小宽度 */
+  min-width: 20px;
+  /* 为每列设置最小宽度 */
 }
 
 .data-table td {
@@ -2700,22 +2675,58 @@ async scrollToFirstError(errors) {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
-  height: 20px; /* 设置固定行高 */
-  min-width: 20px; /* 为每列设置最小宽度 */
+  height: 20px;
+  /* 设置固定行高 */
+  min-width: 20px;
+  /* 为每列设置最小宽度 */
 
 }
+
 .data-table tbody tr:last-child td {
   border-bottom: none;
 }
+
 /* 针对不同列设置最小宽度 */
-.col-seq { min-width: 20px; width: auto; }
-.col-report-no { min-width: 140px; width: auto; }
-.col-policy-no { min-width: 120px; width: auto; }
-.col-accident-time { min-width: 130px; width: auto; }
-.col-report-time { min-width: 130px; width: auto; }
-.col-reporter { min-width: 80px; width: auto; }
-.col-fast-claim { min-width: 100px; width: auto; }
-.col-status { min-width: 80px; width: auto; }
+.col-seq {
+  min-width: 20px;
+  width: auto;
+}
+
+.col-report-no {
+  min-width: 140px;
+  width: auto;
+}
+
+.col-policy-no {
+  min-width: 120px;
+  width: auto;
+}
+
+.col-accident-time {
+  min-width: 130px;
+  width: auto;
+}
+
+.col-report-time {
+  min-width: 130px;
+  width: auto;
+}
+
+.col-reporter {
+  min-width: 80px;
+  width: auto;
+}
+
+.col-fast-claim {
+  min-width: 100px;
+  width: auto;
+}
+
+.col-status {
+  min-width: 80px;
+  width: auto;
+}
+
 /* 序号列居中对齐 */
 .seq-center {
   text-align: center;
@@ -2724,9 +2735,11 @@ async scrollToFirstError(errors) {
 
 /* 表格行悬停效果 */
 .table-row:hover {
-  background-color: #f5f9ff; /* 悬停背景色 */
+  background-color: #f5f9ff;
+  /* 悬停背景色 */
   transition: background-color 0.2s ease;
 }
+
 .report-link {
   color: #007bff;
   text-decoration: none;
@@ -3229,23 +3242,33 @@ async scrollToFirstError(errors) {
 
 /* 固定在底部的按钮区域 */
 .form-actions-sticky {
+  position: fixed;
+  bottom: 20px;/* 距离页面底部20px */
+  z-index: 200;/* 确保在所有内容之上 */
+  height: 40px;
+  background-color: #ffffff;
+  border-top: 1px solid #858789;/* 上部边框 */
+  border-bottom: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  width: 100%;
   display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: auto;
-  /* 推到底部 */
-  padding: 20px 20px 20px 20px;
-  border-top: 1px solid #ddd;
+  gap: 16px;
+  padding: 10px;
   flex-wrap: wrap;
-  position: sticky; /* 使用 sticky 而不是 fixed */
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: white;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  /* 确保在最顶层 */
-  margin-bottom: 0;
+  justify-content: center;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .form-actions-sticky {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 
 .btn-submit {
@@ -3255,7 +3278,7 @@ async scrollToFirstError(errors) {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   transition: background-color 0.2s;
 }
@@ -3271,7 +3294,7 @@ async scrollToFirstError(errors) {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   transition: background-color 0.2s;
 }
@@ -3287,7 +3310,7 @@ async scrollToFirstError(errors) {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   transition: background-color 0.2s;
 }
