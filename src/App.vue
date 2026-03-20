@@ -226,24 +226,24 @@ body {
   display: flex;
   flex-direction: row;
   flex: 1;
-  overflow: hidden;
-  padding: 24px;
+  padding: 24px 1px;
   gap: 24px;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* 居中的主内容区 */
+/* 主内容区 */
 .main-content {
-  flex: 1;
-  overflow-y: auto;  /* 允许垂直滚动 */
+  flex: 2;
   padding: 24px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
-  max-width: 100%; 
-  height: calc(100vh - 120px); /* 减去顶部和底部的固定元素高度 */
+  max-width: calc(100% - 180px); /* 减去右侧导航栏宽度 */
+  width: 100%;
+  margin-left: 0; /* 确保没有额外的左边距 */
+
 }
 
 /* 固定的右侧导航栏 */
@@ -257,7 +257,7 @@ body {
   z-index: 100;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  position: static; /* 固定定位 */
+  position: fixed; /* 固定定位 */
   right: 24px;
   top: 80px; /* 调整距离顶部的高度，给标题栏留出更多空间 */
   height: calc(100vh - 104px); /* 相应调整高度计算 */
@@ -281,6 +281,7 @@ body {
 
   .main-content-centered {
     max-width: 100%;
+    margin-right: 0; /* 小屏幕上去掉右边距 */
     margin-bottom: 120px; /* 为固定导航留出空间 */
   }
 
@@ -294,6 +295,8 @@ body {
     height: 120px;
     border-radius: 0;
     z-index: 1000;
+    right: 0; /* 重置right值 */
+    top: auto; /* 重置top值 */
   }
   
   .app-header {
