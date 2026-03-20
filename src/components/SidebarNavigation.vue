@@ -86,7 +86,7 @@ export default {
 }
 
 .nav-item.active {
-  background-color: #e6f7ff;
+  background-color: #e3eaed;
   color: #007bff;
   border-left: 3px solid #007bff;
 }
@@ -98,7 +98,7 @@ export default {
 }
 
 .nav-text {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
 }
 </style>

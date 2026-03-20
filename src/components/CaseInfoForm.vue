@@ -1,7 +1,6 @@
   <!-- src/components/CaseInfoForm.vue -->
   <template>
     <div class="case-info-form">
-
       <!-- ============ 保单信息区块 ============ -->
       <section class="form-section" id="section-policyInfo">
         <div class="section-header">
@@ -1264,7 +1263,8 @@ export default {
       caseDescExpanded: true,
       historyReportExpanded: true,
       propertyLossExpanded: true,
-
+    // 新增：导航数据
+    activeSection: 'policyInfo', // 当前激活的区块
 
       // ============ 校验错误信息 ============
       validationErrors: {},
@@ -1841,42 +1841,157 @@ export default {
       this.caseDescList.splice(index, 1)
     },
     // ============ 导航到指定区块 ============
-    navigateToSection(section) {
-      console.log('导航到区块:', section)
+  // ============ 导航到指定区块 ============
+navigateToSection(section) {
+  console.log('导航到区块:', section)
 
-      const sectionKey = `${section}Expanded`
+  const sectionKey = `${section}Expanded`
 
-      if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
-        // 展开目标区块
-        this[sectionKey] = true
+  if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
+    // 展开目标区块
+    this[sectionKey] = true
 
-        // 等待 DOM 更新后滚动
-        this.$nextTick(() => {
-          this.$nextTick(() => { // 确保展开动画完成
-            const sectionElement = document.getElementById(`section-${section}`)
-            if (sectionElement) {
-              console.log('找到区块元素:', sectionElement)
-
-              // 使用 element.scrollIntoView 方法，它会自动处理滚动
-              sectionElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-                inline: 'nearest'
-              })
-            } else {
-              console.error('未找到区块元素:', `section-${section}`)
-            }
+    // 等待 DOM 更新后滚动
+    this.$nextTick(() => {
+      this.$nextTick(() => { // 确保展开动画完成
+        const sectionElement = document.getElementById(`section-${section}`)
+        if (sectionElement) {
+          console.log('找到区块元素:', sectionElement)
+          
+          // 滚动到元素位置
+          sectionElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
           })
-        })
-      } else {
-        console.error('无效的区块:', section, sectionKey)
+
+          // 高亮区块头部
+          this.highlightSection(sectionElement, section)
+        }
+      })
+    })
+  }
+},
+
+// 新增高亮方法
+highlightSection(sectionElement, section) {
+  // 移除之前的所有高亮
+  this.removeHighlightFromAllSections()
+  
+  // 为当前区块添加高亮
+  const headerElement = sectionElement.querySelector('.section-header')
+  if (headerElement) {
+    headerElement.classList.add('section-highlighted')
+    
+    // 3秒后移除高亮
+    setTimeout(() => {
+      headerElement.classList.remove('section-highlighted')
+    }, 3000)
+  }
+},
+
+// 移除所有区块高亮
+removeHighlightFromAllSections() {
+  const allHeaders = document.querySelectorAll('.section-header.section-highlighted')
+  allHeaders.forEach(header => {
+    header.style.backgroundColor = ''
+    header.style.borderLeft = ''
+    header.classList.remove('section-highlighted')
+  })
+},
+// 滚动处理方法
+handleScroll() {
+  const sectionIds = [
+    'section-policyInfo', 
+    'section-reportInfo', 
+    'section-vehicleInfo', 
+    'section-lossType', 
+    'section-personInjury', 
+    'section-accidentRescue',
+    'section-contactInfo',
+    'section-caseDesc',
+    'section-historyReport',
+    'section-propertyLoss'
+  ]
+  
+  let currentSection = ''
+  const scrollPosition = window.scrollY + 150 // 增加偏移量，提前切换
+  
+  for (let i = 0; i < sectionIds.length; i++) {
+    const sectionId = sectionIds[i]
+    const sectionElement = document.getElementById(sectionId)
+    
+    if (sectionElement) {
+      const offsetTop = sectionElement.offsetTop
+      const height = sectionElement.offsetHeight
+      
+      if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
+        currentSection = sectionId.replace('section-', '')
+        break
       }
     }
   }
+  
+  if (currentSection && currentSection !== this.activeSection) {
+    this.activeSection = currentSection
+    // 通知父组件更新激活的标签
+    this.$parent && this.$parent.$data && (this.$parent.activeTab = currentSection)
+  }
+  },
+},
+mounted() {
+  // 添加滚动事件监听器
+  window.addEventListener('scroll', this.handleScroll)
+},
+
+beforeDestroy() {
+  // 移除滚动事件监听器
+  window.removeEventListener('scroll', this.handleScroll)
+}
 }
 </script>
 
 <style scoped>
+/* 导航栏样式 */
+.sidebar-nav {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 10px 0;
+}
+
+.nav-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #f5f5f5;
+}
+
+.nav-item.active {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  font-weight: bold;
+  border-left: 3px solid #1890ff;
+}
+
+/* 区块高亮样式 */
+.section-header.section-highlighted {
+  background-color: #e6f7ff !important;
+  border-left: 4px solid #1890ff !important;
+  transition: all 0.3s ease;
+}
+
 /* 区块标题装饰 */
 .section-header {
   display: flex;
