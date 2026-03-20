@@ -4,14 +4,14 @@
     <!-- 新增：顶部系统标题栏 -->
     <header class="app-header">
       <div class="header-left">
-        <i class="iconfont icon-shield .system-icon " ></i>
+        <i class="iconfont icon-shield .system-icon"></i>
         <h2 class="system-title">保险理赔管理系统</h2>
       </div>
     </header>
 
     <!-- 原有双栏布局容器 -->
     <div class="app-container">
-      <!-- 左侧主内容区 -->
+      <!-- 主内容区 -->
       <main class="main-content">
         <CaseInfoForm 
           ref="caseForm" 
@@ -22,8 +22,8 @@
         />
       </main>
 
-      <!-- 右侧导航栏 -->
-      <aside class="sidebar">
+      <!-- 右侧固定导航栏 -->
+      <aside class="sidebar-fixed">
         <SidebarNavigation 
           :active-tab="activeTab" 
           @tab-change="handleTabChange" 
@@ -173,14 +173,16 @@ body {
   font-size: 14px;
   color: #333;
   background-color: #f5f5f5;
+  overflow-y: auto; /* 允许整页垂直滚动 */
+
 }
 
-/* 整体页面容器：垂直布局（顶部栏 + 双栏内容） */
+/* 整体页面容器：垂直布局（顶部栏 + 内容） */
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
   width: 100%;
 }
 
@@ -196,6 +198,8 @@ body {
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   z-index: 200;
+  position: sticky;
+  top: 0;
 }
 
 .header-left {
@@ -223,23 +227,28 @@ body {
   flex-direction: row;
   flex: 1;
   overflow: hidden;
+  padding: 24px;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* 左侧主内容区 */
+/* 居中的主内容区 */
 .main-content {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: auto;  /* 允许垂直滚动 */
   padding: 24px;
   background-color: #ffffff;
-  border-right: 1px solid #e5e7eb;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  max-width: 100%; 
+  height: calc(100vh - 120px); /* 减去顶部和底部的固定元素高度 */
 }
 
-/* 右侧导航栏 */
-.sidebar {
-  width: 240px;
+/* 固定的右侧导航栏 */
+.sidebar-fixed {
+  width: 150px; 
   flex-shrink: 0;
   background-color: #f9fafb;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
@@ -248,11 +257,18 @@ body {
   z-index: 100;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: static; /* 固定定位 */
+  right: 24px;
+  top: 80px; /* 调整距离顶部的高度，给标题栏留出更多空间 */
+  height: calc(100vh - 104px); /* 相应调整高度计算 */
+  border-radius: 8px;
+  padding-top: 16px; /* 减少内边距 */
+  box-sizing: border-box; /* 确保盒模型正确计算 */
 }
 
 /* 隐藏滚动条 */
-::v-deep .main-content::-webkit-scrollbar,
-::v-deep .sidebar::-webkit-scrollbar {
+::v-deep .main-content-centered::-webkit-scrollbar,
+::v-deep .sidebar-fixed::-webkit-scrollbar {
   display: none;
 }
 
@@ -260,20 +276,28 @@ body {
 @media (max-width: 1024px) {
   .app-container {
     flex-direction: column;
+    padding: 12px;
   }
 
-  .sidebar {
+  .main-content-centered {
+    max-width: 100%;
+    margin-bottom: 120px; /* 为固定导航留出空间 */
+  }
+
+  .sidebar-fixed {
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
     width: 100%;
     height: 120px;
-    border-right: none;
-    border-top: 1px solid #e5e7eb;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+    z-index: 1000;
   }
-
-  .main-content {
-    height: calc(100vh - 60px - 120px); /* 扣除顶部栏和导航栏高度 */
-    border-right: none;
-    border-bottom: 1px solid #e5e7eb;
+  
+  .app-header {
+    position: static; /* 在小屏幕上取消sticky定位 */
   }
 }
 </style>

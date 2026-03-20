@@ -2,120 +2,164 @@
   <template>
     <div class="case-info-form">
 
-      <!-- ============ 保单信息区块 ============ -->
-      <section class="form-section" id="section-policyInfo">
-        <div class="section-header">
-          <h3> 保单信息</h3>
-          <span class="toggle-icon" @click="toggleSection('policyInfo')">
-            <i :class="policyInfoExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
-          </span>
-        </div>
+ <!-- ============ 保单信息区块 ============ -->
+  <section class="form-section" id="section-policyInfo">
+    <div class="section-header">
+      <div class="section-header-left">
+        <!-- 主题色竖条装饰 -->
+        <div class="section-decorator"></div>
+        <h3>保单信息</h3>
+        <!-- 已选择保单标签 -->
+        <el-tag type="primary" size="small" class="selected-count-tag">
+          已选择 {{ selectedPoliciesCount }} 份保单
+        </el-tag>
+      </div>
+      <div class="section-header-right">
+        <!-- 信息展示按钮 -->
+        <button type="button" class="btn-info-display" @click="toggleInfoDisplay">
+          <i class="iconfont icon-yanjing"></i>
+          {{ infoDisplayExpanded ? '收起详情' : '信息展示' }}
+        </button>
+        <span class="toggle-icon" @click="toggleSection('policyInfo')">
+          <i :class="policyInfoExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
+        </span>
+      </div>
+    </div>
 
-        <div v-show="policyInfoExpanded" class="section-content">
-          <!-- 卡片容器 -->
-          <div class="policy-card">
-            <!-- 顶部信息行 -->
-            <div class="policy-header">
-              <div class="policy-number-wrapper">
-                <input type="checkbox" v-model="caseInfo.selected" class="checkbox-input" />
-                <div class="policy-number">
-                  <div class="policy-no-row">
-                    <input type="text" v-model="caseInfo.policyNo" readonly class="form-input policy-no" />
-                  </div>
-                  <div class="policy-tags">
-                    <span class="tag">一般客户</span>
-                    <span class="tag">新客户</span>
-                  </div>
-
+    <div v-show="policyInfoExpanded" class="section-content">
+      <!-- 保单卡片列表 -->
+      <div class="policy-cards-container">
+        <div 
+          v-for="(policy, index) in policies" 
+          :key="policy.policyNo"
+          :class="['policy-card', { 'selected': policy.selected, 'hovered': policy.hovered }]"
+          @click="selectPolicy(policy, $event)"
+          @mouseenter="policy.hovered = true"
+          @mouseleave="policy.hovered = false"
+        >
+          <!-- 顶部信息行 -->
+          <div class="policy-header">
+            <div class="policy-number-wrapper">
+              <!-- 复选框 -->
+              <input 
+                type="checkbox" 
+                :checked="policy.selected" 
+                class="checkbox-input" 
+                @click.stop="togglePolicySelection(policy)"
+              />
+              <div class="policy-info">
+                <!-- 保单号链接 -->
+                <a 
+                  href="#" 
+                  class="policy-no-link"
+                  @click.prevent="handlePolicyClick(policy.policyNo)"
+                >
+                  {{ policy.policyNo }}
+                </a>
+                
+                <!-- 客户信息标签 - 在保单号下方 -->
+                <div class="policy-tags-row">
+                  <el-tag type="info" size="small" class="policy-tag">
+                    {{ policy.customerTag }}
+                  </el-tag>
+                  <el-tag type="warning" size="small" class="policy-tag">
+                    {{ policy.customerLevel }}
+                  </el-tag>
                 </div>
               </div>
-              <div class="policy-title">
-                <span class="title-text">{{ caseInfo.insuranceName }}</span>
-                <span class="toggle-icon" @click="toggleSection('policyBody')">
-                  <i :class="policyBodyExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
-                </span>
-              </div>
+            </div>
+            
+            <!-- 险种名称标签 - 右上角 -->
+            <div class="policy-title">
+              <el-tag type="success" size="medium" class="insurance-name-tag">
+                {{ truncateText(policy.insuranceName, 15) }}
+              </el-tag>
+              <span class="toggle-icon" @click.stop="togglePolicyBodyByIndex(index)">
+                <i :class="policy.bodyExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- 主体信息网格 -->
+          <div class="policy-body" v-show="policy.bodyExpanded" :id="'policyBody-' + index">
+            <!-- 第 1 行：3 个字段 -->
+            <div class="info-item">
+              <label><i class="iconfont icon-yonghu"></i> 投保人名称</label>
+              <div class="value">{{ policy.appliName }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-yonghu"></i> 被保人名称</label>
+              <div class="value">{{ policy.insuredName }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-shield"></i> 代理人名称</label>
+              <div class="value">{{ policy.agentName }}</div>
             </div>
 
-            <!-- 主体信息网格 -->
-            <div class="policy-body" v-show="policyBodyExpanded" id="policyBody">
-              <!-- 第 1 行：3 个字段 -->
-              <div class="info-item">
-                <label><i class="iconfont icon-yonghu"></i> 投保人名称</label>
-                <div class="value">{{ caseInfo.appliName }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-yonghu"></i> 被保人名称</label>
-                <div class="value">{{ caseInfo.insuredName }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-shield"></i> 代理人名称</label>
-                <div class="value">{{ caseInfo.agentName }}</div>
-              </div>
+            <!-- 第 2 行：3 个字段 -->
+            <div class="info-item">
+              <label><i class="iconfont icon-wendang"></i> 险种名称</label>
+              <div class="value">{{ policy.insuranceName }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 保险起期</label>
+              <div class="value">{{ policy.policyStartDateStr }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 保险止期</label>
+              <div class="value">{{ policy.policyEndDateStr }}</div>
+            </div>
 
-              <!-- 第 2 行：3 个字段 -->
-              <div class="info-item">
-                <label><i class="iconfont icon-wendang"></i> 险种名称</label>
-                <div class="value">{{ caseInfo.insuranceName }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-shijiankaishishijian"></i> 保险起期</label>
-                <div class="value">{{ caseInfo.policyStartDateStr }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-shijiankaishishijian"></i> 保险止期</label>
-                <div class="value">{{ caseInfo.policyEndDateStr }}</div>
-              </div>
+            <!-- 第 3 行：3 个字段 -->
+            <div class="info-item">
+              <label><i class="iconfont icon-shijiankaishishijian"></i> 保险日期止期</label>
+              <div class="value">{{ policy.policyEndDateStr }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-jigou"></i> 承保机构</label>
+              <div class="value">{{ policy.insurerName }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-commpany"></i> 工作单位</label>
+              <div class="value">{{ policy.workUnit || '-' }}</div>
+            </div>
 
-              <!-- 第 3 行：3 个字段 -->
-              <div class="info-item">
-                <label><i class="iconfont icon-shijiankaishishijian"></i> 保险日期止期</label>
-                <div class="value">{{ caseInfo.policyEndDateStr }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-jigou"></i> 承保机构</label>
-                <div class="value">{{ caseInfo.insurerName }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-commpany"></i> 工作单位</label>
-                <div class="value">{{ caseInfo.workUnit || '-' }}</div>
-              </div>
+            <!-- 第 4 行：3 个字段 -->
+            <div class="info-item">
+              <label><i class="iconfont icon-dingwei"></i> 客户来源</label>
+              <div class="value">{{ policy.customerSource || '-' }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-yonghu"></i> 客户标识</label>
+              <div class="value">{{ policy.customerTag || '-' }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-shoucang"></i> 客户等级</label>
+              <div class="value">{{ policy.customerLevel || '-' }}</div>
+            </div>
 
-              <!-- 第 4 行：3 个字段 -->
-              <div class="info-item">
-                <label><i class="iconfont icon-dingwei"></i> 客户来源</label>
-                <div class="value">{{ caseInfo.customerSource || '-' }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-yonghu"></i> 客户标识</label>
-                <div class="value">{{ caseInfo.customerTag || '-' }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-shoucang"></i> 客户等级</label>
-                <div class="value">{{ caseInfo.customerLevel || '-' }}</div>
-              </div>
-
-              <!-- 第 5 行：3 个字段 -->
-              <div class="info-item">
-                <label><i class="iconfont icon-yonghu"></i> 专员名称</label>
-                <div class="value">{{ caseInfo.specialistName || '-' }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-Telephone"></i> 专员电话</label>
-                <div class="value">{{ caseInfo.specialistPhone || '-' }}</div>
-              </div>
-              <div class="info-item">
-                <label><i class="iconfont icon-shoucang"></i> 服务等级</label>
-                <div class="value">{{ caseInfo.serviceLevel || '-' }}</div>
-              </div>
+            <!-- 第 5 行：3 个字段 -->
+            <div class="info-item">
+              <label><i class="iconfont icon-yonghu"></i> 专员名称</label>
+              <div class="value">{{ policy.specialistName || '-' }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-Telephone"></i> 专员电话</label>
+              <div class="value">{{ policy.specialistPhone || '-' }}</div>
+            </div>
+            <div class="info-item">
+              <label><i class="iconfont icon-shoucang"></i> 服务等级</label>
+              <div class="value">{{ policy.serviceLevel || '-' }}</div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
       <!-- ============ 历史报案记录区块 ============ -->
-      <section class="form-section" id="section-historyReport">
-        <div class="section-header">
+      <section class="form-section" id="section-historyReport" v-show="infoDisplayExpanded">
+        <div class="section-header no-border">
           <h3><i class="icon-history"></i> 历史报案记录</h3>
           <span class="record-count">{{ historyReports.length }} 条记录</span>
           <span class="toggle-icon" @click="toggleSection('historyReport')">
@@ -124,23 +168,23 @@
         </div>
 
         <div v-show="historyReportExpanded" class="section-content">
-          <div class="report-table">
+          <div class="report-table-container">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>序号</th>
-                  <th>报案号</th>
-                  <th>保单号</th>
-                  <th>出险时间</th>
-                  <th>报案时间</th>
-                  <th>报案人</th>
-                  <th>快赔案件编号</th>
-                  <th>状态</th>
+                  <th class="col-seq">序号</th>
+                  <th class="col-report-no">报案号</th>
+                  <th class="col-policy-no">保单号</th>
+                  <th class="col-accident-time">出险时间</th>
+                  <th class="col-report-time">报案时间</th>
+                  <th class="col-reporter">报案人</th>
+                  <th class="col-fast-claim">快赔案件编号</th>
+                  <th class="col-status">状态</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in historyReports" :key="index">
-                  <td>{{ index + 1 }}</td>
+                <tr v-for="(item, index) in historyReports" :key="index" class="table-row">
+                  <td class="seq-center"> {{ index + 1 }}</td>
                   <td>
                     <a href="#" class="report-link" @click.prevent="handleReportClick(item.reportNo)">
                       {{ item.reportNo }}
@@ -161,7 +205,7 @@
                   <td>{{ item.reporter }}</td>
                   <td><span class="empty-cell">-</span></td>
                   <td>
-                    <span class="status-badge status-submitted">已提交</span>
+                    <el-tag type="success" size="small" class="status-tag">已提交</el-tag>
                   </td>
                 </tr>
               </tbody>
@@ -1218,23 +1262,17 @@
       </section>
 
       <!-- ============ 表单底部按钮 ============ -->
-      <div class="form-actions">
-        <button type="button" @click="validateAndSubmit" class="btn-submit">
-          <i class=" iconfont icon-fasong"></i> 提交
-        </button>
-        <button type="button" @click="handleSave" class="btn-save">
-          <i class=" iconfont icon-icon-zancun"></i> 暂存
-        </button>
-        <button type="button" @click="handleTransfer" class="btn-transfer">
-          <i class=" iconfont icon-arrow-1-right"></i> 转专岗处理
-        </button>
-        <!-- <button type="button" @click="expandAll" class="btn-secondary">
-          ⊞ 全部展开
-        </button>
-        <button type="button" @click="collapseAll" class="btn-secondary">
-          ⊟ 全部折叠
-        </button> -->
-      </div>
+    <div class="form-actions-sticky">
+      <button type="button" @click="validateAndSubmit" class="btn-submit">
+        <i class=" iconfont icon-fasong"></i> 提交
+      </button>
+      <button type="button" @click="handleSave" class="btn-save">
+        <i class=" iconfont icon-icon-zancun"></i> 暂存
+      </button>
+      <button type="button" @click="handleTransfer" class="btn-transfer">
+        <i class=" iconfont icon-arrow-1-right"></i> 转专岗处理
+      </button>
+    </div>
 
       <!-- ============ 全局错误提示 ============ -->
       <div v-if="globalError" class="global-error-toast">
@@ -1262,6 +1300,7 @@ export default {
       // ============ 折叠/展开状态 ============
       policyInfoExpanded: true,
       policyBodyExpanded: true,
+      infoDisplayExpanded: true,
       reportInfoExpanded: true,
       vehicleInfoExpanded: true,
       lossTypeExpanded: true,
@@ -1327,11 +1366,137 @@ export default {
           fastClaimNo: '-',
           status: '已提交'
         }
-      ]
+      ],
+      // 多保单数据结构
+      policies: [
+        {
+          policyNo: '29932070365202500000008',
+          appliName: '吴*行',
+          insuredName: '吴*行',
+          agentName: '李祥荣',
+          insuranceName: '机动车、特种车商业保险2020版',
+          policyStartDateStr: '2025/11/27 00:00:00',
+          policyEndDateStr: '2026/11/26 23:59:59',
+          insurerName: '32070101-招商财产保险股份有限公司连云港中心支公司业务一部出单机构一',
+          workUnit: '',
+          customerSource: '',
+          customerTag: '一般客户',
+          customerLevel: '新客户',
+          specialistName: '',
+          specialistPhone: '',
+          serviceLevel: '',
+          selected: true, // 默认选中第一张
+          hovered: false,
+          bodyExpanded: true
+        },
+        {
+          policyNo: '29932070365202500000009',
+          appliName: '张*明',
+          insuredName: '张*明',
+          agentName: '王丽华',
+          insuranceName: '家庭财产综合保险2020版',
+          policyStartDateStr: '2025/10/15 00:00:00',
+          policyEndDateStr: '2026/10/14 23:59:59',
+          insurerName: '32070102-招商财产保险股份有限公司苏州中心支公司',
+          workUnit: '',
+          customerSource: '',
+          customerTag: '重要客户',
+          customerLevel: 'VIP客户',
+          specialistName: '',
+          specialistPhone: '',
+          serviceLevel: '',
+          selected: false,
+          hovered: false,
+          bodyExpanded: false
+        },
+        {
+          policyNo: '29932070365202500000010',
+          appliName: '李*华',
+          insuredName: '李*华',
+          agentName: '赵晓东',
+          insuranceName: '企业财产保险基本险',
+          policyStartDateStr: '2025/12/01 00:00:00',
+          policyEndDateStr: '2026/11/30 23:59:59',
+          insurerName: '32070103-招商财产保险股份有限公司无锡中心支公司',
+          workUnit: '',
+          customerSource: '',
+          customerTag: '一般客户',
+          customerLevel: '老客户',
+          specialistName: '',
+          specialistPhone: '',
+          serviceLevel: '',
+          selected: false,
+          hovered: false,
+          bodyExpanded: false
+        }
+      ],
     }
   },
-
+computed: {
+     // 计算选中保单数量
+    selectedPoliciesCount() {
+      return this.policies.filter(policy => policy.selected).length;
+    },
+  },
   methods: {
+ // 保单号点击处理
+    handlePolicyClick(policyNo) {
+      console.log(`点击保单号: ${policyNo}`);
+      // 这里可以添加实际的业务逻辑，如打开详情页面等
+      // 示例：this.$router.push(`/policy/${policyNo}`);
+    },
+
+// 选择单个保单
+    selectPolicy(policy, event) {
+      // 如果按住Ctrl键则多选，否则单选
+      if (!event?.ctrlKey) {
+        // 单选模式：取消其他保单的选择状态
+        this.policies.forEach(p => {
+          if (p !== policy) {
+            p.selected = false;
+          }
+        });
+      }
+      
+      // 切换当前保单选择状态
+      policy.selected = !policy.selected;
+    },
+    
+    // 切换保单选择状态（复选框）
+    togglePolicySelection(policy) {
+      policy.selected = !policy.selected;
+    },
+    
+    // 切换保单详情展开状态 - 通过索引
+    togglePolicyBodyByIndex(index) {
+      this.policies[index].bodyExpanded = !this.policies[index].bodyExpanded;
+    },
+    
+    // 保留原来的 togglePolicyBody 方法用于兼容
+    togglePolicyBody() {
+      // 如果是旧的调用方式，可以选择默认处理第一个保单或什么都不做
+      console.warn("togglePolicyBody 方法已被弃用，请使用 togglePolicyBodyByIndex(index)");
+    },
+    // 文本截断方法
+    truncateText(text, length) {
+      if (!text) return '';
+      return text.length > length ? text.substring(0, length) + '...' : text;
+    },
+     // 切换信息展示（保单详情 + 历史报案记录）
+    toggleInfoDisplay() {
+      this.infoDisplayExpanded = !this.infoDisplayExpanded;
+      
+      // 同时控制保单详情的展开状态
+      if (this.infoDisplayExpanded) {
+        // 展开时也展开保单详情
+        this.policyInfoExpanded = true;
+        this.historyReportExpanded = true;
+      } else {
+        // 收起时也收起保单详情
+        this.policyInfoExpanded = false;
+        this.historyReportExpanded = false;
+      }
+    },
     // 点击报案号时触发
     handleReportClick(reportNo) {
       alert(`查看报案号：${reportNo} 的详情`)
@@ -1527,7 +1692,6 @@ export default {
       })
     },
 
-    // ============ 滚动到第一个错误字段 ============
    // ============ 滚动到第一个错误字段 ============
 async scrollToFirstError(errors) {
   const firstErrorField = Object.keys(errors)[0]
@@ -1728,37 +1892,27 @@ async scrollToFirstError(errors) {
 
       const sectionKey = `${section}Expanded`
 
-      // 修复：使用 Object.prototype.hasOwnProperty.call 替代 this.hasOwnProperty
       if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
         // 展开目标区块
         this[sectionKey] = true
 
         // 等待 DOM 更新后滚动
         this.$nextTick(() => {
-          const sectionElement = document.getElementById(`section-${section}`)
-          if (sectionElement) {
-            console.log('找到区块元素:', sectionElement)
-
-            // 获取滚动容器（.main-content）
-            const container = document.querySelector('.main-content')
-
-            if (container) {
-              // 计算滚动位置
-              const offsetPosition = sectionElement.offsetTop - 50
-              container.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
+          this.$nextTick(() => { // 确保展开动画完成
+            const sectionElement = document.getElementById(`section-${section}`)
+            if (sectionElement) {
+              console.log('找到区块元素:', sectionElement)
+              
+              // 使用 element.scrollIntoView 方法，它会自动处理滚动
+              sectionElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest'
               })
             } else {
-              // 降级方案：使用 window 滚动
-              window.scrollTo({
-                top: sectionElement.offsetTop - 50,
-                behavior: 'smooth'
-              })
+              console.error('未找到区块元素:', `section-${section}`)
             }
-          } else {
-            console.error('未找到区块元素:', `section-${section}`)
-          }
+          })
         })
       } else {
         console.error('无效的区块:', section, sectionKey)
@@ -1769,6 +1923,71 @@ async scrollToFirstError(errors) {
 </script>
 
 <style scoped>
+/* 区块标题装饰 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.2s;
+  gap: 12px;
+}
+
+.section-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto; 
+
+}
+
+/* 主题色竖条装饰 */
+.section-decorator {
+  width: 4px;
+  height: 32px;
+  background-color: #0066cc; /* 主题色 */
+  border-radius: 2px;
+}
+
+/* 已选择保单标签 */
+.selected-count-tag {
+  margin-left: 8px;
+  background-color: #e6f7ff;
+  border-color: #91d5ff;
+  color: #1890ff;
+  height: 24px;
+  line-height: 22px;
+  font-size: 12px;
+}
+
+/* 信息展示按钮 */
+.btn-info-display {
+  padding: 6px 12px;
+  background-color: #e4f1f9;
+  color: #111111;
+  border:none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-info-display:hover {
+  background-color: #e6f7ff;
+  border-color: #91d5ff;
+}
 /* 日期选择器样式 */
 .el-date-editor {
   width: 100%;
@@ -2133,6 +2352,32 @@ async scrollToFirstError(errors) {
   /* 调整垂直对齐 */
 }
 
+
+/* 保单卡片容器 */
+.policy-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+/* 选中状态的保单卡片 */
+.policy-card.selected {
+  border: 2px solid #0066CC; /* 选中时的主题色边框 */
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2); /* 外发光效果 */
+  background-color: #f0f8ff; /* 选中背景色 */
+}
+
+/* 鼠标悬停状态 */
+.policy-card.hovered {
+  border-color: #0052A3; /* 悬停时加深边框颜色 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+}
+
+/* 选中且悬停的状态 */
+.policy-card.selected.hovered {
+  border-color: #004080; /* 选中状态下悬停更深的颜色 */
+}
 /* ============ 保单卡片样式 ============ */
 .policy-card {
   border: 2px solid #0066CC;
@@ -2148,14 +2393,59 @@ async scrollToFirstError(errors) {
   align-items: flex-start;
   margin-bottom: 16px;
 }
+.policy-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+/* 保单号链接样式 */
+.policy-no-link {
+  font-size: 12px;
+  font-weight: bold;
+  color: #0066CC; /* 主题色 */
+  text-decoration: underline; /* 添加下划线 */
+  margin-bottom: 8px;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
 
+.policy-no-link:hover {
+  color: #0052A3; /* 悬停时加深颜色 */
+  text-decoration: underline;
+}
+
+/* 客户信息标签行 */
+.policy-tags-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* 客户信息标签样式 */
+.policy-tag {
+  border-radius: 4px;
+  font-size: 12px;
+  height: 22px;
+  line-height: 20px;
+}
+
+/* 险种名称标签样式 */
+.insurance-name-tag {
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 500;
+  max-width: 200px; /* 限制最大宽度 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: #0066CC;
+  background-color: #afcbe9;
+}
 .policy-number-wrapper {
   display: flex;
-  flex-direction: row;
-  /* 改为垂直排列 */
-  gap: 4px;
-  /* 减小间距 */
-  align-items: center;
+  gap: 8px;
+  align-items: flex-start;
 }
 
 .policy-number {
@@ -2356,6 +2646,14 @@ async scrollToFirstError(errors) {
 }
 
 /* ============ 历史报案记录样式 ============ */
+.section-header.no-border {
+  border-bottom: none;
+  transition: none;
+}
+
+.section-header.no-border:hover {
+  background-color: #f8f9fa; /* 保持原始背景色，无变化 */
+}
 .record-count {
   font-size: 12px;
   color: #666;
@@ -2363,32 +2661,38 @@ async scrollToFirstError(errors) {
   padding: 2px 8px;
   border-radius: 4px;
 }
+/* 表格容器 */
+.report-table-container {
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 
-.report-table {
+/* 表格样式 */
+.data-table {
   width: 100%;
   border-collapse: collapse;
-  overflow-x: fixed;
+  min-width: 100%;
+  table-layout: auto;
 }
 
 .data-table th {
   text-align: left;
   padding: 12px 16px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-  font-size: 10px;
+  background-color: #f8f9fa; /* 表头背景色 */
+  border-bottom: 1px solid #e1e5e9;
+  font-size: 12px;
   color: #333;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.data-table {
-  min-width: 100%;
-  table-layout: fixed;
+  min-width: 20px; /* 为每列设置最小宽度 */
 }
 
 .data-table td {
-  padding: 12px 16px;
+  padding: 2px 3px;
   border-bottom: 1px solid #eee;
   font-size: 10px;
   color: #333;
@@ -2396,8 +2700,33 @@ async scrollToFirstError(errors) {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  height: 20px; /* 设置固定行高 */
+  min-width: 20px; /* 为每列设置最小宽度 */
+
+}
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+/* 针对不同列设置最小宽度 */
+.col-seq { min-width: 20px; width: auto; }
+.col-report-no { min-width: 140px; width: auto; }
+.col-policy-no { min-width: 120px; width: auto; }
+.col-accident-time { min-width: 130px; width: auto; }
+.col-report-time { min-width: 130px; width: auto; }
+.col-reporter { min-width: 80px; width: auto; }
+.col-fast-claim { min-width: 100px; width: auto; }
+.col-status { min-width: 80px; width: auto; }
+/* 序号列居中对齐 */
+.seq-center {
+  text-align: center;
 }
 
+
+/* 表格行悬停效果 */
+.table-row:hover {
+  background-color: #f5f9ff; /* 悬停背景色 */
+  transition: background-color 0.2s ease;
+}
 .report-link {
   color: #007bff;
   text-decoration: none;
@@ -2422,18 +2751,35 @@ async scrollToFirstError(errors) {
   font-style: normal;
 }
 
-.status-badge {
-  display: inline-block;
-  padding: 2px 2px;
-  border-radius: 4px;
-  font-size: 10px;
+/* 状态标签样式 */
+.status-tag {
+  border-radius: 12px;
+  font-size: 12px;
   font-weight: 500;
+  padding: 4px 10px;
+  height: auto;
+  line-height: normal;
 }
 
+/* 已提交：绿色系 */
 .status-submitted {
-  background-color: #e4e5e6;
-  color: #42dd69;
-  border: 1px solid #b3d8ff;
+  background-color: #e8f7ef;
+  color: #1db369;
+  border-color: #1db369;
+}
+
+/* 处理中：黄色/警告色 */
+.status-processing {
+  background-color: #fffbeb;
+  color: #f5a623;
+  border-color: #f5a623;
+}
+
+/* 已完成：主题色 */
+.status-completed {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border-color: #1890ff;
 }
 
 /* ============ 损失类型信息区块样式 ============ */
@@ -2871,7 +3217,6 @@ async scrollToFirstError(errors) {
   transition: all 0.3s ease;
 }
 
-aozu
 
 /* ============ 按钮样式 ============ */
 .case-info-form {
@@ -2879,29 +3224,28 @@ aozu
   /* 减去页面其他部分的高度 */
   display: flex;
   flex-direction: column;
-  padding-bottom: 80px;
-  /* 为固定按钮预留空间 */
+  padding-bottom: 0px;
 }
 
-.form-actions {
+/* 固定在底部的按钮区域 */
+.form-actions-sticky {
   display: flex;
   gap: 12px;
   justify-content: center;
   margin-top: auto;
   /* 推到底部 */
-  padding-top: 20px;
+  padding: 20px 20px 20px 20px;
   border-top: 1px solid #ddd;
   flex-wrap: wrap;
-  position: fixed;
-  /* 固定定位 */
+  position: sticky; /* 使用 sticky 而不是 fixed */
   bottom: 0;
   left: 0;
   right: 0;
   background-color: white;
-  padding: 16px 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   /* 确保在最顶层 */
+  margin-bottom: 0;
 }
 
 .btn-submit {
