@@ -3,7 +3,7 @@
     <div class="case-info-form">
       <!-- ============ 保单信息区块 ============ -->
       <section class="form-section" id="section-policyInfo">
-        <div class="section-header">
+        <div class="section-header ">
           <div class="section-header-left">
             <!-- 主题色竖条装饰 -->
             <div class="section-decorator"></div>
@@ -203,7 +203,7 @@
 
       <!-- ============ 报案信息区块 ============ -->
       <section class="form-section" id="section-reportInfo">
-        <div class="section-header"">
+        <div class="section-header no-border">
           <h3><i class=" iconfont icon-bianji-wenjian-bianji" style="color: #0056a4 ;"></i> 报案信息</h3>
         </div>
 
@@ -249,10 +249,10 @@
               </div>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label><i class="iconfont icon-yun"></i> 天气情况</label>
               <select v-model="caseInfo.weatherSituation" ref="weatherSituation"
-                :class="{ 'input-error': validationErrors.weatherSituation }" class="form-input">
+                :class="{ 'input-error': validationErrors.weatherSituation }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">晴</option>
                 <option value="1">阴</option>
@@ -263,10 +263,10 @@
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label><i class="iconfont icon-tishi"></i> 出险地点分类 </label>
               <select v-model="caseInfo.damageLocationType" ref="damageLocationType"
-                :class="{ 'input-error': validationErrors.damageLocationType }" class="form-input">
+                :class="{ 'input-error': validationErrors.damageLocationType }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">道路</option>
                 <option value="1">停车场</option>
@@ -403,10 +403,10 @@
 
           <!-- 第八行：多列下拉选择 -->
           <div class="contact-form-row">
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>险因类型 <span class="required">*</span></label>
               <select v-model="caseInfo.lsType" ref="lsType" :class="{ 'input-error': validationErrors.lsType }"
-                class="form-input">
+                class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="01">碰撞</option>
                 <option value="02">倾覆</option>
@@ -416,10 +416,10 @@
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>保险事故分类 <span class="required">*</span></label>
               <select v-model="caseInfo.damageCode" ref="damageCode"
-                :class="{ 'input-error': validationErrors.damageCode }" class="form-input">
+                :class="{ 'input-error': validationErrors.damageCode }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="01">单方事故</option>
                 <option value="02">双方事故</option>
@@ -427,10 +427,10 @@
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>出险原因 <span class="required">*</span></label>
               <select v-model="caseInfo.accidentCause" ref="accidentCause"
-                :class="{ 'input-error': validationErrors.accidentCause }" class="form-input">
+                :class="{ 'input-error': validationErrors.accidentCause }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">未按规定让行</option>
                 <option value="1">违反交通信号灯</option>
@@ -440,10 +440,10 @@
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>事故处理部门 <span class="required">*</span></label>
               <select v-model="caseInfo.handleDepartment" ref="handleDepartment"
-                :class="{ 'input-error': validationErrors.handleDepartment }" class="form-input">
+                :class="{ 'input-error': validationErrors.handleDepartment }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">交警</option>
                 <option value="1">保险公司</option>
@@ -454,10 +454,10 @@
 
           <!-- 第九行 -->
           <div class="contact-form-row">
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>事故处理类型 <span class="required">*</span></label>
               <select v-model="caseInfo.handleType" ref="handleType"
-                :class="{ 'input-error': validationErrors.handleType }" class="form-input">
+                :class="{ 'input-error': validationErrors.handleType }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">快赔</option>
                 <option value="1">定损</option>
@@ -465,10 +465,10 @@
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>事故责任 <span class="required">*</span></label>
               <select v-model="caseInfo.responsibility" ref="responsibility"
-                :class="{ 'input-error': validationErrors.responsibility }" class="form-input">
+                :class="{ 'input-error': validationErrors.responsibility }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">全责</option>
                 <option value="1">主责</option>
@@ -478,20 +478,20 @@
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>驾驶员是否被保险人 <span class="required">*</span></label>
               <select v-model="caseInfo.driverIsInsured" ref="driverIsInsured"
-                :class="{ 'input-error': validationErrors.driverIsInsured }" class="form-input">
+                :class="{ 'input-error': validationErrors.driverIsInsured }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">否</option>
                 <option value="1">是</option>
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>被保险人证件类型 <span class="required">*</span></label>
               <select v-model="caseInfo.insuredCertType" ref="insuredCertType"
-                :class="{ 'input-error': validationErrors.insuredCertType }" class="form-input">
+                :class="{ 'input-error': validationErrors.insuredCertType }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="124001">居民身份证或驾驶证</option>
                 <option value="124002">护照</option>
@@ -501,10 +501,10 @@
 
           <!-- 第十行 -->
           <div class="contact-form-row">
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>紧急程度 <span class="required">*</span></label>
               <select v-model="caseInfo.emergencyLevel" ref="emergencyLevel"
-                :class="{ 'input-error': validationErrors.emergencyLevel }" class="form-input">
+                :class="{ 'input-error': validationErrors.emergencyLevel }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">普通</option>
                 <option value="1">紧急</option>
@@ -512,30 +512,30 @@
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>是否异地 <span class="required">*</span></label>
               <select v-model="caseInfo.isOutProvince" ref="isOutProvince"
-                :class="{ 'input-error': validationErrors.isOutProvince }" class="form-input">
+                :class="{ 'input-error': validationErrors.isOutProvince }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">否</option>
                 <option value="1">是</option>
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>是否微信理赔 <span class="required">*</span></label>
               <select v-model="caseInfo.isWeChatClaim" ref="isWeChatClaim"
-                :class="{ 'input-error': validationErrors.isWeChatClaim }" class="form-input">
+                :class="{ 'input-error': validationErrors.isWeChatClaim }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">否</option>
                 <option value="1">是</option>
               </select>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>事故原因 <span class="required">*</span></label>
               <select v-model="caseInfo.accidentReason" ref="accidentReason"
-                :class="{ 'input-error': validationErrors.accidentReason }" class="form-input">
+                :class="{ 'input-error': validationErrors.accidentReason }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">未按规定让行</option>
                 <option value="1">违反交通信号灯</option>
@@ -585,10 +585,10 @@
               </div>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>巨灾类型 <span class="required">*</span></label>
               <select v-model="caseInfo.disasterType" ref="disasterType"
-                :class="{ 'input-error': validationErrors.disasterType }" class="form-input">
+                :class="{ 'input-error': validationErrors.disasterType }" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="0">地震</option>
                 <option value="1">洪水</option>
@@ -649,7 +649,7 @@
 
       <!-- ============ 事故救援区块 ============ -->
       <section class="form-section" id="section-accidentRescue">
-        <div class="section-header">
+        <div class="section-header no-border">
           <h3><i class="iconfont icon-wuliuqiache" style="color: #0056a4 ;"></i> 事故救援</h3>
         </div>
         <div v-show="accidentRescueExpanded" class="section-content">
@@ -737,7 +737,7 @@
 
       <!-- ============ 报案人，联系人姓名区块 ============ -->
       <section class="form-section" id="section-contactInfo">
-        <div class="section-header">
+        <div class="section-header no-border">
           <h3><i class="iconfont icon-yonghu" style="color: #0056a4 ;"></i> 报案人姓名、联系人姓名</h3>
         </div>
 
@@ -832,7 +832,7 @@
       </section>
       <!-- ============ 车辆信息区块 ============ -->
       <section class="form-section" id="section-vehicleInfo">
-        <div class="section-header">
+        <div class="section-header no-border">
           <h3><i class="iconfont icon-qicheSUV" style="color: #0056a4 ;"></i> 涉案车辆信息</h3>
           <button type="button" class="btn-add-icon float-right">
             <span>+</span>
@@ -896,9 +896,9 @@
               </span>
             </div>
 
-            <div class="form-group">
+            <div class="contact-form-group">
               <label>驾驶员证件类型</label>
-              <select v-model="caseInfo.driverCertType" class="form-input">
+              <select v-model="caseInfo.driverCertType" class="form-input select-sm">
                 <option value="">请选择</option>
                 <option value="124001">身份证</option>
                 <option value="124002">护照</option>
@@ -966,7 +966,7 @@
 
       <!-- 财产损失信息区块 -->
       <section class="form-section" id="section-propertyLoss">
-        <div class="section-header">
+        <div class="section-header no-border">
           <h3><i class="iconfont icon-meiyuan" style="color: #0056a4 ;"></i> 财产损失信息</h3>
           <button type="button" @click="addPropertyLoss" class="btn-add-icon float-right">
             <span>+</span>
@@ -1001,9 +1001,9 @@
                   <input type="text" v-model="item.propertyName" class="form-input" />
                 </div>
 
-                <div class="form-group">
-                  <label>归属 *</label>
-                  <select v-model="item.identityRec" class="form-input"
+                <div class="contact-form-group">
+                  <label>归属 <span class="required">*</span></label>
+                  <select v-model="item.identityRec" class="form-input select-sm"
                     :class="{ 'input-error': validationErrors[`identityRec_${index}`] }">
                     <option value="">请选择</option>
                     <option value="0">第三者</option>
@@ -1015,9 +1015,9 @@
                   </span>
                 </div>
 
-                <div class="form-group">
+                <div class="contact-form-group">
                   <label>损失情况</label>
-                  <select v-model="item.lossSituation" class="form-input"
+                  <select v-model="item.lossSituation" class="form-input select-sm"
                     :class="{ 'input-error': validationErrors[`lossSituation_${index}`] }">
                     <option value="">请选择</option>
                     <option value="0">轻微损坏</option>
@@ -1036,9 +1036,9 @@
       </section>
       <!-- ============ 人员伤亡区块 ============ -->
       <section class="form-section" id="section-personInjury">
-        <div class="section-header">
+        <div class="section-header no-border">
           <h3><i class="iconfont icon-aixin" style="color: #0056a4 ;"></i> 人员伤亡</h3>
-          <button type="button" class="btn-add-icon float-right">
+          <button type="button" class="btn-add-icon float-right" @click="addPersonInjury">
             <span>+</span>
           </button>
         </div>
@@ -1070,26 +1070,35 @@
             </div>
           </div>
 
-          <!-- <div v-if="caseInfo.woundFlag === '1'" class="person-injury-list">
-            <div v-for="(item, index) in personInjuryList" :key="index" class="injury-item">
+          <div v-if="caseInfo.woundFlag === '1'" class="person-injury-list">
+            <div v-for="(item, index) in personInjuryList" :key="index" class="person-injury-item">
+              <button type="button" @click="removePersonInjury(index)" class="btn-remove-top">
+                -
+              </button>
               <div class="form-row">
-                <div class="form-group">
-                  <label>姓名</label>
+                <div class="contact-form-group">
+                  <label>姓名<span class="required">*</span></label>
                   <input type="text" v-model="item.name" class="form-input" />
                 </div>
-
-                <div class="form-group">
-                  <label>归属</label>
-                  <select v-model="item.owncar" class="form-input">
+                <div class="contact-form-group">
+                  <label>性别</label>
+                  <select v-model="item.owncar" class="form-input select-sm">
+                    <option value="">请选择</option>
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                  </select>
+                </div>
+                <div class="contact-form-group">
+                  <label>归属<span class="required">*</span></label>
+                  <select v-model="item.owncar" class="form-input select-sm">
                     <option value="">请选择</option>
                     <option value="0">第三者</option>
                     <option value="1">车上人员</option>
                   </select>
                 </div>
-
-                <div class="form-group">
+                <div class="contact-form-group">
                   <label>伤亡情况</label>
-                  <select v-model="item.persionpayType" class="form-input">
+                  <select v-model="item.persionpayType" class="form-input select-sm">
                     <option value="">请选择</option>
                     <option value="0">轻伤</option>
                     <option value="1">重伤</option>
@@ -1097,25 +1106,31 @@
                     <option value="3">死亡</option>
                   </select>
                 </div>
-
-                <div class="form-group">
-                  <label>&nbsp;</label>
-                  <button type="button" @click="removePersonInjury(index)" class="btn-remove">
-                    删除
-                  </button>
-                </div>
               </div>
+              <div class="form-row">
+                  <div class="contact-form-group">
+                    <label>是否就医伤亡 </label>
+                    <div class="radio-group">
+                      <label class="radio-label">
+                        <input type="radio" v-model="caseInfo.woundFlag" value="0" /> 无
+                      </label>
+                      <label class="radio-label">
+                        <input type="radio" v-model="caseInfo.woundFlag" value="1" /> 有
+                      </label>
+                    </div>
+                  </div>
+                  <div class="contact-form-group">
+                    <label>就诊医院</label>
+                    <input type="text" class="form-input" />
+                  </div>
+                </div>
             </div>
-
-            <button type="button" @click="addPersonInjury" class="btn-add">
-              + 添加人员伤亡
-            </button>
-          </div> -->
+          </div>
         </div>
       </section>
       <!-- ============ 损失类型区块 ============ -->
       <section class="form-section" id="section-lossType">
-        <div class="section-header">
+        <div class="section-header no-border">
           <h3><i class="iconfont icon-shield" style="color: #0056a4 ;"></i>损失类型</h3>
         </div>
 
@@ -1187,7 +1202,7 @@
       </section>
       <!-- ============ 案件补充说明区块 ============ -->
       <section class="form-section" id="section-caseDesc">
-        <div class="section-header"">
+        <div class="section-header no-border">
           <h3><i class=" iconfont icon-008duihuakuang-6" style="color: #0056a4 ;"></i>案件补充说明</h3>
           <button type=" button" @click="addCaseDesc" class="desc-add-icon float-right">
             <span>+ 添加说明</span>
@@ -1263,8 +1278,8 @@ export default {
       caseDescExpanded: true,
       historyReportExpanded: true,
       propertyLossExpanded: true,
-    // 新增：导航数据
-    activeSection: 'policyInfo', // 当前激活的区块
+      // 新增：导航数据
+      activeSection: 'policyInfo', // 当前激活的区块
 
       // ============ 校验错误信息 ============
       validationErrors: {},
@@ -1841,113 +1856,113 @@ export default {
       this.caseDescList.splice(index, 1)
     },
     // ============ 导航到指定区块 ============
-  // ============ 导航到指定区块 ============
-navigateToSection(section) {
-  console.log('导航到区块:', section)
+    // ============ 导航到指定区块 ============
+    navigateToSection(section) {
+      console.log('导航到区块:', section)
 
-  const sectionKey = `${section}Expanded`
+      const sectionKey = `${section}Expanded`
 
-  if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
-    // 展开目标区块
-    this[sectionKey] = true
+      if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
+        // 展开目标区块
+        this[sectionKey] = true
 
-    // 等待 DOM 更新后滚动
-    this.$nextTick(() => {
-      this.$nextTick(() => { // 确保展开动画完成
-        const sectionElement = document.getElementById(`section-${section}`)
-        if (sectionElement) {
-          console.log('找到区块元素:', sectionElement)
-          
-          // 滚动到元素位置
-          sectionElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest'
+        // 等待 DOM 更新后滚动
+        this.$nextTick(() => {
+          this.$nextTick(() => { // 确保展开动画完成
+            const sectionElement = document.getElementById(`section-${section}`)
+            if (sectionElement) {
+              console.log('找到区块元素:', sectionElement)
+
+              // 滚动到元素位置
+              sectionElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest'
+              })
+
+              // 高亮区块头部
+              this.highlightSection(sectionElement, section)
+            }
           })
-
-          // 高亮区块头部
-          this.highlightSection(sectionElement, section)
-        }
-      })
-    })
-  }
-},
-
-// 新增高亮方法
-highlightSection(sectionElement, section) {
-  // 移除之前的所有高亮
-  this.removeHighlightFromAllSections()
-  
-  // 为当前区块添加高亮
-  const headerElement = sectionElement.querySelector('.section-header')
-  if (headerElement) {
-    headerElement.classList.add('section-highlighted')
-    
-    // 3秒后移除高亮
-    setTimeout(() => {
-      headerElement.classList.remove('section-highlighted')
-    }, 3000)
-  }
-},
-
-// 移除所有区块高亮
-removeHighlightFromAllSections() {
-  const allHeaders = document.querySelectorAll('.section-header.section-highlighted')
-  allHeaders.forEach(header => {
-    header.style.backgroundColor = ''
-    header.style.borderLeft = ''
-    header.classList.remove('section-highlighted')
-  })
-},
-// 滚动处理方法
-handleScroll() {
-  const sectionIds = [
-    'section-policyInfo', 
-    'section-reportInfo', 
-    'section-vehicleInfo', 
-    'section-lossType', 
-    'section-personInjury', 
-    'section-accidentRescue',
-    'section-contactInfo',
-    'section-caseDesc',
-    'section-historyReport',
-    'section-propertyLoss'
-  ]
-  
-  let currentSection = ''
-  const scrollPosition = window.scrollY + 150 // 增加偏移量，提前切换
-  
-  for (let i = 0; i < sectionIds.length; i++) {
-    const sectionId = sectionIds[i]
-    const sectionElement = document.getElementById(sectionId)
-    
-    if (sectionElement) {
-      const offsetTop = sectionElement.offsetTop
-      const height = sectionElement.offsetHeight
-      
-      if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
-        currentSection = sectionId.replace('section-', '')
-        break
+        })
       }
-    }
-  }
-  
-  if (currentSection && currentSection !== this.activeSection) {
-    this.activeSection = currentSection
-    // 通知父组件更新激活的标签
-    this.$parent && this.$parent.$data && (this.$parent.activeTab = currentSection)
-  }
-  },
-},
-mounted() {
-  // 添加滚动事件监听器
-  window.addEventListener('scroll', this.handleScroll)
-},
+    },
 
-beforeDestroy() {
-  // 移除滚动事件监听器
-  window.removeEventListener('scroll', this.handleScroll)
-}
+    // 新增高亮方法
+    highlightSection(sectionElement, section) {
+      // 移除之前的所有高亮
+      this.removeHighlightFromAllSections()
+
+      // 为当前区块添加高亮
+      const headerElement = sectionElement.querySelector('.section-header')
+      if (headerElement) {
+        headerElement.classList.add('section-highlighted')
+
+        // 3秒后移除高亮
+        setTimeout(() => {
+          headerElement.classList.remove('section-highlighted')
+        }, 3000)
+      }
+    },
+
+    // 移除所有区块高亮
+    removeHighlightFromAllSections() {
+      const allHeaders = document.querySelectorAll('.section-header.section-highlighted')
+      allHeaders.forEach(header => {
+        header.style.backgroundColor = ''
+        header.style.borderLeft = ''
+        header.classList.remove('section-highlighted')
+      })
+    },
+    // 滚动处理方法
+    handleScroll() {
+      const sectionIds = [
+        'section-policyInfo',
+        'section-reportInfo',
+        'section-vehicleInfo',
+        'section-lossType',
+        'section-personInjury',
+        'section-accidentRescue',
+        'section-contactInfo',
+        'section-caseDesc',
+        'section-historyReport',
+        'section-propertyLoss'
+      ]
+
+      let currentSection = ''
+      const scrollPosition = window.scrollY + 150 // 增加偏移量，提前切换
+
+      for (let i = 0; i < sectionIds.length; i++) {
+        const sectionId = sectionIds[i]
+        const sectionElement = document.getElementById(sectionId)
+
+        if (sectionElement) {
+          const offsetTop = sectionElement.offsetTop
+          const height = sectionElement.offsetHeight
+
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
+            currentSection = sectionId.replace('section-', '')
+            break
+          }
+        }
+      }
+
+      if (currentSection && currentSection !== this.activeSection) {
+        this.activeSection = currentSection
+        // 通知父组件更新激活的标签
+        this.$parent && this.$parent.$data && (this.$parent.activeTab = currentSection)
+      }
+    },
+  },
+  mounted() {
+    // 添加滚动事件监听器
+    window.addEventListener('scroll', this.handleScroll)
+  },
+
+  beforeDestroy() {
+    // 移除滚动事件监听器
+    window.removeEventListener('scroll', this.handleScroll)
+  }
 }
 </script>
 
@@ -1961,7 +1976,7 @@ beforeDestroy() {
   z-index: 1000;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 10px 0;
 }
 
@@ -2000,9 +2015,15 @@ beforeDestroy() {
   padding: 12px 16px;
   background-color: #f8f9fa;
   cursor: pointer;
-  border-bottom: 1px solid #ddd;
-  transition: background-color 0.2s;
+  border-bottom: none;
+  transition: none;
   gap: 12px;
+}
+
+.section-header:hover {
+  /* 移除悬停时的背景色变化 */
+  background-color: #f8f9fa;
+  /* 保持与常态相同的背景色 */
 }
 
 .section-header-left {
@@ -2292,6 +2313,7 @@ beforeDestroy() {
   margin-top: 16px;
 }
 
+.person-injury-item,
 .property-loss-item {
   position: relative;
   border: 1px solid #e5e5e5;
@@ -2300,7 +2322,7 @@ beforeDestroy() {
   padding: 16px;
   background-color: white;
   transition: box-shadow 0.2s ease;
-  height: 100px;
+  height: 120px;
   display: grid;
 }
 
@@ -2345,8 +2367,9 @@ beforeDestroy() {
   grid-template-columns: repeat(4, 1fr);
 }
 
-.property-loss-item .form-group {
-  min-width: 0;
+/* .property-loss-item .form-group {
+  margin-bottom: 16px;
+  min-width: 80px;
 }
 
 .property-loss-item .form-group label {
@@ -2370,7 +2393,7 @@ beforeDestroy() {
   outline: none;
   border-color: #0887FF;
   box-shadow: 0 0 0 2px rgba(8, 135, 255, 0.1);
-}
+} */
 
 .property-loss-item .btn-remove {
   background-color: #f5f5f5;
@@ -3120,14 +3143,29 @@ beforeDestroy() {
   min-width: 80px;
 }
 
+.contact-form-group {
+  display: flex;
+  flex-direction: column;
+  /* 核心：垂直排列（文字在上，下拉框在下） */
+  align-items: flex-start;
+  /* 核心：左侧对齐（文字和下拉框左边缘齐平） */
+}
 
+.contact-form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: #333;
+  font-weight: bold;
+  text-align: left;
+}
 
 .form-group label {
   display: block;
   margin-bottom: 6px;
   font-size: 11px;
   color: #333;
-  font-weight: 500;
+  font-weight: bold;
   text-align: left;
 }
 
@@ -3138,7 +3176,7 @@ beforeDestroy() {
 
 .form-input {
   width: 100%;
-  padding: 8px 12px;
+  padding: 8px 2px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 11px;
@@ -3232,7 +3270,20 @@ beforeDestroy() {
 
 .select-sm {
   width: auto;
-  min-width: 120px;
+  min-width: 180px;
+  padding-right: 1rem !important;
+  /* 强制生效 */
+  padding-left: 0.5rem !important;
+  /* 强制生效 */
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M10.8 1.2L6 6 1.2 1.2 0 2.4l6 6 6-6z'/%3E%3C/svg%3E") no-repeat right 0.5rem center;
+  background-color: #ffffff;
+  box-sizing: border-box !important;
+  border: 1px solid #ddd;
+  /* 补充基础样式，避免样式缺失 */
 }
 
 /* ============ 表单行样式 ============ */
@@ -3358,11 +3409,14 @@ beforeDestroy() {
 /* 固定在底部的按钮区域 */
 .form-actions-sticky {
   position: fixed;
-  bottom: 20px;/* 距离页面底部20px */
-  z-index: 200;/* 确保在所有内容之上 */
+  bottom: 20px;
+  /* 距离页面底部20px */
+  z-index: 200;
+  /* 确保在所有内容之上 */
   height: 40px;
   background-color: #ffffff;
-  border-top: 1px solid #858789;/* 上部边框 */
+  border-top: 1px solid #858789;
+  /* 上部边框 */
   border-bottom: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   width: 100%;
