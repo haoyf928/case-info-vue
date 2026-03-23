@@ -646,8 +646,7 @@
           </div>
         </div>
       </section>
-
-      <!-- ============ 事故救援区块 ============ -->
+      <!-- ============ 事故救援 ============ -->
       <section class="form-section" id="section-accidentRescue">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-wuliuqiache" style="color: #0056a4 ;"></i> 事故救援</h3>
@@ -735,7 +734,7 @@
         </div>
       </section>
 
-      <!-- ============ 报案人，联系人姓名区块 ============ -->
+      <!-- ============ 报案人姓名 ============ -->
       <section class="form-section" id="section-contactInfo">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-yonghu" style="color: #0056a4 ;"></i> 报案人姓名、联系人姓名</h3>
@@ -830,7 +829,8 @@
           </div>
         </div>
       </section>
-      <!-- ============ 车辆信息区块 ============ -->
+
+      <!-- ============ 车辆信息 ============ -->
       <section class="form-section" id="section-vehicleInfo">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-qicheSUV" style="color: #0056a4 ;"></i> 涉案车辆信息</h3>
@@ -964,7 +964,7 @@
         </div>
       </section>
 
-      <!-- 财产损失信息区块 -->
+      <!-- ============ 财产损失 ============ -->
       <section class="form-section" id="section-propertyLoss">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-meiyuan" style="color: #0056a4 ;"></i> 财产损失信息</h3>
@@ -1034,8 +1034,8 @@
           </div>
         </div>
       </section>
-      <!-- ============ 人员伤亡区块 ============ -->
-      <section class="form-section" id="section-personInjury">
+
+      <!-- <section class="form-section" id="section-personInjury">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-aixin" style="color: #0056a4 ;"></i> 人员伤亡</h3>
           <button type="button" class="btn-add-icon float-right" @click="addPersonInjury">
@@ -1082,7 +1082,7 @@
                 </div>
                 <div class="contact-form-group">
                   <label>性别</label>
-                  <select v-model="item.owncar" class="form-input select-sm">
+                  <select v-model="item.sex" class="form-input select-sm">
                     <option value="">请选择</option>
                     <option value="0">男</option>
                     <option value="1">女</option>
@@ -1108,32 +1108,32 @@
                 </div>
               </div>
               <div class="form-row">
-                  <div class="contact-form-group">
-                    <label>是否就医伤亡 </label>
-                    <div class="radio-group">
-                      <label class="radio-label">
-                        <input type="radio" v-model="caseInfo.woundFlag" value="0" /> 无
-                      </label>
-                      <label class="radio-label">
-                        <input type="radio" v-model="caseInfo.woundFlag" value="1" /> 有
-                      </label>
-                    </div>
-                  </div>
-                  <div class="contact-form-group">
-                    <label>就诊医院</label>
-                    <input type="text" class="form-input" />
+                <div class="contact-form-group">
+                  <label>是否就医伤亡 </label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input type="radio" v-model="item.isHospitalized" value="0" /> 无
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" v-model="item.isHospitalized" value="1" /> 有
+                    </label>
                   </div>
                 </div>
+                <div class="contact-form-group">
+                  <label>就诊医院</label>
+                  <input type="text" class="form-input" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
-      <!-- ============ 损失类型区块 ============ -->
+      </section> -->
+
+      
       <section class="form-section" id="section-lossType">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-shield" style="color: #0056a4 ;"></i>损失类型</h3>
         </div>
-
         <div v-show="lossTypeExpanded" class="section-content">
           <div class="loss-type-container">
             <!-- 第一行：7个选项 -->
@@ -1200,7 +1200,7 @@
           </div>
         </div>
       </section>
-      <!-- ============ 案件补充说明区块 ============ -->
+      
       <section class="form-section" id="section-caseDesc">
         <div class="section-header no-border">
           <h3><i class=" iconfont icon-008duihuakuang-6" style="color: #0056a4 ;"></i>案件补充说明</h3>
