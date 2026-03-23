@@ -329,10 +329,10 @@
             <label>客户提供位置信息不准</label>
             <div class="radio-group">
               <label class="radio-label">
-                <input type="radio" v-model="caseInfo.isfirstsiteFlag" value="1" @change="onFieldInput('isfirstsiteFlag')" /> 是
+                <input type="radio" v-model="caseInfo.upadress" value="1" @change="onFieldInput('upadress')" /> 是
               </label>
               <label class="radio-label">
-                <input type="radio" v-model="caseInfo.isfirstsiteFlag" value="0" @change="onFieldInput('isfirstsiteFlag')" /> 否
+                <input type="radio" v-model="caseInfo.upadress" value="0" @change="onFieldInput('upadress')" /> 否
               </label>
             </div>
           </div>
@@ -1049,7 +1049,7 @@
                 <input type="radio" v-model="caseInfo.propFlag" value="0" @change="onFieldInput('propFlag')" /> 无
               </label>
               <label class="radio-label">
-                <input type="radio" v-model="caseInfo.propFlag" value="1" @change="onFieldInput('propFlag')" /> 有
+                <input type="radio" v-model="caseInfo.propFlag" value="1" @change="onFieldInput('propFlag')" @click="addPropertyLoss" /> 有
               </label>
             </div>
           </div>
@@ -1106,6 +1106,101 @@
         </div>
       </div>
     </section>
+    
+      <section class="form-section" id="section-personInjury">
+        <div class="section-header no-border">
+          <h3><i class="iconfont icon-aixin" style="color: #0056a4 ;"></i> 人员伤亡</h3>
+          <button type="button" class="btn-add-icon float-right" @click="addPersonInjury" >
+            <span>+</span>
+          </button>
+        </div>
+
+        <div v-show="personInjuryExpanded" class="section-content">
+          <div class="contact-form-row">
+            <div class="form-group">
+              <label>是否人员伤亡 </label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.woundFlag" value="0" /> 无
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.woundFlag" value="1" @click="addPersonInjury" /> 有
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>是否叫救护车</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.isambulance" value="1" /> 是
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="caseInfo.isambulance" value="0" /> 否
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="caseInfo.woundFlag === '1'" class="person-injury-list">
+            <div v-for="(item, index) in personInjuryList" :key="index" class="person-injury-item">
+              <button type="button" @click="removePersonInjury(index)" class="btn-remove-top">
+                -
+              </button>
+              <div class="injury-grid-row">
+                <div class="contact-form-group">
+                  <label>姓名<span class="required">*</span></label>
+                  <input type="text" v-model="item.name" class="form-input" />
+                </div>
+                <div class="contact-form-group">
+                  <label>性别</label>
+                  <select v-model="item.sex" class="form-input select-sm">
+                    <option value="">请选择</option>
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                  </select>
+                </div>
+                <div class="contact-form-group">
+                  <label>归属<span class="required">*</span></label>
+                  <select v-model="item.owncar" class="form-input select-sm">
+                    <option value="">请选择</option>
+                    <option value="0">第三者</option>
+                    <option value="1">车上人员</option>
+                  </select>
+                </div>
+                <div class="contact-form-group">
+                  <label>伤亡情况</label>
+                  <select v-model="item.persionpayType" class="form-input select-sm">
+                    <option value="">请选择</option>
+                    <option value="0">轻伤</option>
+                    <option value="1">重伤</option>
+                    <option value="2">残废</option>
+                    <option value="3">死亡</option>
+                  </select>
+                </div>
+              </div>
+              <div class="injury-grid-row">
+                <div class="contact-form-group">
+                  <label>是否就医伤亡 </label>
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input type="radio" v-model="item.isHospitalized" value="0" /> 无
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" v-model="item.isHospitalized" value="1" /> 有
+                    </label>
+                  </div>
+                </div>
+                <div class="contact-form-group">
+                  <label>就诊医院</label>
+                  <input type="text" class="form-input" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
     <section class="form-section" id="section-lossType">
       <div class="section-header no-border">
@@ -1117,49 +1212,49 @@
           <div class="loss-type-row">
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车损" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="本车车损" />
                 本车车损
               </label>
             </div>
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="本车人伤" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="本车人伤"  />
                 本车人伤
               </label>
             </div>
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="本车车载货物" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="本车车载货物"  />
                 本车车载货物
               </label>
             </div>
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="三者车损" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="三者车损" />
                 三者车损
               </label>
             </div>
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="三者人伤" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="三者人伤" />
                 三者人伤
               </label>
             </div>
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="三者物损" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="三者物损" />
                 三者物损
               </label>
             </div>
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="全车盗抢" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="全车盗抢"  />
                 全车盗抢
               </label>
             </div>
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="车身划痕" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="车身划痕" />
                 车身划痕
               </label>
             </div>
@@ -1169,7 +1264,7 @@
           <div class="loss-type-row">
             <div class="loss-type-item">
               <label class="checkbox-label">
-                <input type="checkbox" v-model="caseInfo.lossTypes" value="本车自燃" @change="onFieldInput('lossTypes')" />
+                <input type="checkbox" v-model="lossTypes" value="本车自燃" />
                 本车自燃
               </label>
             </div>
@@ -1393,6 +1488,11 @@ export default {
     // 实时验证并清除错误
 // 实时验证并清除错误
 validateFieldRealTime(fieldName) {
+
+   if (fieldName === 'lossTypes') {
+    // 不进行验证逻辑，直接返回
+    return;
+  }
   const fieldConfig = requiredFields[fieldName];
   if (!fieldConfig) return;
 
@@ -1428,6 +1528,9 @@ validateFieldRealTime(fieldName) {
 
     // 在用户输入时调用此方法
  onFieldInput(fieldName) {
+   if (fieldName === 'lossTypes') {
+    return;
+  }
   // 延迟执行，避免频繁验证
   clearTimeout(this.inputValidationTimer);
   this.inputValidationTimer = setTimeout(() => {

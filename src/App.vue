@@ -307,7 +307,7 @@ body {
 /* 固定在底部的按钮区域 */
 .form-actions-sticky {
   position: fixed;
-  bottom: 20px;
+  bottom: 0;
   left: 24px;              /* 与主内容区左边距一致 */
   right: 174px;            /* 与右侧导航栏宽度相加，给导航栏留出空间 */
   z-index: 200;
