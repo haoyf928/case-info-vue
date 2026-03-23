@@ -972,7 +972,6 @@
             <span>+</span>
           </button>
         </div>
-
         <div v-show="propertyLossExpanded" class="section-content">
           <!-- 是否财产损失 -->
           <div class="form-row">
@@ -1075,7 +1074,7 @@
               <button type="button" @click="removePersonInjury(index)" class="btn-remove-top">
                 -
               </button>
-              <div class="form-row">
+              <div class="injury-grid-row">
                 <div class="contact-form-group">
                   <label>姓名<span class="required">*</span></label>
                   <input type="text" v-model="item.name" class="form-input" />
@@ -1107,7 +1106,7 @@
                   </select>
                 </div>
               </div>
-              <div class="form-row">
+              <div class="injury-grid-row">
                 <div class="contact-form-group">
                   <label>是否就医伤亡 </label>
                   <div class="radio-group">
@@ -1961,6 +1960,16 @@ export default {
 </script>
 
 <style scoped>
+/* 人员伤亡统一网格布局 */
+.injury-grid-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.aligned-with-sex {
+  grid-column: 2 / span 1; /* 从第2列开始，占1列，与上面的性别字段对齐 */
+}
 /* 导航栏样式 */
 .sidebar-nav {
   position: fixed;
