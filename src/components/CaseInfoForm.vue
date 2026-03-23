@@ -292,11 +292,16 @@
                 <select v-model="caseInfo.areaCity" ref="areaCity" :class="{ 'input-error': validationErrors.areaCity }"
                   class="form-input select-sm">
                   <option value="">请选择市</option>
+                  <option value="0">北京市</option>
+                <option value="1">上海市</option>
+                <option value="2">杭州市</option>
                 </select>
 
                 <select v-model="caseInfo.areaDistrict" ref="areaDistrict"
                   :class="{ 'input-error': validationErrors.areaDistrict }" class="form-input select-sm">
                   <option value="">请选择区</option>
+                  <option value="0">西湖区</option>
+                <option value="1">拱墅区</option>
                 </select>
 
                 <input type="text" v-model="caseInfo.street" ref="street"
@@ -357,11 +362,16 @@
                 <select v-model="caseInfo.currentAreaCity" ref="currentAreaCity"
                   :class="{ 'input-error': validationErrors.currentAreaCity }" class="form-input select-sm">
                   <option value="">请选择市</option>
+                  <option value="0">北京市</option>
+                <option value="1">上海市</option>
+                <option value="2">杭州市</option>
                 </select>
 
                 <select v-model="caseInfo.currentAreaDistrict" ref="currentAreaDistrict"
                   :class="{ 'input-error': validationErrors.currentAreaDistrict }" class="form-input select-sm">
                   <option value="">请选择区</option>
+                  <option value="0">西湖区</option>
+                <option value="1">拱墅区</option>
                 </select>
 
                 <input type="text" v-model="caseInfo.currentStreet" ref="currentStreet"
