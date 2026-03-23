@@ -1035,7 +1035,7 @@
         </div>
       </section>
 
-      <!-- <section class="form-section" id="section-personInjury">
+      <section class="form-section" id="section-personInjury">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-aixin" style="color: #0056a4 ;"></i> 人员伤亡</h3>
           <button type="button" class="btn-add-icon float-right" @click="addPersonInjury">
@@ -1127,16 +1127,14 @@
             </div>
           </div>
         </div>
-      </section> -->
+      </section>
 
-      
       <section class="form-section" id="section-lossType">
         <div class="section-header no-border">
           <h3><i class="iconfont icon-shield" style="color: #0056a4 ;"></i>损失类型</h3>
         </div>
         <div v-show="lossTypeExpanded" class="section-content">
           <div class="loss-type-container">
-            <!-- 第一行：7个选项 -->
             <div class="loss-type-row">
               <div class="loss-type-item">
                 <label class="checkbox-label">
@@ -1188,7 +1186,6 @@
               </div>
             </div>
 
-            <!-- 第二行：1个选项 -->
             <div class="loss-type-row">
               <div class="loss-type-item">
                 <label class="checkbox-label">
@@ -1200,22 +1197,19 @@
           </div>
         </div>
       </section>
-      
+
       <section class="form-section" id="section-caseDesc">
         <div class="section-header no-border">
-          <h3><i class=" iconfont icon-008duihuakuang-6" style="color: #0056a4 ;"></i>案件补充说明</h3>
-          <button type=" button" @click="addCaseDesc" class="desc-add-icon float-right">
+          <h3><i class="iconfont icon-008duihuakuang-6" style="color: #0056a4 ;"></i>案件补充说明</h3>
+          <button type="button" @click="addCaseDesc" class="desc-add-icon float-right">
             <span>+ 添加说明</span>
           </button>
         </div>
-
         <div v-show="caseDescExpanded" class="section-content">
-          <!-- 使用表格布局的补充说明列表 -->
           <div class="case-desc-list">
             <div v-if="caseDescList.length === 0" class="empty-state">
               <p style="color: #6c757d; text-align: center; padding: 20px;">暂无补充说明记录</p>
             </div>
-
             <div v-else>
               <table class="case-desc-table">
                 <thead>
