@@ -145,7 +145,7 @@
       </section>
 
       <!-- ============ 历史报案记录区块 ============ -->
-      <section class="form-section" id="section-historyReport" v-show="infoDisplayExpanded">
+      <section class="form-section" id="section-historyReport">
         <div class="section-header no-border">
           <h3><i class="icon-history"></i> 历史报案记录</h3>
           <span class="record-count">{{ historyReports.length }} 条记录</span>
@@ -1271,6 +1271,8 @@ export default {
       caseDescExpanded: true,
       historyReportExpanded: true,
       propertyLossExpanded: true,
+      // 添加一个标记来控制是否显示错误
+      shouldShowValidationErrors: false,
       // 新增：导航数据
       activeSection: 'policyInfo', // 当前激活的区块
 
@@ -1394,6 +1396,33 @@ export default {
       ],
     }
   },
+  // watch: {
+  //   // 监听 caseInfo 的变化，当有值变化时清除对应错误
+  //   caseInfo: {
+  //     handler(newVal, oldVal) {
+  //       if (!this.shouldShowValidationErrors) return
+
+  //       // 遍历比较哪些字段发生了变化
+  //       Object.keys(newVal).forEach(key => {
+  //         if (newVal[key] !== oldVal?.[key]) {
+  //           // 如果该字段有错误，且现在有值了，就清除错误
+  //           if (this.validationErrors[key] && newVal[key]) {
+  //             // 检查是否是有效值（非空字符串、非null、非undefined）
+  //             if (newVal[key] !== '' && newVal[key] !== null && newVal[key] !== undefined) {
+  //               delete this.validationErrors[key]
+
+  //               // 检查是否还有其他错误，如果没有则清除全局错误
+  //               if (Object.keys(this.validationErrors).length === 0) {
+  //                 this.globalError = ''
+  //               }
+  //             }
+  //           }
+  //         }
+  //       })
+  //     },
+  //     deep: true
+  //   }
+  // },
   computed: {
     // 计算选中保单数量
     selectedPoliciesCount() {
@@ -1450,12 +1479,16 @@ export default {
 
       // 同时控制保单详情的展开状态
       if (this.infoDisplayExpanded) {
-        // 展开时也展开保单详情
-        this.policyInfoExpanded = true;
+        // 展开时，展开所有保单主体信息
+        this.policies.forEach(policy => {
+          policy.bodyExpanded = true;
+        });
         this.historyReportExpanded = true;
       } else {
-        // 收起时也收起保单详情
-        this.policyInfoExpanded = false;
+        // 收起时，收起所有保单主体信息
+        this.policies.forEach(policy => {
+          policy.bodyExpanded = false;
+        });
         this.historyReportExpanded = false;
       }
     },
@@ -1581,7 +1614,8 @@ export default {
       this.validationErrors = {}
       this.globalError = ''
       this.clearErrorHighlights()
-
+      // // 设置标记，表示现在应该显示验证错误
+      // this.shouldShowValidationErrors = true
       // 2. 执行表单校验
       const errors = validateForm(this.caseInfo, requiredFields)
 
@@ -1614,7 +1648,13 @@ export default {
       // 即使有错误也返回 true，因为我们仍需要完成前面的操作
       return Object.keys(errors).length === 0
     },
-
+    // // 重置验证状态
+    // resetValidationState() {
+    //   this.shouldShowValidationErrors = false
+    //   this.validationErrors = {}
+    //   this.globalError = ''
+    //   this.clearErrorHighlights()
+    // },
     // ============ 展开包含错误的区块 ============
     expandSectionsWithErrors(errors) {
       const fieldSectionMap = {
@@ -1967,9 +2007,12 @@ export default {
   gap: 16px;
   margin-bottom: 16px;
 }
+
 .aligned-with-sex {
-  grid-column: 2 / span 1; /* 从第2列开始，占1列，与上面的性别字段对齐 */
+  grid-column: 2 / span 1;
+  /* 从第2列开始，占1列，与上面的性别字段对齐 */
 }
+
 /* 导航栏样式 */
 .sidebar-nav {
   position: fixed;
