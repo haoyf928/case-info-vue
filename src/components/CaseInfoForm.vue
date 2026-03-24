@@ -145,7 +145,7 @@
     </section>
 
     <!-- ============ 历史报案记录区块 ============ -->
-    <section class="form-section" id="section-historyReport" v-show="infoDisplayExpanded">
+    <section class="form-section" id="section-historyReport">
       <div class="section-header no-border">
         <h3><i class="icon-history"></i> 历史报案记录</h3>
         <span class="record-count">{{ historyReports.length }} 条记录</span>
@@ -1587,12 +1587,16 @@ validateFieldRealTime(fieldName) {
 
       // 同时控制保单详情的展开状态
       if (this.infoDisplayExpanded) {
-        // 展开时也展开保单详情
-        this.policyInfoExpanded = true;
+        // 展开时，展开所有保单主体信息
+        this.policies.forEach(policy => {
+          policy.bodyExpanded = true;
+        });
         this.historyReportExpanded = true;
       } else {
-        // 收起时也收起保单详情
-        this.policyInfoExpanded = false;
+        // 展开时，展开所有保单主体信息
+        this.policies.forEach(policy => {
+          policy.bodyExpanded = true;
+        });
         this.historyReportExpanded = false;
       }
     },
