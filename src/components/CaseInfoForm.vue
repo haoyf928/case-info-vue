@@ -19,8 +19,8 @@
             <i class="iconfont icon-yanjing"></i>
             {{ infoDisplayExpanded ? '收起详情' : '信息展示' }}
           </button>
-          <span class="toggle-icon" @click="toggleSection('policyInfo')">
-            <i :class="policyInfoExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
+          <span class="toggle-icon" @click="toggleInfoDisplay">
+            <i :class="infoDisplayExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
           </span>
         </div>
       </div>
@@ -2626,8 +2626,6 @@ async validateAndSubmit() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-    width: 100%; /* 确保容器宽度固定 */
-
 }
 
 
@@ -2662,8 +2660,6 @@ async validateAndSubmit() {
   background-color: white;
   padding: 16px;
   margin-bottom: 16px;
-   width: 100%; /* 确保卡片宽度固定 */
-  box-sizing: border-box;
 }
 
 .policy-header {
@@ -2851,6 +2847,8 @@ async validateAndSubmit() {
   text-align: left;
   padding-left: 20px;
   box-sizing: border-box;
+  font-weight: bold;
+
 }
 
 /* 图标样式（可替换为实际图标库） */
@@ -3582,9 +3580,6 @@ async validateAndSubmit() {
   display: flex;
   flex-direction: column;
   padding-bottom: 0px;
-    width: 100%; /* 确保固定宽度 */
-  max-width: 100vw; /* 限制最大宽度 */
-
 }
 
 /* 固定在底部的按钮区域 */
