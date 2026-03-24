@@ -3,7 +3,7 @@
   <div class="case-info-form">
     <!-- ============ 保单信息区块 ============ -->
     <section class="form-section" id="section-policyInfo">
-      <div class="section-header ">
+      <div class="section-header no-border">
         <div class="section-header-left">
           <!-- 主题色竖条装饰 -->
           <div class="section-decorator"></div>
