@@ -1548,14 +1548,14 @@ validateFieldRealTime(fieldName) {
     // 选择单个保单
     selectPolicy(policy, event) {
       // 如果按住Ctrl键则多选，否则单选
-      if (!event?.ctrlKey) {
-        // 单选模式：取消其他保单的选择状态
-        this.policies.forEach(p => {
-          if (p !== policy) {
-            p.selected = false;
-          }
-        });
-      }
+      // if (!event?.ctrlKey) {
+      //   // 单选模式：取消其他保单的选择状态
+      //   this.policies.forEach(p => {
+      //     if (p !== policy) {
+      //       p.selected = false;
+      //     }
+      //   });
+      // }
 
       // 切换当前保单选择状态
       policy.selected = !policy.selected;
@@ -1595,7 +1595,7 @@ validateFieldRealTime(fieldName) {
       } else {
         // 展开时，展开所有保单主体信息
         this.policies.forEach(policy => {
-          policy.bodyExpanded = true;
+          policy.bodyExpanded = false;
         });
         this.historyReportExpanded = false;
       }
@@ -2626,6 +2626,8 @@ async validateAndSubmit() {
   display: flex;
   flex-direction: column;
   gap: 16px;
+    width: 100%; /* 确保容器宽度固定 */
+
 }
 
 
@@ -2660,6 +2662,8 @@ async validateAndSubmit() {
   background-color: white;
   padding: 16px;
   margin-bottom: 16px;
+   width: 100%; /* 确保卡片宽度固定 */
+  box-sizing: border-box;
 }
 
 .policy-header {
@@ -3578,6 +3582,9 @@ async validateAndSubmit() {
   display: flex;
   flex-direction: column;
   padding-bottom: 0px;
+    width: 100%; /* 确保固定宽度 */
+  max-width: 100vw; /* 限制最大宽度 */
+
 }
 
 /* 固定在底部的按钮区域 */
