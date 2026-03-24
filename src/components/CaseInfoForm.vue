@@ -2171,8 +2171,7 @@ async validateAndSubmit() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  background-color: #f8f9fa;
+  padding: 12px 0px !important;
   cursor: pointer;
   border-bottom: none;
   transition: none;
@@ -2655,7 +2654,7 @@ async validateAndSubmit() {
 
 /* ============ 保单卡片样式 ============ */
 .policy-card {
-  border: 2px solid #0066CC;
+  border: 1px solid #ddd;
   border-radius: 8px;
   background-color: white;
   padding: 16px;
@@ -3264,6 +3263,8 @@ async validateAndSubmit() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+   border : 1px solid #ddd;
+
 }
 
 .checkbox-label {
@@ -3529,7 +3530,6 @@ async validateAndSubmit() {
 /* ============ 区块样式 ============ */
 .form-section {
   margin-bottom: 20px;
-  border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -3553,7 +3553,7 @@ async validateAndSubmit() {
 
 .section-header h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
 }
 
@@ -3567,7 +3567,6 @@ async validateAndSubmit() {
 }
 
 .section-content {
-  padding: 16px;
   overflow: hidden;
   transition: all 0.3s ease;
 }

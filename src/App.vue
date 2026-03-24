@@ -215,7 +215,6 @@ body {
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
-  width: 100%;
 }
 
 /* 新增：顶部系统标题栏样式 */
@@ -223,13 +222,13 @@ body {
   height: 40px;
   line-height: 40px;
   width: 100%;
-  padding: 0 24px;
+  padding: 0px;
+  padding-left: 2rem ;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   z-index: 200;
   position: fixed;
   top: 0;
@@ -248,7 +247,7 @@ body {
 }
 
 .system-title {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   color: #1f2937;
   margin: 0;
@@ -259,7 +258,7 @@ body {
   display: flex;
   flex-direction: row;
   flex: 1;
-  padding: 24px 1px;
+  padding: 4px 30px !important;
   gap: 24px;
   width: 100%;
   box-sizing: border-box;
@@ -268,14 +267,12 @@ body {
 /* 主内容区 */
 .main-content {
   flex: 1;
-  padding: 24px;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
-  max-width: calc(100% - 180px); /* 减去右侧导航栏宽度 */
+  max-width: calc(100% - 180px); 
   width: 100%;
-  margin-left: 0; /* 确保没有额外的左边距 */
+  margin-left: 0; 
 }
 
 /* 固定的右侧导航栏 */
