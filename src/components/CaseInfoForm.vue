@@ -146,7 +146,7 @@
 
     <!-- ============ 历史报案记录区块 ============ -->
     <section class="policy-card" id="section-historyReport">
-      <div class="section-header no-border">
+      <div class="section-header-other no-border">
         <h3><i class="icon-history"></i> 历史报案记录</h3>
         <span class="record-count">{{ historyReports.length }} 条记录</span>
         <span class="toggle-icon" @click="toggleSection('historyReport')">
@@ -203,7 +203,7 @@
 
     <!-- ============ 报案信息区块 ============ -->
     <section class="policy-card" id="section-reportInfo">
-      <div class="section-header no-border">
+      <div class="section-header-other no-border">
         <h3><i class=" iconfont icon-bianji-wenjian-bianji" style="color: #0056a4 ;"></i> 报案信息</h3>
       </div>
 
@@ -359,8 +359,7 @@
         </div>
 
         <!-- 第五行：车辆目前所在地 -->
-        <!-- 第五行：车辆目前所在地 -->
-<div class="form-row">
+        <div class="form-row" v-if="caseInfo.upadress === '1' || caseInfo.upadress === 1">
   <div class="form-group full-width">
     <label><i class="iconfont icon-dingwei"></i> 车辆目前所在地 <span class="required">*</span></label>
     <div class="address-inputs">
@@ -420,10 +419,10 @@
       </button>
     </div>
   </div>
-</div>
+        </div>
 
         <!-- 第六行：车辆目前所在地经纬度 -->
-        <div class="form-row">
+        <div class="form-row" v-if="caseInfo.upadress === '1' || caseInfo.upadress === 1">
           <div class="form-group">
             <label>车辆目前所在地经度 <span class="required">*</span></label>
             <input type="number" step="0.000001" v-model="caseInfo.currentLongitude" ref="currentLongitude"
@@ -443,7 +442,7 @@
         <div class="form-row">
           <div class="form-group full-width">
             <label>出险经过 <span class="required">*</span></label>
-            <textarea v-model="caseInfo.accidentDescription" @input="onFieldInput('accidentDescription')" rows="3"
+            <textarea v-model="caseInfo.accidentDescription" @input="onFieldInput('accidentDescription')" rows="5"
               class="form-input" placeholder="请详细描述出险经过..."></textarea>
           </div>
         </div>
@@ -607,7 +606,7 @@
               </label>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" v-if="caseInfo.isAlarm === '1' || caseInfo.isAlarm === 1">
             <label><i class="iconfont icon-shijiankaishishijian"></i> 报警时间 </label>
             <el-date-picker v-model="caseInfo.alarmTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
               value-format="YYYY/MM/DD HH:mm:ss" placeholder="选择报警时间" prefix-icon="_" clear-icon="_"
@@ -634,7 +633,7 @@
             </div>
           </div>
 
-          <div class="contact-form-group">
+          <div class="contact-form-group" v-if="caseInfo.isDisaster === '1' || caseInfo.isDisaster === 1">
             <label>巨灾类型 <span class="required">*</span></label>
             <select v-model="caseInfo.disasterType" ref="disasterType" @change="onFieldInput('disasterType')"
               :class="{ 'input-error': validationErrors.disasterType }" class="form-input select-sm">
@@ -646,7 +645,7 @@
             </select>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" v-if="caseInfo.isDisaster === '1' || caseInfo.isDisaster === 1">
             <label>巨灾名称 <span class="required">*</span></label>
             <input type="text" v-model="caseInfo.disasterName" ref="disasterName" @input="onFieldInput('disasterName')"
               :class="{ 'input-error': validationErrors.disasterName }" class="form-input" />
@@ -1545,6 +1544,9 @@ export default {
     if (!this.caseInfo.reportTime) {
       this.caseInfo.reportTime = this.getCurrentBeijingTime();
     }
+    if (!this.caseInfo.alarmTime) {
+      this.caseInfo.alarmTime = this.getCurrentBeijingTime();
+    }
   },
   computed: {
     // 计算选中保单数量
@@ -1582,13 +1584,30 @@ export default {
       this.onFieldInput('damageAddress');
     },
     // 获取当前北京时间
-    getCurrentBeijingTime() {
+    // 获取当前北京时间
+getCurrentBeijingTime() {
+  // 创建一个新的 Date 对象，表示当前时间
   const now = new Date();
-  // 计算北京时间偏移量（北京时间比UTC快8小时）
-  const utcOffset = now.getTimezoneOffset() * 60000; // 分钟转毫秒
-  const beijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000)); // 加上8小时的毫秒数
-  return beijingTime.toISOString().slice(0, 19).replace('T', ' ');
+  
+  // 获取当前时间的 UTC 时间戳
+  const utcTimestamp = now.getTime() + (now.getTimezoneOffset() * 60000);
+  
+  // 计算北京时间（UTC + 8小时）
+  const beijingTimestamp = utcTimestamp + (8 * 3600000);
+  const beijingTime = new Date(beijingTimestamp);
+  
+  // 返回符合 ISO 8601 格式的字符串，带时区信息
+  // 注意：这里我们手动格式化为 YYYY/MM/DD HH:mm:ss 格式
+  const year = beijingTime.getFullYear();
+  const month = String(beijingTime.getMonth() + 1).padStart(2, '0');
+  const day = String(beijingTime.getDate()).padStart(2, '0');
+  const hours = String(beijingTime.getHours()).padStart(2, '0');
+  const minutes = String(beijingTime.getMinutes()).padStart(2, '0');
+  const seconds = String(beijingTime.getSeconds()).padStart(2, '0');
+  
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 },
+ 
     // 实时验证并清除错误
     validateFieldRealTime(fieldName) {
       // 特殊处理时间字段的验证 - 使用北京时间
@@ -1606,11 +1625,11 @@ export default {
       if (selectedTime.getTime() > currentBeijingTime.getTime()) {
         // 设置错误信息
         if (fieldName === 'accidentTime') {
-          this.validationErrors[fieldName] = '出险时间不能晚于当前北京时间';
+          this.validationErrors[fieldName] = '出险时间不能晚于当前时间';
         } else if (fieldName === 'reportTime') {
-          this.validationErrors[fieldName] = '报案时间不能晚于当前北京时间';
+          this.validationErrors[fieldName] = '报案时间不能晚于当前时间';
         } else if (fieldName === 'alarmTime') {
-          this.validationErrors[fieldName] = '报警时间不能晚于当前北京时间';
+          this.validationErrors[fieldName] = '报警时间不能晚于当前时间';
         }
         return; // 提前返回，不执行后续验证
       } else {
@@ -2235,6 +2254,8 @@ export default {
 
 
 <style scoped>
+
+
 /* ============ 底部提示文字样式 ============ */
 .footer-message {
   margin-top: 20px;
@@ -2304,14 +2325,22 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px !important;
+  padding: 12px 0px !important;
   cursor: pointer;
-  border-bottom: none;
   transition: none;
   gap: 12px;
   background-color: white;
 }
-
+.section-header-other {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0px 30px !important;
+  cursor: pointer;
+  transition: none;
+  gap: 12px;
+  background-color: white;
+}
 
 .section-header-left {
   display: flex;
@@ -2383,8 +2412,8 @@ export default {
   border-radius: 8px;
   font-size: 14px;
   color: #333;
-  height: 36px;
-  line-height: 36px;
+  height: 20px;
+  line-height: 20px;
   text-align: left;
 }
 
@@ -3068,11 +3097,12 @@ export default {
 }
 
 .record-count {
-  font-size: 12px;
-  color: #666;
+  font-size: 10px;
+  color: black;
   background-color: #f0f0f0;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
+
 }
 
 /* 表格容器 */
@@ -3093,11 +3123,11 @@ export default {
 
 .data-table th {
   text-align: left;
-  padding: 12px 16px;
+  padding: 10px 6px;
   background-color: #f8f9fa;
   /* 表头背景色 */
   border-bottom: 1px solid #e1e5e9;
-  font-size: 12px;
+  font-size: 11px;
   color: #333;
   font-weight: 600;
   white-space: nowrap;
@@ -3105,12 +3135,13 @@ export default {
   text-overflow: ellipsis;
   min-width: 20px;
   /* 为每列设置最小宽度 */
+  font-weight: bold;
 }
 
 .data-table td {
   padding: 2px 3px;
   border-bottom: 1px solid #eee;
-  font-size: 10px;
+  font-size: 11px;
   color: #333;
   white-space: nowrap;
   overflow: hidden;
@@ -3129,8 +3160,8 @@ export default {
 
 /* 针对不同列设置最小宽度 */
 .col-seq {
-  min-width: 20px;
-  width: auto;
+  min-width: 10px !important;
+  width: 10px !important;
   text-align: center;
 
 }
@@ -3212,9 +3243,9 @@ export default {
 /* 状态标签样式 */
 .status-tag {
   border-radius: 12px;
-  font-size: 10px;
-  font-weight: 500;
-  padding: 4px 10px;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 2px 6px;
   height: auto;
   line-height: normal;
 }
@@ -3427,22 +3458,9 @@ export default {
   gap: 16px;
   align-items: center;
   text-align: left;
+  height: 40px;
   /* 确保文字左对齐 */
 }
-
-.radio-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  text-align: left;
-}
-
-.radio-label input {
-  margin-right: 6px;
-}
-
 /* ============ 表单行样式 ============ */
 .form-row {
   display: flex;
@@ -3628,11 +3646,19 @@ export default {
   cursor: pointer;
   font-size: 14px;
   color: #333;
+  text-align: left;
 }
 
 .radio-label input,
 .checkbox-label input {
   margin-right: 6px;
+  background-color: #3B4DAA !important; /* 选中时的填充色 */
+
+}
+/* 单选框选中状态 */
+input[type="radio"]:checked {
+  background-color: #3B4DAA !important; /* 设置选中时的填充色 */
+  border-color: #3B4DAA; /* 边框颜色也要设置 */
 }
 
 /* ============ 复选框样式 ============ */
@@ -3651,8 +3677,8 @@ export default {
 }
 
 .checkbox-input:checked {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #3B4DAA;
+  border-color: #3B4DAA;
 }
 
 .checkbox-input:checked::after {
@@ -3682,14 +3708,18 @@ export default {
 
 .section-header h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
+  color: #333;
+}
+.section-header-other h3{
+   margin: 0;
+  font-size: 13px;
   color: #333;
 }
 
 .section-content {
   overflow: hidden;
   transition: all 0.3s ease;
-  padding: 16px 16px;
 }
 
 

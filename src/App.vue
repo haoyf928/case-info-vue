@@ -247,7 +247,7 @@ body {
 }
 
 .system-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #1f2937;
   margin: 0;
