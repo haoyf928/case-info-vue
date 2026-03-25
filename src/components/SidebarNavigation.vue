@@ -17,7 +17,7 @@ export default {
   props: {
     activeTab: {
       type: String,
-      default: 'reportInfo'
+    required: true  
     }
   },
   data() {

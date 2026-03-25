@@ -772,7 +772,7 @@
             <!-- 三者车事故救援选项 -->
             <div class="form-group">
               <label>三者车事故救援</label>
-              <div class="rescue-t-checkbox-group">
+              <div class="rescue-checkbox-group">
                 <label class="checkbox-label">
                   <input type="checkbox" v-model="rescueInfo[1].hasThirdPartyInsurance"
                     @change="onFieldInput('rescueInfo1')" /> 保有交强险及商业三者险
@@ -905,8 +905,8 @@
     </section>
 
     <!-- ============ 车辆信息 ============ -->
-    <section class="form-section" id="section-vehicleInfo">
-      <div class="section-header no-border">
+    <section class="policy-card" id="section-vehicleInfo">
+      <div class="section-header-other no-border">
         <h3><i class="iconfont icon-qicheSUV" style="color: #0056a4 ;"></i> 涉案车辆信息</h3>
         <button type="button" class="btn-add-icon float-right">
           <span>+</span>
@@ -2254,37 +2254,43 @@ getCurrentBeijingTime() {
       this.caseDescList.splice(index, 1)
     },
     // ============ 导航到指定区块 ============
-    // ============ 导航到指定区块 ============
     navigateToSection(section) {
-      console.log('导航到区块:', section)
+  console.log('导航到区块:', section)
 
-      const sectionKey = `${section}Expanded`
+  const sectionKey = `${section}Expanded`
 
-      if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
-        // 展开目标区块
-        this[sectionKey] = true
+  if (Object.prototype.hasOwnProperty.call(this, sectionKey)) {
+    // 展开目标区块
+    this[sectionKey] = true
 
-        // 等待 DOM 更新后滚动
-        this.$nextTick(() => {
-          this.$nextTick(() => { // 确保展开动画完成
-            const sectionElement = document.getElementById(`section-${section}`)
-            if (sectionElement) {
-              console.log('找到区块元素:', sectionElement)
+    // 等待 DOM 更新后滚动
+    this.$nextTick(() => {
+      this.$nextTick(() => { // 确保展开动画完成
+        const sectionElement = document.getElementById(`section-${section}`)
+        if (sectionElement) {
+          console.log('找到区块元素:', sectionElement)
 
-              // 滚动到元素位置
-              sectionElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-                inline: 'nearest'
-              })
+          // 获取元素相对于视口的位置
+          const rect = sectionElement.getBoundingClientRect();
+          const elementTop = rect.top + window.pageYOffset;
+          
+          // 计算滚动位置，减去顶部固定元素的高度
+          const offsetTop = 60; // 顶部标题栏高度 + 一些额外空间
+          const scrollTop = elementTop - offsetTop;
 
-              // 高亮区块头部
-              this.highlightSection(sectionElement, section)
-            }
-          })
-        })
-      }
-    },
+          // 使用 smooth 滚动到计算好的位置
+          window.scrollTo({
+            top: scrollTop,
+            behavior: 'smooth'
+          });
+
+          // // 高亮区块头部
+          // this.highlightSection(sectionElement, section)
+        }
+      })
+    })
+  }
+},
 
     // 新增高亮方法
     highlightSection(sectionElement, section) {
@@ -2366,7 +2372,18 @@ getCurrentBeijingTime() {
 
 
 <style scoped>
-
+#section-policyInfo,
+#section-reportInfo,
+#section-vehicleInfo,
+#section-lossType,
+#section-personInjury,
+#section-accidentRescue,
+#section-contactInfo,
+#section-caseDesc,
+#section-historyReport,
+#section-propertyLoss {
+  scroll-margin-top: 100px; /* 调整这个值以适应你的页面布局 */
+}
 
 /* ============ 底部提示文字样式 ============ */
 .footer-message {
@@ -2592,6 +2609,8 @@ getCurrentBeijingTime() {
   align-items: center;
   min-width: 0;
   flex: 1;
+  box-sizing: border-box;
+
 }
 
 /* ============ 案件补充说明区块样式 ============ */
@@ -3493,7 +3512,6 @@ getCurrentBeijingTime() {
 .rescue-vehicle-header {
   margin-bottom: 16px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
   text-align: left;
   /* 确保标题左对齐 */
 }
@@ -3501,7 +3519,7 @@ getCurrentBeijingTime() {
 .rescue-vehicle-header h4 {
   margin: 0;
   color: #333;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   text-align: left;
   /* 确保标题文字左对齐 */
@@ -3509,19 +3527,12 @@ getCurrentBeijingTime() {
 
 .rescue-checkbox-group {
   display: grid;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 10px 4px;
   flex-wrap: wrap;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: auto auto auto;
 }
 
-.rescue-t-checkbox-group {
-  display: grid;
-  gap: 16px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  grid-template-columns: repeat(2, 1fr);
-}
+
 
 .checkbox-group {
   display: flex;
@@ -3531,7 +3542,6 @@ getCurrentBeijingTime() {
 }
 
 /* 使用更具体的选择器来覆盖其他样式 */
-.rescue-checkbox-group .checkbox-label,
 .form-section .checkbox-label {
   display: flex;
   align-items: center;
@@ -3544,8 +3554,26 @@ getCurrentBeijingTime() {
   overflow: hidden;
   text-overflow: ellipsis;
   border: 1px solid #ddd;
+}
+.rescue-checkbox-group .checkbox-label{
+   display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 11px;
+  color: #333;
+  margin-bottom: 0;
+  text-align: left;
+  white-space: nowrap;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  gap: 4px; /* 复选框和文字之间的间距 */
+  border-radius: 8px;
+  width: fit-content;
+  background-color: white;
+
 
 }
+
 
 .checkbox-label {
   display: flex;
@@ -3586,6 +3614,11 @@ getCurrentBeijingTime() {
   margin-bottom: 16px;
   min-width: 80px;
 }
+.vehicle.form-group {
+  margin-bottom: 1px;
+  min-width: 80px;
+}
+
 
 .contact-form-group {
   display: flex;

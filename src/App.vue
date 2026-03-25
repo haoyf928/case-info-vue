@@ -140,7 +140,7 @@ export default {
         engineNumber: '',
         frameNumber: ''
       },
-      activeTab: 'reportInfo'
+      activeTab: 'policyInfo'
     }
   },
   methods: {
