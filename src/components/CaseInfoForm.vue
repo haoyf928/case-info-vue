@@ -905,157 +905,309 @@
     </section>
 
     <!-- ============ 车辆信息 ============ -->
-    <section class="policy-card" id="section-vehicleInfo">
-      <div class="section-header-other no-border">
-        <h3><i class="iconfont icon-qicheSUV" style="color: #0056a4 ;"></i> 涉案车辆信息</h3>
-        <button type="button" class="btn-add-icon float-right">
-          <span>+</span>
+<section class="policy-card" id="section-vehicleInfo">
+  <div class="section-header-other no-border">
+    <h3><i class="iconfont icon-qicheSUV" style="color: #0056a4 ;"></i> 涉案车辆信息</h3>
+    <button type="button" class="btn-add-icon float-right" @click="addVehicleInfo">
+      <span>+</span>
+    </button>
+  </div>
+
+  <div v-show="vehicleInfoExpanded" class="section-content">
+    <!-- 当前标的车信息（始终存在） -->
+    <div class="vehicle-info-section" id="vehicle-info-0">
+      <!-- 第一行：是否要求代位 -->
+      <div class="contact-form-row">
+        <div class="form-group">
+          <label>是否要求代位</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].isSubrogation" value="1"
+                @change="onFieldInput('vehicleList0_subrogation')" /> 是
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].isSubrogation" value="0"
+                @change="onFieldInput('vehicleList0_subrogation')" /> 否
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第二行：标的车车牌、现有车牌号、损失情况 -->
+      <div class="contact-form-row">
+        <div class="form-group">
+          <label>标的车车牌 <span class="required">*</span></label>
+          <input type="text" v-model="vehicleList[0].licenseNumber" 
+            @input="onFieldInput('vehicleList0_licenseNumber')" 
+            :class="{ 'input-error': validationErrors.vehicleList0_licenseNumber }"
+            class="form-input" placeholder="如：京 A12345" />
+          <span v-if="validationErrors.vehicleList0_licenseNumber" class="error-message">
+            {{ validationErrors.vehicleList0_licenseNumber }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>现有车牌号</label>
+          <input type="text" v-model="vehicleList[0].currentLicenseNumber" 
+            @input="onFieldInput('vehicleList0_currentLicenseNumber')"
+            class="form-input" />
+        </div>
+
+        <div class="form-group">
+          <label>损失情况 <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].damageStatus" value="1" 
+                @change="onFieldInput('vehicleList0_damageStatus')" /> 损
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].damageStatus" value="0" 
+                @change="onFieldInput('vehicleList0_damageStatus')" /> 无损
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第三行：驾驶员姓名、证件类型、证件号码、损坏程度 -->
+      <div class="contact-form-row">
+        <div class="form-group">
+          <label>驾驶员姓名 <span class="required">*</span></label>
+          <input type="text" v-model="vehicleList[0].driverName" 
+            @input="onFieldInput('vehicleList0_driverName')"
+            :class="{ 'input-error': validationErrors.vehicleList0_driverName }"
+            class="form-input" />
+          <span v-if="validationErrors.vehicleList0_driverName" class="error-message">
+            {{ validationErrors.vehicleList0_driverName }}
+          </span>
+        </div>
+
+        <div class="contact-form-group">
+          <label>驾驶员证件类型</label>
+          <select v-model="vehicleList[0].driverCertType" 
+            @change="onFieldInput('vehicleList0_driverCertType')"
+            class="form-input select-sm">
+            <option value="">请选择</option>
+            <option value="124001">身份证</option>
+            <option value="124002">护照</option>
+            <option value="124003">驾驶证</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>驾驶员证件号码</label>
+          <input type="text" v-model="vehicleList[0].driverCertNo" 
+            @input="onFieldInput('vehicleList0_driverCertNo')"
+            class="form-input" />
+        </div>
+
+        <div class="form-group">
+          <label>损坏程度</label>
+          <input type="text" v-model="vehicleList[0].damageDegree" 
+            @input="onFieldInput('vehicleList0_damageDegree')"
+            class="form-input" />
+        </div>
+      </div>
+
+      <!-- 第四行：车辆能否正常行驶、车辆状态、发动机号、车架号 -->
+      <div class="contact-form-row">
+        <div class="form-group">
+          <label>车辆能否正常行驶 </label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].vehicleCanRun" value="1"
+                @change="onFieldInput('vehicleList0_vehicleCanRun')" /> 能
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].vehicleCanRun" value="0"
+                @change="onFieldInput('vehicleList0_vehicleCanRun')" /> 不能
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>车辆状态 </label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].vehicleStatus" value="1"
+                @change="onFieldInput('vehicleList0_vehicleStatus')" /> 需要拖车
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="vehicleList[0].vehicleStatus" value="2"
+                @change="onFieldInput('vehicleList0_vehicleStatus')" /> 气囊弹出
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>发动机号 <span class="required">*</span></label>
+          <input type="text" v-model="vehicleList[0].engineNumber" 
+            @input="onFieldInput('vehicleList0_engineNumber')"
+            :class="{ 'input-error': validationErrors.vehicleList0_engineNumber }"
+            class="form-input" />
+          <span v-if="validationErrors.vehicleList0_engineNumber" class="error-message">
+            {{ validationErrors.vehicleList0_engineNumber }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>车架号 <span class="required">*</span></label>
+          <input type="text" v-model="vehicleList[0].frameNumber" 
+            @input="onFieldInput('vehicleList0_frameNumber')"
+            :class="{ 'input-error': validationErrors.vehicleList0_frameNumber }"
+            class="form-input" />
+          <span v-if="validationErrors.vehicleList0_frameNumber" class="error-message">
+            {{ validationErrors.vehicleList0_frameNumber }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 动态三者车信息 -->
+    <div v-for="(vehicle, index) in vehicleList.slice(1)" :key="index + 1" class="vehicle-info-section" 
+         :id="'vehicle-info-' + (index + 1)">
+      <div class="vehicle-header">
+        <button type="button" @click="removeVehicleInfo(index + 1)" class="btn-remove-top">
+          -
         </button>
       </div>
-
-      <div v-show="vehicleInfoExpanded" class="section-content">
-        <!-- 第一行：是否要求代位 -->
-        <div class="contact-form-row">
-          <div class="form-group">
-            <label>是否要求代位</label>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.isSubrogation" value="1"
-                  @change="onFieldInput('isSubrogation')" /> 是
-              </label>
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.isSubrogation" value="0"
-                  @change="onFieldInput('isSubrogation')" /> 否
-              </label>
-            </div>
-          </div>
+      
+      <!-- 第一行：三者车车牌、现有车牌号、损失情况 -->
+      <div class="contact-form-row">
+        <div class="form-group">
+          <label>三者车车牌 <span class="required">*</span></label>
+          <input type="text" v-model="vehicle.licenseNumber" 
+            @input="onFieldInput('vehicleList' + (index + 1) + '_licenseNumber')" 
+            :class="{ 'input-error': validationErrors['vehicleList' + (index + 1) + '_licenseNumber'] }"
+            class="form-input" placeholder="如：京 B12345" />
+          <span v-if="validationErrors['vehicleList' + (index + 1) + '_licenseNumber']" class="error-message">
+            {{ validationErrors['vehicleList' + (index + 1) + '_licenseNumber'] }}
+          </span>
         </div>
 
-        <!-- 第二行：标的车车牌、现有车牌号、损失情况 -->
-        <div class="contact-form-row">
-          <div class="form-group">
-            <label>标的车车牌 <span class="required">*</span></label>
-            <input type="text" v-model="caseInfo.licenseNumber" ref="licenseNumber"
-              @input="onFieldInput('licenseNumber')" :class="{ 'input-error': validationErrors.licenseNumber }"
-              class="form-input" placeholder="如：京 A12345" />
-            <span v-if="validationErrors.licenseNumber" class="error-message">
-              {{ validationErrors.licenseNumber }}
-            </span>
-          </div>
-
-          <div class="form-group">
-            <label>现有车牌号</label>
-            <input type="text" v-model="caseInfo.currentLicenseNumber" @input="onFieldInput('currentLicenseNumber')"
-              class="form-input" />
-          </div>
-
-          <div class="form-group">
-            <label>损失情况 <span class="required">*</span></label>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.damageStatus" value="1" @change="onFieldInput('damageStatus')" />
-                损
-              </label>
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.damageStatus" value="0" @change="onFieldInput('damageStatus')" />
-                无损
-              </label>
-            </div>
-          </div>
+        <div class="form-group">
+          <label>现有车牌号</label>
+          <input type="text" v-model="vehicle.currentLicenseNumber" 
+            @input="onFieldInput('vehicleList' + (index + 1) + '_currentLicenseNumber')"
+            class="form-input" />
         </div>
 
-        <!-- 第三行：驾驶员姓名、证件类型、证件号码、损坏程度 -->
-        <div class="contact-form-row">
-          <div class="form-group">
-            <label>驾驶员姓名 <span class="required">*</span></label>
-            <input type="text" v-model="caseInfo.driverName" ref="driverName" @input="onFieldInput('driverName')"
-              :class="{ 'input-error': validationErrors.driverName }" class="form-input" />
-            <span v-if="validationErrors.driverName" class="error-message">
-              {{ validationErrors.driverName }}
-            </span>
-          </div>
-
-          <div class="contact-form-group">
-            <label>驾驶员证件类型</label>
-            <select v-model="caseInfo.driverCertType" @change="onFieldInput('driverCertType')"
-              class="form-input select-sm">
-              <option value="">请选择</option>
-              <option value="124001">身份证</option>
-              <option value="124002">护照</option>
-              <option value="124003">驾驶证</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>驾驶员证件号码</label>
-            <input type="text" v-model="caseInfo.driverCertNo" @input="onFieldInput('driverCertNo')"
-              class="form-input" />
-          </div>
-
-          <div class="form-group">
-            <label>损坏程度</label>
-            <input type="text" v-model="caseInfo.damageDegree" @input="onFieldInput('damageDegree')"
-              class="form-input" />
-          </div>
-        </div>
-
-        <!-- 第四行：车辆能否正常行驶、车辆状态、发动机号、车架号 -->
-        <div class="contact-form-row">
-          <div class="form-group">
-            <label>车辆能否正常行驶 </label>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.vehicleCanRun" value="1"
-                  @change="onFieldInput('vehicleCanRun')" /> 能
-              </label>
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.vehicleCanRun" value="0"
-                  @change="onFieldInput('vehicleCanRun')" /> 不能
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>车辆状态 </label>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.vehicleStatus" value="1"
-                  @change="onFieldInput('vehicleStatus')" /> 需要拖车
-              </label>
-              <label class="radio-label">
-                <input type="radio" v-model="caseInfo.vehicleStatus" value="2"
-                  @change="onFieldInput('vehicleStatus')" /> 气囊弹出
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>发动机号 <span class="required">*</span></label>
-            <input type="text" v-model="caseInfo.engineNumber" ref="engineNumber" @input="onFieldInput('engineNumber')"
-              :class="{ 'input-error': validationErrors.engineNumber }" class="form-input" />
-            <span v-if="validationErrors.engineNumber" class="error-message">
-              {{ validationErrors.engineNumber }}
-            </span>
-          </div>
-
-          <div class="form-group">
-            <label>车架号 <span class="required">*</span></label>
-            <input type="text" v-model="caseInfo.frameNumber" ref="frameNumber" @input="onFieldInput('frameNumber')"
-              :class="{ 'input-error': validationErrors.frameNumber }" class="form-input" />
-            <span v-if="validationErrors.frameNumber" class="error-message">
-              {{ validationErrors.frameNumber }}
-            </span>
+        <div class="form-group">
+          <label>损失情况 <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="vehicle.damageStatus" value="1" 
+                @change="onFieldInput('vehicleList' + (index + 1) + '_damageStatus')" /> 损
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="vehicle.damageStatus" value="0" 
+                @change="onFieldInput('vehicleList' + (index + 1) + '_damageStatus')" /> 无损
+            </label>
           </div>
         </div>
       </div>
-    </section>
+
+      <!-- 第二行：驾驶员姓名、证件类型、证件号码、损坏程度 -->
+      <div class="contact-form-row">
+        <div class="form-group">
+          <label>驾驶员姓名 <span class="required">*</span></label>
+          <input type="text" v-model="vehicle.driverName" 
+            @input="onFieldInput('vehicleList' + (index + 1) + '_driverName')"
+            :class="{ 'input-error': validationErrors['vehicleList' + (index + 1) + '_driverName'] }"
+            class="form-input" />
+          <span v-if="validationErrors['vehicleList' + (index + 1) + '_driverName']" class="error-message">
+            {{ validationErrors['vehicleList' + (index + 1) + '_driverName'] }}
+          </span>
+        </div>
+
+        <div class="contact-form-group">
+          <label>驾驶员证件类型</label>
+          <select v-model="vehicle.driverCertType" 
+            @change="onFieldInput('vehicleList' + (index + 1) + '_driverCertType')"
+            class="form-input select-sm">
+            <option value="">请选择</option>
+            <option value="124001">身份证</option>
+            <option value="124002">护照</option>
+            <option value="124003">驾驶证</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>驾驶员证件号码</label>
+          <input type="text" v-model="vehicle.driverCertNo" 
+            @input="onFieldInput('vehicleList' + (index + 1) + '_driverCertNo')"
+            class="form-input" />
+        </div>
+
+        <div class="form-group">
+          <label>损坏程度</label>
+          <input type="text" v-model="vehicle.damageDegree" 
+            @input="onFieldInput('vehicleList' + (index + 1) + '_damageDegree')"
+            class="form-input" />
+        </div>
+      </div>
+
+      <!-- 第三行：车辆能否正常行驶、车辆状态、发动机号、车架号 -->
+      <div class="contact-form-row">
+        <div class="form-group">
+          <label>车辆能否正常行驶 </label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="vehicle.vehicleCanRun" value="1"
+                @change="onFieldInput('vehicleList' + (index + 1) + '_vehicleCanRun')" /> 能
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="vehicle.vehicleCanRun" value="0"
+                @change="onFieldInput('vehicleList' + (index + 1) + '_vehicleCanRun')" /> 不能
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>车辆状态 </label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="vehicle.vehicleStatus" value="1"
+                @change="onFieldInput('vehicleList' + (index + 1) + '_vehicleStatus')" /> 需要拖车
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="vehicle.vehicleStatus" value="2"
+                @change="onFieldInput('vehicleList' + (index + 1) + '_vehicleStatus')" /> 气囊弹出
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>发动机号 <span class="required">*</span></label>
+          <input type="text" v-model="vehicle.engineNumber" 
+            @input="onFieldInput('vehicleList' + (index + 1) + '_engineNumber')"
+            :class="{ 'input-error': validationErrors['vehicleList' + (index + 1) + '_engineNumber'] }"
+            class="form-input" />
+          <span v-if="validationErrors['vehicleList' + (index + 1) + '_engineNumber']" class="error-message">
+            {{ validationErrors['vehicleList' + (index + 1) + '_engineNumber'] }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>车架号 <span class="required">*</span></label>
+          <input type="text" v-model="vehicle.frameNumber" 
+            @input="onFieldInput('vehicleList' + (index + 1) + '_frameNumber')"
+            :class="{ 'input-error': validationErrors['vehicleList' + (index + 1) + '_frameNumber'] }"
+            class="form-input" />
+          <span v-if="validationErrors['vehicleList' + (index + 1) + '_frameNumber']" class="error-message">
+            {{ validationErrors['vehicleList' + (index + 1) + '_frameNumber'] }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- ============ 财产损失 ============ -->
-    <section class="form-section" id="section-propertyLoss">
-      <div class="section-header no-border">
+    <section class="policy-card" id="section-propertyLoss">
+      <div class="section-header-other no-border">
         <h3><i class="iconfont icon-meiyuan" style="color: #0056a4 ;"></i> 财产损失信息</h3>
-        <button type="button" @click="addPropertyLoss" class="btn-add-icon float-right">
-          <span>+</span>
+        <button type="button" v-if="caseInfo.propFlag === '1'"  @click="addPropertyLoss" class="btn-add-icon float-right">
+          <span>+</span> 
         </button>
       </div>
 
@@ -1066,7 +1218,7 @@
             <label>是否财产损失</label>
             <div class="radio-group">
               <label class="radio-label">
-                <input type="radio" v-model="caseInfo.propFlag" value="0" @change="onFieldInput('propFlag')" /> 无
+                <input type="radio" v-model="caseInfo.propFlag" value="0" @change="onPropFlagChange" /> 无
               </label>
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.propFlag" value="1" @change="onFieldInput('propFlag')"
@@ -1123,10 +1275,10 @@
       </div>
     </section>
 
-    <section class="form-section" id="section-personInjury">
-      <div class="section-header no-border">
+    <section class="policy-card" id="section-personInjury">
+      <div class="section-header-other no-border">
         <h3><i class="iconfont icon-aixin" style="color: #0056a4 ;"></i> 人员伤亡</h3>
-        <button type="button" class="btn-add-icon float-right" @click="addPersonInjury">
+        <button type="button" v-if="caseInfo.woundFlag === '1'"  class="btn-add-icon float-right" @click="addPersonInjury">
           <span>+</span>
         </button>
       </div>
@@ -1137,7 +1289,7 @@
             <label>是否人员伤亡 </label>
             <div class="radio-group">
               <label class="radio-label">
-                <input type="radio" v-model="caseInfo.woundFlag" value="0" /> 无
+                <input type="radio" v-model="caseInfo.woundFlag" value="0" @change="onWoundFlagChange" /> 无
               </label>
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.woundFlag" value="1" @click="addPersonInjury" /> 有
@@ -1218,8 +1370,8 @@
     </section>
 
 
-    <section class="form-section" id="section-lossType">
-      <div class="section-header no-border">
+    <section class="policy-card" id="section-lossType">
+      <div class="section-header-other no-border">
         <h3><i class="iconfont icon-shield" style="color: #0056a4 ;"></i>损失类型</h3>
       </div>
       <div v-show="lossTypeExpanded" class="section-content">
@@ -1289,8 +1441,8 @@
       </div>
     </section>
 
-    <section class="form-section" id="section-caseDesc">
-      <div class="section-header no-border">
+    <section class="policy-card" id="section-caseDesc">
+      <div class="section-header-other no-border">
         <h3><i class="iconfont icon-008duihuakuang-6" style="color: #0056a4;"></i> 案件补充说明</h3>
         <button type="button" @click="addCaseDesc" class="desc-add-icon float-right">
           <span>+ 添加说明</span>
@@ -1454,6 +1606,23 @@ export default {
           { code: '1', name: '龙湾区' }
         ]
       },
+      vehicleList: [
+      // 标的车信息（默认存在）
+      {
+        isSubrogation: '0', // 是否要求代位，默认否
+        licenseNumber: '', // 车牌号
+        currentLicenseNumber: '', // 现有车牌号
+        damageStatus: '1', // 损失情况，默认"损"
+        driverName: '', // 驾驶员姓名
+        driverCertType: '', // 驾驶员证件类型
+        driverCertNo: '', // 驾驶员证件号码
+        damageDegree: '', // 损坏程度
+        vehicleCanRun: '1', // 车辆能否正常行驶，默认"能"
+        vehicleStatus: '1', // 车辆状态，默认"需要拖车"
+        engineNumber: '', // 发动机号
+        frameNumber: '' // 车架号
+      }
+    ],
       propertyLossList: [],
       lossTypes: [],
       personInjuryList: [],
@@ -1589,6 +1758,42 @@ export default {
     },
   },
   methods: {
+    // 处理人员伤亡标志变化
+  onWoundFlagChange() {
+    // 当选择"无"时，清空所有人员伤亡信息
+    if (this.caseInfo.woundFlag === '0') {
+      this.personInjuryList = []; // 清空人员伤亡列表
+    }
+  },
+  onPropFlagChange() {
+    // 当选择"无"时，清空所有
+    if (this.caseInfo.propFlag === '0') {
+      this.propertyLossList = [];
+    }
+  },
+    // 新增三者车信息
+  addVehicleInfo() {
+    this.vehicleList.push({
+      licenseNumber: '', // 三者车车牌
+      currentLicenseNumber: '', // 现有车牌号
+      damageStatus: '1', // 损失情况，默认"损"
+      driverName: '', // 驾驶员姓名
+      driverCertType: '', // 驾驶员证件类型
+      driverCertNo: '', // 驾驶员证件号码
+      damageDegree: '', // 损坏程度
+      vehicleCanRun: '1', // 车辆能否正常行驶，默认"能"
+      vehicleStatus: '1', // 车辆状态，默认"需要拖车"
+      engineNumber: '', // 发动机号
+      frameNumber: '' // 车架号
+    });
+  },
+
+  // 删除三者车信息（注意：不能删除标的车，即索引为0的项目）
+  removeVehicleInfo(index) {
+    if (index > 0 && index < this.vehicleList.length) {
+      this.vehicleList.splice(index, 1);
+    }
+  },
 // 当选择当前省份时，清空当前城市和区县
   onCurrentProvinceChange() {
     // 清空当前城市和区县选择
@@ -1644,7 +1849,51 @@ getCurrentBeijingTime() {
  
     // 实时验证并清除错误
     validateFieldRealTime(fieldName) {
-      // 特殊处理时间字段的验证 - 使用北京时间
+// 处理车辆信息字段的验证
+  if (fieldName.startsWith('vehicleList')) {
+    const match = fieldName.match(/vehicleList(\d+)_(.*)/);
+    if (match) {
+      const index = parseInt(match[1]);
+      const field = match[2];
+      
+      let value = '';
+      if (this.vehicleList[index] && this.vehicleList[index][field] !== undefined) {
+        value = this.vehicleList[index][field];
+      }
+      
+      // 根据字段类型进行验证
+      if (field === 'licenseNumber' || field === 'engineNumber' || field === 'frameNumber') {
+        if (!value || value.trim() === '') {
+          this.validationErrors[fieldName] = '此项为必填项';
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else if (field === 'driverName') {
+        if (!value || value.trim() === '') {
+          this.validationErrors[fieldName] = '此项为必填项';
+        } else if (!this.validationRules.name.pattern.test(value.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.name.message;
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else if (field === 'damageStatus' || field === 'vehicleCanRun') {
+        if (!value) {
+          this.validationErrors[fieldName] = '请选择';
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else {
+        // 其他字段的验证
+        if (value && value.trim() !== '') {
+          delete this.validationErrors[fieldName];
+        } else {
+          delete this.validationErrors[fieldName]; // 非必填项
+        }
+      }
+    }
+    return;
+  }
+
       // 特殊处理时间字段的验证 - 使用北京时间
   if (fieldName === 'accidentTime' || fieldName === 'reportTime' || fieldName === 'alarmTime') {
     // 获取当前北京时间
@@ -2228,16 +2477,18 @@ getCurrentBeijingTime() {
     },
 
     // ============ 添加/删除人员伤亡 ============
-    addPersonInjury() {
+  addPersonInjury() {
+    // 确保只有在选择"有"时才添加新的人员伤亡信息
+    if (this.caseInfo.woundFlag === '1') {
       this.personInjuryList.push({
         name: '',
+        sex: '',
         owncar: '',
         persionpayType: '',
-        sex: '',
-        doctorNo: '0',
-        hospital: ''
-      })
-    },
+        isHospitalized: '0'
+      });
+    }
+  },
     removePersonInjury(index) {
       this.personInjuryList.splice(index, 1)
     },
@@ -2383,6 +2634,14 @@ getCurrentBeijingTime() {
 #section-historyReport,
 #section-propertyLoss {
   scroll-margin-top: 100px; /* 调整这个值以适应你的页面布局 */
+}
+.vehicle-info-section {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #fafafa;
+  position: relative;
 }
 
 /* ============ 底部提示文字样式 ============ */
