@@ -697,8 +697,8 @@
       </div>
     </section>
     <!-- ============ 事故救援 ============ -->
-    <section class="form-section" id="section-accidentRescue">
-      <div class="section-header no-border">
+    <section class="policy-card" id="section-accidentRescue">
+      <div class="section-header-other no-border">
         <h3><i class="iconfont icon-wuliuqiache" style="color: #0056a4 ;"></i> 事故救援</h3>
       </div>
       <div v-show="accidentRescueExpanded" class="section-content">
@@ -797,7 +797,7 @@
     </section>
 
     <!-- ============ 报案人姓名 ============ -->
-    <section class="form-section" id="section-contactInfo">
+    <section class="policy-card" id="section-contactInfo">
       <div class="section-header no-border">
         <h3><i class="iconfont icon-yonghu" style="color: #0056a4 ;"></i> 报案人姓名、联系人姓名</h3>
       </div>
@@ -855,11 +855,15 @@
 
         <!-- 第二行：1个字段 -->
         <div class="contact-form-row">
-          <div class="form-group">
-            <label>报案人证件号码</label>
-            <input type="text" v-model="caseInfo.reporterCertNo" @input="onFieldInput('reporterCertNo')"
-              class="form-input" />
-          </div>
+          <!-- 报案人证件号码 -->
+<div class="form-group">
+  <label>报案人证件号码</label>
+  <input type="text" v-model="caseInfo.reporterCertNo" @input="onFieldInput('reporterCertNo')"
+    :class="{ 'input-error': validationErrors.reporterCertNo }" class="form-input" />
+  <span v-if="validationErrors.reporterCertNo" class="error-message">
+    {{ validationErrors.reporterCertNo }}
+  </span>
+</div>
         </div>
         <!-- 分割线 -->
         <div class="divider-line"></div>
@@ -883,11 +887,15 @@
             </span>
           </div>
 
-          <div class="form-group">
-            <label>联系人手机</label>
-            <input type="text" v-model="caseInfo.linkerMobile" @input="onFieldInput('linkerMobile')"
-              class="form-input" />
-          </div>
+          <!-- 联系人手机 -->
+<div class="form-group">
+  <label>联系人手机</label>
+  <input type="text" v-model="caseInfo.linkerMobile" @input="onFieldInput('linkerMobile')"
+    :class="{ 'input-error': validationErrors.linkerMobile }" class="form-input" />
+  <span v-if="validationErrors.linkerMobile" class="error-message">
+    {{ validationErrors.linkerMobile }}
+  </span>
+</div>
           <div class="form-group">
             <label>受理人编码 <span class="required">*</span></label>
             <input type="text" v-model="caseInfo.handlerCode" @input="onFieldInput('handlerCode')" class="form-input" />
@@ -1364,6 +1372,32 @@ export default {
       shouldShowValidationErrors: false,
       // 新增：导航数据
       activeSection: 'policyInfo', // 当前激活的区块
+      // ============ 校验规则 ============
+    validationRules: {
+      // 姓名校验：2-15个字符，中文或英文字母
+      name: {
+        pattern: /^[\u4E00-\u9FA5a-zA-Z\s]{2,15}$/,
+        message: '姓名应为2-15个字符，只能包含中文、英文字母和空格'
+      },
+      // 手机号校验：中国大陆手机号
+      phone: {
+        pattern: /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+        message: '请输入有效的手机号码'
+      },
+      // 证件号校验：支持身份证、护照、驾驶证
+      idCard: {
+        pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+        message: '请输入有效的证件号码'
+      },
+      passport: {
+        pattern: /^[a-zA-Z]{1,2}[0-9]{7,8}$/,
+        message: '请输入有效的护照号码'
+      },
+      driverLicense: {
+        pattern: /^[a-zA-Z0-9]{9,12}$/,
+        message: '请输入有效的驾驶证号码'
+      }
+    },
 
       // ============ 校验错误信息 ============
       validationErrors: {},
@@ -1638,7 +1672,85 @@ getCurrentBeijingTime() {
       }
     }
   }
-
+// 添加姓名、手机号、证件号校验
+  if (fieldName === 'reportorName' || fieldName === 'linkerName') {
+    // 姓名校验
+    const nameValue = this.caseInfo[fieldName];
+    if (nameValue && nameValue.trim() !== '') {
+      if (!this.validationRules.name.pattern.test(nameValue.trim())) {
+        this.validationErrors[fieldName] = this.validationRules.name.message;
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    } else {
+      // 如果是必填项且为空
+      if (requiredFields[fieldName]) {
+        this.validationErrors[fieldName] = '此项为必填项';
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    }
+    return;
+  }
+  
+  if (fieldName === 'reportorPhonenumber' || fieldName === 'linkerPhone' || fieldName === 'linkerMobile') {
+    // 手机号校验
+    const phoneValue = this.caseInfo[fieldName];
+    if (phoneValue && phoneValue.trim() !== '') {
+      if (!this.validationRules.phone.pattern.test(phoneValue.trim())) {
+        this.validationErrors[fieldName] = this.validationRules.phone.message;
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    } else {
+      // 如果是必填项且为空
+      if (requiredFields[fieldName]) {
+        this.validationErrors[fieldName] = '此项为必填项';
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    }
+    return;
+  }
+  
+  if (fieldName === 'reporterCertNo') {
+    // 证件号校验 - 根据证件类型选择不同的校验规则
+    const certNoValue = this.caseInfo[fieldName];
+    const certType = this.caseInfo.reporterCertType;
+    
+    if (certNoValue && certNoValue.trim() !== '') {
+      if (certType === '124001') { // 身份证
+        if (!this.validationRules.idCard.pattern.test(certNoValue.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.idCard.message;
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else if (certType === '124002') { // 护照
+        if (!this.validationRules.passport.pattern.test(certNoValue.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.passport.message;
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else if (certType === '124003') { // 驾驶证
+        if (!this.validationRules.driverLicense.pattern.test(certNoValue.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.driverLicense.message;
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else {
+        // 如果没有选择证件类型，暂时不校验
+        delete this.validationErrors[fieldName];
+      }
+    } else {
+      // 如果是必填项且为空
+      if (requiredFields[fieldName]) {
+        this.validationErrors[fieldName] = '此项为必填项';
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    }
+    return;
+  }
 
 
       if (fieldName === 'lossTypes') {
@@ -3514,6 +3626,8 @@ getCurrentBeijingTime() {
   font-size: 11px;
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
+  box-sizing: border-box;
+
 }
 
 .form-input:focus {
