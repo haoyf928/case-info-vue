@@ -214,7 +214,14 @@
           <div class="form-group">
             <label><i class="iconfont icon-shijiankaishishijian"></i> 出险时间 </label>
             <el-date-picker v-model="caseInfo.accidentTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss" placeholder="选择出险时间" prefix-icon="_" clear-icon="_"
+              value-format="YYYY/MM/DD HH:mm:ss" 
+              :disabled-date="disabledFutureDate"
+              :disabled-hours="disabledHours"
+              :disabled-minutes="disabledMinutes"
+              :disabled-seconds="disabledSeconds"
+              @focus="setOperatingField('accidentTime')"
+              @blur="resetOperatingField"
+              placeholder="选择出险时间" prefix-icon="_" clear-icon="_"
               @change="onFieldInput('accidentTime')" :class="{ 'input-error': validationErrors.accidentTime }"
               style="width: 100%;">
             </el-date-picker>
@@ -227,7 +234,14 @@
           <div class="form-group">
             <label><i class="iconfont icon-shijiankaishishijian"></i> 报案时间</label>
             <el-date-picker v-model="caseInfo.reportTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss" placeholder="选择报案时间" prefix-icon="_" clear-icon="_"
+              value-format="YYYY/MM/DD HH:mm:ss" 
+              :disabled-date="disabledFutureDate"
+              :disabled-hours="disabledHours"
+              :disabled-minutes="disabledMinutes"
+              :disabled-seconds="disabledSeconds"
+              @focus="setOperatingField('reportTime')"
+              @blur="resetOperatingField"
+              placeholder="选择报案时间" prefix-icon="_" clear-icon="_"
               @change="onFieldInput('reportTime')" :class="{ 'input-error': validationErrors.reportTime }"
               style="width: 100%;">
             </el-date-picker>
@@ -359,7 +373,7 @@
         </div>
 
         <!-- 第五行：车辆目前所在地 -->
-        <div class="form-row" v-if="caseInfo.upadress === '1' || caseInfo.upadress === 1">
+        <div class="form-row" v-if="caseInfo.isfirstsiteFlag === '1' || caseInfo.isfirstsiteFlag === 1">
           <div class="form-group full-width">
             <label><i class="iconfont icon-dingwei"></i> 车辆目前所在地 <span class="required">*</span></label>
             <div class="address-inputs">
@@ -409,7 +423,7 @@
         </div>
 
         <!-- 第六行：车辆目前所在地经纬度 -->
-        <div class="form-row" v-if="caseInfo.upadress === '1' || caseInfo.upadress === 1">
+        <div class="form-row" v-if="caseInfo.isfirstsiteFlag === '1' || caseInfo.isfirstsiteFlag === 1">
           <div class="form-group">
             <label>车辆目前所在地经度 <span class="required">*</span></label>
             <input type="number" step="0.000001" v-model="caseInfo.currentLongitude" ref="currentLongitude"
@@ -596,7 +610,14 @@
           <div class="form-group" v-if="caseInfo.isAlarm === '1' || caseInfo.isAlarm === 1">
             <label><i class="iconfont icon-shijiankaishishijian"></i> 报警时间 </label>
             <el-date-picker v-model="caseInfo.alarmTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss" placeholder="选择报警时间" prefix-icon="_" clear-icon="_"
+              value-format="YYYY/MM/DD HH:mm:ss"
+              :disabled-date="disabledFutureDate"
+              :disabled-hours="disabledHours"
+              :disabled-minutes="disabledMinutes"
+              :disabled-seconds="disabledSeconds" 
+              @focus="setOperatingField('alarmTime')"
+              @blur="resetOperatingField"
+              placeholder="选择报警时间" prefix-icon="_" clear-icon="_"
               @change="onFieldInput('alarmTime')" :class="{ 'input-error': validationErrors.alarmTime }"
               style="width: 100%;">
             </el-date-picker>
@@ -1712,6 +1733,7 @@ export default {
           bodyExpanded: false
         }
       ],
+    currentOperatingField: null, // 新增：跟踪当前操作的时间字段
     }
   },
   created() {
@@ -1734,6 +1756,100 @@ export default {
     },
   },
   methods: {
+
+     // 获取当前正在操作的时间字段的日期
+  getCurrentSelectedDate() {
+    // 根据当前操作的字段返回相应的时间值
+    if (this.currentOperatingField) {
+      const fieldValue = this.caseInfo[this.currentOperatingField];
+      if (fieldValue) {
+        return new Date(fieldValue);
+      }
+    }
+    // 如果没有明确的操作字段，返回当前日期
+    return new Date();
+  },
+   // 禁用晚于当前时间的日期
+  disabledFutureDate(time) {
+    const now = new Date();
+    const utcOffset = now.getTimezoneOffset() * 60000;
+    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
+    
+    return time.getTime() > currentBeijingTime.getTime();
+  },
+// 禁用大于当前小时的小时数 - 动态获取当前时间
+  disabledHours() {
+    // 注意：在这个函数执行时，我们需要获取当前选择器的当前值
+    // 但由于Element UI的API限制，我们只能获取到当前操作的时间字段
+    const now = new Date();
+    const utcOffset = now.getTimezoneOffset() * 60000;
+    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
+    
+    // 获取当前操作字段的日期部分
+    if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
+      const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
+      // 如果选择的日期是今天，则限制小时
+      if (selectedDateTime.toDateString() === currentBeijingTime.toDateString()) {
+        const hours = [];
+        for (let i = currentBeijingTime.getHours() + 1; i < 24; i++) {
+          hours.push(i);
+        }
+        return hours;
+      }
+    }
+    return [];
+  },
+ // 禁用大于当前分钟的分钟数 - 动态获取当前时间
+  disabledMinutes(selectedHour) {
+    const now = new Date();
+    const utcOffset = now.getTimezoneOffset() * 60000;
+    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
+    
+    if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
+      const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
+      // 如果选择的日期是今天，且小时相同，则限制分钟
+      if (selectedDateTime.toDateString() === currentBeijingTime.toDateString() && 
+          selectedHour === currentBeijingTime.getHours()) {
+        const minutes = [];
+        for (let i = currentBeijingTime.getMinutes() + 1; i < 60; i++) {
+          minutes.push(i);
+        }
+        return minutes;
+      }
+    }
+    return [];
+  },
+  // 禁用大于当前秒的秒数 - 动态获取当前时间
+  disabledSeconds(selectedHour, selectedMinute) {
+    const now = new Date();
+    const utcOffset = now.getTimezoneOffset() * 60000;
+    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
+    
+    if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
+      const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
+      // 如果选择的日期是今天，且小时和分钟都相同，则限制秒
+      if (selectedDateTime.toDateString() === currentBeijingTime.toDateString() && 
+          selectedHour === currentBeijingTime.getHours() && 
+          selectedMinute === currentBeijingTime.getMinutes()) {
+        const seconds = [];
+        for (let i = currentBeijingTime.getSeconds() + 1; i < 60; i++) {
+          seconds.push(i);
+        }
+        return seconds;
+      }
+    }
+    return [];
+  },
+  // 在时间选择器的focus事件中设置当前操作字段
+  setOperatingField(fieldName) {
+    this.currentOperatingField = fieldName;
+  },
+
+  // 重置当前操作字段
+  resetOperatingField() {
+    this.currentOperatingField = null;
+  },
+
     // 处理人员伤亡标志变化
     onWoundFlagChange() {
       // 当选择"无"时，清空所有人员伤亡信息
@@ -1798,7 +1914,6 @@ export default {
       this.caseInfo.areaDistrict = '';
       this.onFieldInput('damageAddress');
     },
-    // 获取当前北京时间
     // 获取当前北京时间
     getCurrentBeijingTime() {
       // 创建一个新的 Date 对象，表示当前时间
@@ -1871,32 +1986,32 @@ export default {
       }
 
       // 特殊处理时间字段的验证 - 使用北京时间
-      if (fieldName === 'accidentTime' || fieldName === 'reportTime' || fieldName === 'alarmTime') {
-        // 获取当前北京时间
-        const now = new Date();
-        const utcOffset = now.getTimezoneOffset() * 60000; // 分钟转毫秒
-        const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000)); // 当前北京时间
+      // if (fieldName === 'accidentTime' || fieldName === 'reportTime' || fieldName === 'alarmTime') {
+      //   // 获取当前北京时间
+      //   const now = new Date();
+      //   const utcOffset = now.getTimezoneOffset() * 60000; // 分钟转毫秒
+      //   const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000)); // 当前北京时间
 
-        if (this.caseInfo[fieldName]) {
-          const selectedTime = new Date(this.caseInfo[fieldName]);
+      //   if (this.caseInfo[fieldName]) {
+      //     const selectedTime = new Date(this.caseInfo[fieldName]);
 
-          // 直接比较时间戳，确保使用北京时间
-          if (selectedTime.getTime() > currentBeijingTime.getTime()) {
-            // 设置错误信息
-            if (fieldName === 'accidentTime') {
-              this.validationErrors[fieldName] = '出险时间不能晚于当前时间';
-            } else if (fieldName === 'reportTime') {
-              this.validationErrors[fieldName] = '报案时间不能晚于当前时间';
-            } else if (fieldName === 'alarmTime') {
-              this.validationErrors[fieldName] = '报警时间不能晚于当前时间';
-            }
-            return; // 提前返回，不执行后续验证
-          } else {
-            // 如果时间合法，清除错误信息
-            delete this.validationErrors[fieldName];
-          }
-        }
-      }
+      //     // 直接比较时间戳，确保使用北京时间
+      //     if (selectedTime.getTime() > currentBeijingTime.getTime()) {
+      //       // 设置错误信息
+      //       if (fieldName === 'accidentTime') {
+      //         this.validationErrors[fieldName] = '出险时间不能晚于当前时间';
+      //       } else if (fieldName === 'reportTime') {
+      //         this.validationErrors[fieldName] = '报案时间不能晚于当前时间';
+      //       } else if (fieldName === 'alarmTime') {
+      //         this.validationErrors[fieldName] = '报警时间不能晚于当前时间';
+      //       }
+      //       return; // 提前返回，不执行后续验证
+      //     } else {
+      //       // 如果时间合法，清除错误信息
+      //       delete this.validationErrors[fieldName];
+      //     }
+      //   }
+      // }
       // 添加姓名、手机号、证件号校验
       if (fieldName === 'reportorName' || fieldName === 'linkerName') {
         // 姓名校验
@@ -2020,6 +2135,10 @@ export default {
       if (fieldName === 'lossTypes') {
         return;
       }
+       // 设置当前操作字段
+    if (['accidentTime', 'reportTime', 'alarmTime'].includes(fieldName)) {
+      this.currentOperatingField = fieldName;
+    }
       // 延迟执行，避免频繁验证
       clearTimeout(this.inputValidationTimer);
       this.inputValidationTimer = setTimeout(() => {
