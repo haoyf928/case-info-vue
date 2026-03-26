@@ -214,16 +214,11 @@
           <div class="form-group">
             <label><i class="iconfont icon-shijiankaishishijian"></i> 出险时间 </label>
             <el-date-picker v-model="caseInfo.accidentTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss" 
-              :disabled-date="disabledFutureDate"
-              :disabled-hours="disabledHours"
-              :disabled-minutes="disabledMinutes"
-              :disabled-seconds="disabledSeconds"
-              @focus="setOperatingField('accidentTime')"
-              @blur="resetOperatingField"
-              placeholder="选择出险时间" prefix-icon="_" clear-icon="_"
-              @change="onFieldInput('accidentTime')" :class="{ 'input-error': validationErrors.accidentTime }"
-              style="width: 100%;">
+              value-format="YYYY/MM/DD HH:mm:ss" :disabled-date="disabledFutureDate" :disabled-hours="disabledHours"
+              :disabled-minutes="disabledMinutes" :disabled-seconds="disabledSeconds"
+              @focus="setOperatingField('accidentTime')" @blur="resetOperatingField" placeholder="选择出险时间"
+              prefix-icon="_" clear-icon="_" @change="onFieldInput('accidentTime')"
+              :class="{ 'input-error': validationErrors.accidentTime }" style="width: 100%;">
             </el-date-picker>
             <span v-if="validationErrors.accidentTime" class="error-message">
               {{ validationErrors.accidentTime }}
@@ -234,16 +229,11 @@
           <div class="form-group">
             <label><i class="iconfont icon-shijiankaishishijian"></i> 报案时间</label>
             <el-date-picker v-model="caseInfo.reportTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss" 
-              :disabled-date="disabledFutureDate"
-              :disabled-hours="disabledHours"
-              :disabled-minutes="disabledMinutes"
-              :disabled-seconds="disabledSeconds"
-              @focus="setOperatingField('reportTime')"
-              @blur="resetOperatingField"
-              placeholder="选择报案时间" prefix-icon="_" clear-icon="_"
-              @change="onFieldInput('reportTime')" :class="{ 'input-error': validationErrors.reportTime }"
-              style="width: 100%;">
+              value-format="YYYY/MM/DD HH:mm:ss" :disabled-date="disabledFutureDate" :disabled-hours="disabledHours"
+              :disabled-minutes="disabledMinutes" :disabled-seconds="disabledSeconds"
+              @focus="setOperatingField('reportTime')" @blur="resetOperatingField" placeholder="选择报案时间" prefix-icon="_"
+              clear-icon="_" @change="onFieldInput('reportTime')"
+              :class="{ 'input-error': validationErrors.reportTime }" style="width: 100%;">
             </el-date-picker>
             <span v-if="validationErrors.reportTime" class="error-message">
               {{ validationErrors.reportTime }}
@@ -610,15 +600,10 @@
           <div class="form-group" v-if="caseInfo.isAlarm === '1' || caseInfo.isAlarm === 1">
             <label><i class="iconfont icon-shijiankaishishijian"></i> 报警时间 </label>
             <el-date-picker v-model="caseInfo.alarmTime" type="datetime" format="YYYY/MM/DD HH:mm:ss"
-              value-format="YYYY/MM/DD HH:mm:ss"
-              :disabled-date="disabledFutureDate"
-              :disabled-hours="disabledHours"
-              :disabled-minutes="disabledMinutes"
-              :disabled-seconds="disabledSeconds" 
-              @focus="setOperatingField('alarmTime')"
-              @blur="resetOperatingField"
-              placeholder="选择报警时间" prefix-icon="_" clear-icon="_"
-              @change="onFieldInput('alarmTime')" :class="{ 'input-error': validationErrors.alarmTime }"
+              value-format="YYYY/MM/DD HH:mm:ss" :disabled-date="disabledFutureDate" :disabled-hours="disabledHours"
+              :disabled-minutes="disabledMinutes" :disabled-seconds="disabledSeconds"
+              @focus="setOperatingField('alarmTime')" @blur="resetOperatingField" placeholder="选择报警时间" prefix-icon="_"
+              clear-icon="_" @change="onFieldInput('alarmTime')" :class="{ 'input-error': validationErrors.alarmTime }"
               style="width: 100%;">
             </el-date-picker>
             <span v-if="validationErrors.alarmTime" class="error-message">
@@ -1065,11 +1050,25 @@
         <div v-for="(vehicle, index) in vehicleList.slice(1)" :key="index + 1" class="vehicle-info-section"
           :id="'vehicle-info-' + (index + 1)">
           <div class="vehicle-header">
-            <button type="button" @click="removeVehicleInfo(index + 1)" class="btn-remove-top">
+            <button type="button" @click="removeVehicleInfo(index + 1)" class="btn-remove-icon">
               -
             </button>
           </div>
-
+          <div class="contact-form-row">
+            <div class="form-group">
+              <label>是否要求代位</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="vehicleList[0].isSubrogation" value="1"
+                    @change="onFieldInput('vehicleList0_subrogation')" /> 是
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="vehicleList[0].isSubrogation" value="0"
+                    @change="onFieldInput('vehicleList0_subrogation')" /> 否
+                </label>
+              </div>
+            </div>
+          </div>
           <!-- 第一行：三者车车牌、现有车牌号、损失情况 -->
           <div class="contact-form-row">
             <div class="form-group">
@@ -1227,7 +1226,8 @@
         <!-- 财产损失列表 -->
         <div v-if="caseInfo.propFlag === '1'" class="property-loss-list">
           <div v-for="(item, index) in propertyLossList" :key="index" class="property-loss-item">
-            <button type="button" v-if="propertyLossList.length > 1" @click="removePropertyLoss(index)" class="btn-remove-icon">
+            <button type="button" v-if="propertyLossList.length > 1" @click="removePropertyLoss(index)"
+              class="btn-remove-icon">
               -
             </button>
             <div class="form-row nomargin">
@@ -1309,7 +1309,8 @@
 
         <div v-if="caseInfo.woundFlag === '1'" class="person-injury-list">
           <div v-for="(item, index) in personInjuryList" :key="index" class="person-injury-item">
-            <button type="button" v-if="personInjuryList.length > 1" @click="removePersonInjury(index)" class="btn-remove-icon">
+            <button type="button" v-if="personInjuryList.length > 1" @click="removePersonInjury(index)"
+              class="btn-remove-icon">
               -
             </button>
             <div class="injury-grid-row">
@@ -1372,62 +1373,62 @@
         <h3><i class="iconfont icon-shield" style="color: #3B4DAA ;"></i>损失类型</h3>
       </div>
       <div v-show="lossTypeExpanded" class="section-content">
-          <div class="loss-type-row">
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="本车车损" />
-                本车车损
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="本车人伤" />
-                本车人伤
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="本车车载货物" />
-                本车车载货物
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="三者车损" />
-                三者车损
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="三者人伤" />
-                三者人伤
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="三者物损" />
-                三者物损
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="全车盗抢" />
-                全车盗抢
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="车身划痕" />
-                车身划痕
-              </label>
-            </div>
-            <div class="loss-type-item">
-              <label class="loss-checkbox-label">
-                <input type="checkbox" v-model="lossTypes" value="本车自燃" />
-                本车自燃
-              </label>
-            </div>
+        <div class="loss-type-row">
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="本车车损" />
+              本车车损
+            </label>
           </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="本车人伤" />
+              本车人伤
+            </label>
+          </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="本车车载货物" />
+              本车车载货物
+            </label>
+          </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="三者车损" />
+              三者车损
+            </label>
+          </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="三者人伤" />
+              三者人伤
+            </label>
+          </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="三者物损" />
+              三者物损
+            </label>
+          </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="全车盗抢" />
+              全车盗抢
+            </label>
+          </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="车身划痕" />
+              车身划痕
+            </label>
+          </div>
+          <div class="loss-type-item">
+            <label class="loss-checkbox-label">
+              <input type="checkbox" v-model="lossTypes" value="本车自燃" />
+              本车自燃
+            </label>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1477,9 +1478,9 @@
       {{ globalError }}
     </div>
     <div class="footer-message">
-  <i class="iconfont icon-008duihuakuang-6" style="color: #3B4DAA;"></i>
-  <span>请您保留事故现场，在原地等候查勘，查勘员会立即与您联系。再见。</span>
-   </div>
+      <i class="iconfont icon-008duihuakuang-6" style="color: #3B4DAA;"></i>
+      <span>请您保留事故现场，在原地等候查勘，查勘员会立即与您联系。再见。</span>
+    </div>
 
 
   </div>
@@ -1729,7 +1730,7 @@ export default {
           bodyExpanded: false
         }
       ],
-    currentOperatingField: null, // 新增：跟踪当前操作的时间字段
+      currentOperatingField: null, // 新增：跟踪当前操作的时间字段
     }
   },
   created() {
@@ -1753,98 +1754,98 @@ export default {
   },
   methods: {
 
-     // 获取当前正在操作的时间字段的日期
-  getCurrentSelectedDate() {
-    // 根据当前操作的字段返回相应的时间值
-    if (this.currentOperatingField) {
-      const fieldValue = this.caseInfo[this.currentOperatingField];
-      if (fieldValue) {
-        return new Date(fieldValue);
-      }
-    }
-    // 如果没有明确的操作字段，返回当前日期
-    return new Date();
-  },
-   // 禁用晚于当前时间的日期
-  disabledFutureDate(time) {
-    const now = new Date();
-    const utcOffset = now.getTimezoneOffset() * 60000;
-    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
-    
-    return time.getTime() > currentBeijingTime.getTime();
-  },
-// 禁用大于当前小时的小时数 - 动态获取当前时间
-  disabledHours() {
-    // 注意：在这个函数执行时，我们需要获取当前选择器的当前值
-    // 但由于Element UI的API限制，我们只能获取到当前操作的时间字段
-    const now = new Date();
-    const utcOffset = now.getTimezoneOffset() * 60000;
-    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
-    
-    // 获取当前操作字段的日期部分
-    if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
-      const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
-      // 如果选择的日期是今天，则限制小时
-      if (selectedDateTime.toDateString() === currentBeijingTime.toDateString()) {
-        const hours = [];
-        for (let i = currentBeijingTime.getHours() + 1; i < 24; i++) {
-          hours.push(i);
+    // 获取当前正在操作的时间字段的日期
+    getCurrentSelectedDate() {
+      // 根据当前操作的字段返回相应的时间值
+      if (this.currentOperatingField) {
+        const fieldValue = this.caseInfo[this.currentOperatingField];
+        if (fieldValue) {
+          return new Date(fieldValue);
         }
-        return hours;
       }
-    }
-    return [];
-  },
- // 禁用大于当前分钟的分钟数 - 动态获取当前时间
-  disabledMinutes(selectedHour) {
-    const now = new Date();
-    const utcOffset = now.getTimezoneOffset() * 60000;
-    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
-    
-    if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
-      const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
-      // 如果选择的日期是今天，且小时相同，则限制分钟
-      if (selectedDateTime.toDateString() === currentBeijingTime.toDateString() && 
-          selectedHour === currentBeijingTime.getHours()) {
-        const minutes = [];
-        for (let i = currentBeijingTime.getMinutes() + 1; i < 60; i++) {
-          minutes.push(i);
-        }
-        return minutes;
-      }
-    }
-    return [];
-  },
-  // 禁用大于当前秒的秒数 - 动态获取当前时间
-  disabledSeconds(selectedHour, selectedMinute) {
-    const now = new Date();
-    const utcOffset = now.getTimezoneOffset() * 60000;
-    const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
-    
-    if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
-      const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
-      // 如果选择的日期是今天，且小时和分钟都相同，则限制秒
-      if (selectedDateTime.toDateString() === currentBeijingTime.toDateString() && 
-          selectedHour === currentBeijingTime.getHours() && 
-          selectedMinute === currentBeijingTime.getMinutes()) {
-        const seconds = [];
-        for (let i = currentBeijingTime.getSeconds() + 1; i < 60; i++) {
-          seconds.push(i);
-        }
-        return seconds;
-      }
-    }
-    return [];
-  },
-  // 在时间选择器的focus事件中设置当前操作字段
-  setOperatingField(fieldName) {
-    this.currentOperatingField = fieldName;
-  },
+      // 如果没有明确的操作字段，返回当前日期
+      return new Date();
+    },
+    // 禁用晚于当前时间的日期
+    disabledFutureDate(time) {
+      const now = new Date();
+      const utcOffset = now.getTimezoneOffset() * 60000;
+      const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
 
-  // 重置当前操作字段
-  resetOperatingField() {
-    this.currentOperatingField = null;
-  },
+      return time.getTime() > currentBeijingTime.getTime();
+    },
+    // 禁用大于当前小时的小时数 - 动态获取当前时间
+    disabledHours() {
+      // 注意：在这个函数执行时，我们需要获取当前选择器的当前值
+      // 但由于Element UI的API限制，我们只能获取到当前操作的时间字段
+      const now = new Date();
+      const utcOffset = now.getTimezoneOffset() * 60000;
+      const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
+
+      // 获取当前操作字段的日期部分
+      if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
+        const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
+        // 如果选择的日期是今天，则限制小时
+        if (selectedDateTime.toDateString() === currentBeijingTime.toDateString()) {
+          const hours = [];
+          for (let i = currentBeijingTime.getHours() + 1; i < 24; i++) {
+            hours.push(i);
+          }
+          return hours;
+        }
+      }
+      return [];
+    },
+    // 禁用大于当前分钟的分钟数 - 动态获取当前时间
+    disabledMinutes(selectedHour) {
+      const now = new Date();
+      const utcOffset = now.getTimezoneOffset() * 60000;
+      const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
+
+      if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
+        const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
+        // 如果选择的日期是今天，且小时相同，则限制分钟
+        if (selectedDateTime.toDateString() === currentBeijingTime.toDateString() &&
+          selectedHour === currentBeijingTime.getHours()) {
+          const minutes = [];
+          for (let i = currentBeijingTime.getMinutes() + 1; i < 60; i++) {
+            minutes.push(i);
+          }
+          return minutes;
+        }
+      }
+      return [];
+    },
+    // 禁用大于当前秒的秒数 - 动态获取当前时间
+    disabledSeconds(selectedHour, selectedMinute) {
+      const now = new Date();
+      const utcOffset = now.getTimezoneOffset() * 60000;
+      const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000));
+
+      if (this.currentOperatingField && this.caseInfo[this.currentOperatingField]) {
+        const selectedDateTime = new Date(this.caseInfo[this.currentOperatingField]);
+        // 如果选择的日期是今天，且小时和分钟都相同，则限制秒
+        if (selectedDateTime.toDateString() === currentBeijingTime.toDateString() &&
+          selectedHour === currentBeijingTime.getHours() &&
+          selectedMinute === currentBeijingTime.getMinutes()) {
+          const seconds = [];
+          for (let i = currentBeijingTime.getSeconds() + 1; i < 60; i++) {
+            seconds.push(i);
+          }
+          return seconds;
+        }
+      }
+      return [];
+    },
+    // 在时间选择器的focus事件中设置当前操作字段
+    setOperatingField(fieldName) {
+      this.currentOperatingField = fieldName;
+    },
+
+    // 重置当前操作字段
+    resetOperatingField() {
+      this.currentOperatingField = null;
+    },
 
     // 处理人员伤亡标志变化
     onWoundFlagChange() {
@@ -2131,10 +2132,10 @@ export default {
       if (fieldName === 'lossTypes') {
         return;
       }
-       // 设置当前操作字段
-    if (['accidentTime', 'reportTime', 'alarmTime'].includes(fieldName)) {
-      this.currentOperatingField = fieldName;
-    }
+      // 设置当前操作字段
+      if (['accidentTime', 'reportTime', 'alarmTime'].includes(fieldName)) {
+        this.currentOperatingField = fieldName;
+      }
       // 延迟执行，避免频繁验证
       clearTimeout(this.inputValidationTimer);
       this.inputValidationTimer = setTimeout(() => {
@@ -2248,8 +2249,8 @@ export default {
       })
     },
     removePropertyLoss(index) {
-      if(this.propertyLossList.length>1){
-      this.propertyLossList.splice(index, 1)
+      if (this.propertyLossList.length > 1) {
+        this.propertyLossList.splice(index, 1)
       }
     },
     // 添加补充说明
@@ -2583,7 +2584,7 @@ export default {
       }
     },
     removePersonInjury(index) {
-      if(this.personInjuryList.length>1){
+      if (this.personInjuryList.length > 1) {
         this.personInjuryList.splice(index, 1)
       }
     },
@@ -2746,25 +2747,25 @@ export default {
   margin-top: 8px;
   border-radius: 4px;
   font-size: 12px;
-  color: #4863e7; 
+  color: #4863e7;
   text-align: left;
   line-height: 1.5;
-  display: flex; 
-  align-items: center; 
-  gap: 6px; 
-  line-height: 1; 
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
 
-  }
+}
 
 .footer-message i {
-  font-size: 14px; 
+  font-size: 14px;
   flex-shrink: 0;
-  display: inline-flex;   
-  align-items: center;   
+  display: inline-flex;
+  align-items: center;
 }
 
 .footer-message span {
-  color: #6B7AC4; 
+  color: #6B7AC4;
 }
 
 /* 人员伤亡统一网格布局 */
@@ -2857,7 +2858,7 @@ export default {
 
 }
 
-.iconfont{
+.iconfont {
   color: #3B4DAA;
 }
 
@@ -3117,7 +3118,7 @@ export default {
   width: calc(100% - 360px);
   height: 20px !important;
   font-size: 11px !important;
-  padding:10px 12px !important;
+  padding: 10px 12px !important;
 
 }
 
@@ -3133,7 +3134,8 @@ export default {
   height: auto;
   display: block;
 }
-.person-injury-item{
+
+.person-injury-item {
   position: relative;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
@@ -3149,9 +3151,11 @@ export default {
   gap: 16px;
   grid-template-columns: repeat(4, 1fr);
 }
-.nomargin{
+
+.nomargin {
   margin-bottom: 0 !important;
 }
+
 .btn-add-icon {
   background-color: #F5F7FA;
   color: rgb(20, 19, 19);
@@ -3159,48 +3163,51 @@ export default {
   cursor: pointer;
   transition: background-color 0.2s ease;
   width: 40px;
-  height: 35px; 
+  height: 35px;
   /* 核心：加号垂直水平居中 */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px; 
+  font-size: 20px;
   font-weight: normal;
-  line-height: 1; /* 确保垂直居中 */
+  line-height: 1;
+  /* 确保垂直居中 */
   padding: 0;
   margin-top: 8px;
-  border-radius: 8px; 
+  border-radius: 8px;
 }
 
 .desc-add-icon:focus,
 .btn-remove-icon:focus,
-.btn-add-icon:focus{
+.btn-add-icon:focus {
   outline: none;
 }
 
 .desc-add-icon:hover,
 .btn-remove-icon:hover,
 .btn-add-icon:hover {
-  background-color: #4D9F8D ;
+  background-color: #4D9F8D;
   color: white;
 }
-.btn-remove-icon{
+
+.btn-remove-icon {
   background-color: white;
   color: rgb(20, 19, 19);
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
   width: 20px;
-  height: 18px; 
+  height: 18px;
   /* 核心：加号垂直水平居中 */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 25px; 
-  line-height: 1; /* 确保垂直居中 */
+  font-size: 25px;
+  line-height: 1;
+  /* 确保垂直居中 */
   padding: 0;
   margin-left: auto;
-  border-radius: 4px; 
+  border-radius: 4px;
   position: absolute;
   top: 12px;
   right: 12px;
@@ -3210,22 +3217,29 @@ export default {
 .desc-add-icon {
   background-color: #F5F7FA;
   color: #333;
-  border: 1px solid #E5E5E5; /* 匹配截图的浅边框 */
+  border: 1px solid #E5E5E5;
+  /* 匹配截图的浅边框 */
   cursor: pointer;
   transition: all 0.2s ease;
-  width: auto; /* 自适应宽度，避免过宽 */
-  height: 30px; /* 匹配截图按钮高度 */
+  width: auto;
+  /* 自适应宽度，避免过宽 */
+  height: 30px;
+  /* 匹配截图按钮高度 */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px; /* 关键：加号和文字之间的间距，解决拥挤 */
-  padding: 0 6px; 
-  margin: 0; /* 清除多余外边距，避免和两侧距离过远 */
-  border-radius: 8px; /* 匹配截图的圆角大小 */
-  font-size: 11px; 
+  gap: 6px;
+  /* 关键：加号和文字之间的间距，解决拥挤 */
+  padding: 0 6px;
+  margin: 0;
+  /* 清除多余外边距，避免和两侧距离过远 */
+  border-radius: 8px;
+  /* 匹配截图的圆角大小 */
+  font-size: 11px;
   font-weight: normal;
   line-height: 1;
-  white-space: nowrap; /* 防止文字换行 */
+  white-space: nowrap;
+  /* 防止文字换行 */
 }
 
 
@@ -3234,7 +3248,8 @@ export default {
 }
 
 .desc-add-icon span:first-child {
-  font-size: 16px; /* 加号字体稍大，更醒目 */
+  font-size: 16px;
+  /* 加号字体稍大，更醒目 */
 }
 
 .float-right {
@@ -3742,15 +3757,17 @@ export default {
 
 .loss-type-row {
   display: flex;
-  flex-wrap: wrap; 
-  gap: 12px; 
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 12px;
   align-items: center;
 }
 
 .loss-type-item {
-  min-width: auto; /* 取消最小宽度限制 */
-  max-width: none; /* 取消最大宽度限制 */
+  min-width: auto;
+  /* 取消最小宽度限制 */
+  max-width: none;
+  /* 取消最大宽度限制 */
 }
 
 /* ============ 联系人信息区块样式 ============ */
@@ -3917,7 +3934,7 @@ export default {
   /* 防止文字换行 */
 }
 
-.loss-checkbox-label{
+.loss-checkbox-label {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -3949,6 +3966,7 @@ export default {
   height: 20px;
   /* 确保文字左对齐 */
 }
+
 .radio-group.height {
   display: flex;
   gap: 16px;
@@ -4225,10 +4243,10 @@ input[type="radio"]:checked {
   margin: 0;
   font-size: 13px;
   color: #333;
-  gap:5px;
+  gap: 5px;
   display: flex;
-  align-items: center; 
-  
+  align-items: center;
+
 }
 
 .section-content {
