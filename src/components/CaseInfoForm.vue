@@ -204,7 +204,7 @@
     <!-- ============ 报案信息区块 ============ -->
     <section class="policy-card" id="section-reportInfo">
       <div class="section-header-other no-border">
-        <h3><i class=" iconfont icon-bianji-wenjian-bianji" style="color: #0056a4 ;"></i> 报案信息</h3>
+        <h3><i class=" iconfont icon-bianji-wenjian-bianji" style="color: #3B4DAA ;"></i> 报案信息</h3>
       </div>
 
       <div v-show="reportInfoExpanded" class="section-content">
@@ -598,7 +598,7 @@
         <div class="contact-form-row">
           <div class="form-group">
             <label>是否报警 <span class="required">*</span></label>
-            <div class="radio-group">
+            <div class="radio-group height">
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.isAlarm" value="1" @change="onFieldInput('isAlarm')" /> 是
               </label>
@@ -631,7 +631,7 @@
         <div class="contact-form-row">
           <div class="form-group">
             <label>是否巨灾 <span class="required">*</span></label>
-            <div class="radio-group">
+            <div class="radio-group height">
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.isDisaster" value="1" @change="onFieldInput('isDisaster')" /> 是
               </label>
@@ -707,7 +707,7 @@
     <!-- ============ 事故救援 ============ -->
     <section class="policy-card" id="section-accidentRescue">
       <div class="section-header-other no-border">
-        <h3><i class="iconfont icon-wuliuqiache" style="color: #0056a4 ;"></i> 事故救援</h3>
+        <h3><i class="iconfont icon-wuliuqiache" style="color: #3B4DAA ;"></i> 事故救援</h3>
       </div>
       <div v-show="accidentRescueExpanded" class="section-content">
         <div class="rescue-container">
@@ -806,8 +806,8 @@
 
     <!-- ============ 报案人姓名 ============ -->
     <section class="policy-card" id="section-contactInfo">
-      <div class="section-header no-border">
-        <h3><i class="iconfont icon-yonghu" style="color: #0056a4 ;"></i> 报案人姓名、联系人姓名</h3>
+      <div class="section-header-other no-border">
+        <h3><i class="iconfont icon-yonghu" style="color: #3B4DAA ;"></i> 报案人姓名、联系人姓名</h3>
       </div>
 
       <div v-show="contactInfoExpanded" class="section-content">
@@ -915,7 +915,7 @@
     <!-- ============ 车辆信息 ============ -->
     <section class="policy-card" id="section-vehicleInfo">
       <div class="section-header-other no-border">
-        <h3><i class="iconfont icon-qicheSUV" style="color: #0056a4 ;"></i> 涉案车辆信息</h3>
+        <h3><i class="iconfont icon-qicheSUV" style="color: #3B4DAA ;"></i> 涉案车辆信息</h3>
         <button type="button" class="btn-add-icon float-right" @click="addVehicleInfo">
           <span>+</span>
         </button>
@@ -1200,7 +1200,7 @@
     <!-- ============ 财产损失 ============ -->
     <section class="policy-card" id="section-propertyLoss">
       <div class="section-header-other no-border">
-        <h3><i class="iconfont icon-meiyuan" style="color: #0056a4 ;"></i> 财产损失信息</h3>
+        <h3><i class="iconfont icon-meiyuan" style="color: #3B4DAA ;"></i> 财产损失信息</h3>
         <button type="button" v-if="caseInfo.propFlag === '1'" @click="addPropertyLoss"
           class="btn-add-icon float-right">
           <span>+</span>
@@ -1209,8 +1209,8 @@
 
       <div v-show="propertyLossExpanded" class="section-content">
         <!-- 是否财产损失 -->
-        <div class="form-row">
-          <div class="form-group">
+        <div class="form-row nomargin">
+          <div class="form-group nomargin">
             <label>是否财产损失</label>
             <div class="radio-group">
               <label class="radio-label">
@@ -1227,11 +1227,11 @@
         <!-- 财产损失列表 -->
         <div v-if="caseInfo.propFlag === '1'" class="property-loss-list">
           <div v-for="(item, index) in propertyLossList" :key="index" class="property-loss-item">
-            <button type="button" @click="removePropertyLoss(index)" class="btn-remove-top">
+            <button type="button" v-if="propertyLossList.length > 1" @click="removePropertyLoss(index)" class="btn-remove-icon">
               -
             </button>
-            <div class="form-row">
-              <div class="form-group">
+            <div class="form-row nomargin">
+              <div class="contact-form-group">
                 <label>财产名称</label>
                 <input type="text" v-model="item.propertyName" @input="onFieldInput(`propertyName_${index}`)"
                   class="form-input" />
@@ -1270,10 +1270,10 @@
         </div>
       </div>
     </section>
-
+    <!-- ============ 人员伤亡 ============ -->
     <section class="policy-card" id="section-personInjury">
       <div class="section-header-other no-border">
-        <h3><i class="iconfont icon-aixin" style="color: #0056a4 ;"></i> 人员伤亡</h3>
+        <h3><i class="iconfont icon-aixin" style="color: #3B4DAA ;"></i> 人员伤亡</h3>
         <button type="button" v-if="caseInfo.woundFlag === '1'" class="btn-add-icon float-right"
           @click="addPersonInjury">
           <span>+</span>
@@ -1281,8 +1281,8 @@
       </div>
 
       <div v-show="personInjuryExpanded" class="section-content">
-        <div class="contact-form-row">
-          <div class="form-group">
+        <div class="contact-form-row nomargin">
+          <div class="form-group nomargin">
             <label>是否人员伤亡 </label>
             <div class="radio-group">
               <label class="radio-label">
@@ -1294,7 +1294,7 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group nomargin">
             <label>是否叫救护车</label>
             <div class="radio-group">
               <label class="radio-label">
@@ -1309,7 +1309,7 @@
 
         <div v-if="caseInfo.woundFlag === '1'" class="person-injury-list">
           <div v-for="(item, index) in personInjuryList" :key="index" class="person-injury-item">
-            <button type="button" @click="removePersonInjury(index)" class="btn-remove-top">
+            <button type="button" v-if="personInjuryList.length > 1" @click="removePersonInjury(index)" class="btn-remove-icon">
               -
             </button>
             <div class="injury-grid-row">
@@ -1366,83 +1366,78 @@
       </div>
     </section>
 
-
+    <!-- ============ 损失类型 ============ -->
     <section class="policy-card" id="section-lossType">
       <div class="section-header-other no-border">
-        <h3><i class="iconfont icon-shield" style="color: #0056a4 ;"></i>损失类型</h3>
+        <h3><i class="iconfont icon-shield" style="color: #3B4DAA ;"></i>损失类型</h3>
       </div>
       <div v-show="lossTypeExpanded" class="section-content">
-        <div class="loss-type-container">
-          <!-- 第一行：7个选项 -->
           <div class="loss-type-row">
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="本车车损" />
                 本车车损
               </label>
             </div>
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="本车人伤" />
                 本车人伤
               </label>
             </div>
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="本车车载货物" />
                 本车车载货物
               </label>
             </div>
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="三者车损" />
                 三者车损
               </label>
             </div>
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="三者人伤" />
                 三者人伤
               </label>
             </div>
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="三者物损" />
                 三者物损
               </label>
             </div>
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="全车盗抢" />
                 全车盗抢
               </label>
             </div>
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="车身划痕" />
                 车身划痕
               </label>
             </div>
-          </div>
-
-          <!-- 第二行：1个选项 -->
-          <div class="loss-type-row">
             <div class="loss-type-item">
-              <label class="checkbox-label">
+              <label class="loss-checkbox-label">
                 <input type="checkbox" v-model="lossTypes" value="本车自燃" />
                 本车自燃
               </label>
             </div>
           </div>
-        </div>
       </div>
     </section>
 
+    <!-- ============ 案件补充说明 ============ -->
     <section class="policy-card" id="section-caseDesc">
       <div class="section-header-other no-border">
-        <h3><i class="iconfont icon-008duihuakuang-6" style="color: #0056a4;"></i> 案件补充说明</h3>
-        <button type="button" @click="addCaseDesc" class="desc-add-icon float-right">
-          <span>+ 添加说明</span>
+        <h3><i class="iconfont icon-008duihuakuang-6" style="color: #3B4DAA;"></i> 案件补充说明</h3>
+        <!-- <button type="button" @click="addCaseDesc" class="desc-add-icon float-right"> -->
+        <button type="button" class="desc-add-icon float-right">
+          <span>+</span><span>添加说明</span>
         </button>
       </div>
       <div class="section-content">
@@ -1482,8 +1477,9 @@
       {{ globalError }}
     </div>
     <div class="footer-message">
-      <i class=" iconfont icon-008duihuakuang-6" style="color: #0056a4 ;"></i>请注意：您提交的信息将用于案件处理，请确保信息真实准确。
-    </div>
+  <i class="iconfont icon-008duihuakuang-6" style="color: #3B4DAA;"></i>
+  <span>请您保留事故现场，在原地等候查勘，查勘员会立即与您联系。再见。</span>
+   </div>
 
 
   </div>
@@ -2252,7 +2248,9 @@ export default {
       })
     },
     removePropertyLoss(index) {
+      if(this.propertyLossList.length>1){
       this.propertyLossList.splice(index, 1)
+      }
     },
     // 添加补充说明
     addCaseDesc() {
@@ -2585,7 +2583,9 @@ export default {
       }
     },
     removePersonInjury(index) {
-      this.personInjuryList.splice(index, 1)
+      if(this.personInjuryList.length>1){
+        this.personInjuryList.splice(index, 1)
+      }
     },
 
     // ============ 添加/删除案件补充说明 ============
@@ -2743,13 +2743,28 @@ export default {
 
 /* ============ 底部提示文字样式 ============ */
 .footer-message {
-  margin-top: 20px;
-  padding: 12px 16px;
+  margin-top: 8px;
   border-radius: 4px;
   font-size: 12px;
-  color: #0056a4;
+  color: #4863e7; 
   text-align: left;
   line-height: 1.5;
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+  line-height: 1; 
+
+  }
+
+.footer-message i {
+  font-size: 14px; 
+  flex-shrink: 0;
+  display: inline-flex;   
+  align-items: center;   
+}
+
+.footer-message span {
+  color: #6B7AC4; 
 }
 
 /* 人员伤亡统一网格布局 */
@@ -2842,6 +2857,10 @@ export default {
 
 }
 
+.iconfont{
+  color: #3B4DAA;
+}
+
 /* 主题色竖条装饰 */
 .section-decorator {
   width: 4px;
@@ -2893,7 +2912,7 @@ export default {
 }
 
 .el-date-editor .el-input__inner {
-  padding: 8px 12px;
+  padding: 0 !important;
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -3063,30 +3082,32 @@ export default {
 
 /* 序号列样式 */
 .seq-column {
-  width: 20px !important;
-  font-weight: 500;
+  width: 50px !important;
+  font-weight: 300;
   color: #333;
-  font-size: 12px !important;
+  font-size: 11px !important;
   text-align: center !important;
 
 }
 
 /* 时间列样式 */
 .time-column {
-  width: 90px !important;
+  width: 50px !important;
   color: #6c757d;
   text-align: center !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
+  text-align: center !important;
 
 
 }
 
 /* 操作员列样式 */
 .operator-column {
-  width: 90px !important;
+  width: 50px !important;
   color: #6c757d;
   text-align: center !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
+  text-align: center !important;
 
 
 }
@@ -3095,169 +3116,126 @@ export default {
 .content-column {
   width: calc(100% - 360px);
   height: 20px !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
+  padding:10px 12px !important;
 
 }
-
-.desc-add-icon {
-  /* 基础样式保留 */
-  background-color: #f2f4f7;
-  color: rgb(20, 19, 19);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-
-  width: 80px;
-  height: 15px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: flex-start;
-  font-size: 12px;
-  /* 加号大小，可按需改 */
-  font-weight: normal;
-  /* 避免加号过粗 */
-  padding: 0;
-  /* 取消内边距，防止圆形变形 */
-  margin-top: 8px;
-  /* 保留原外边距，可删改 */
-}
-
-.desc-add-icon:focus {
-  outline: none;
-}
-
 
 /* 财产损失信息区块样式 */
-.property-loss-list {
-  margin-top: 16px;
-}
 
-.person-injury-item,
 .property-loss-item {
   position: relative;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
   margin-bottom: 12px;
+  padding: 18px;
+  background-color: white;
+  height: auto;
+  display: block;
+}
+.person-injury-item{
+  position: relative;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  margin-bottom: 18px;
   padding: 16px;
   background-color: white;
-  transition: box-shadow 0.2s ease;
   height: 120px;
   display: grid;
-}
-
-.btn-remove-top {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 30px;
-  height: 24px;
-  border: none;
-  background: none;
-  color: #100f0f;
-  font-size: 25px;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  background-color: white;
-  z-index: 10;
-  transform: translateY(0);
-}
-
-.btn-remove-top:focus {
-  outline: none;
-}
-
-/* .btn-remove-top:hover {
-  background-color: rgba(255, 0, 0, 0.1);
-  color: #d32f2f;
-} */
-.property-loss-item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .property-loss-item .form-row {
   display: grid;
   gap: 16px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
   grid-template-columns: repeat(4, 1fr);
 }
-
-/* .property-loss-item .form-group {
-  margin-bottom: 16px;
-  min-width: 80px;
+.nomargin{
+  margin-bottom: 0 !important;
 }
-
-.property-loss-item .form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 12px;
-  color: #333;
-  font-weight: 500;
-}
-
-.property-loss-item .form-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  font-size: 12px;
-  transition: border-color 0.2s ease;
-}
-
-.property-loss-item .form-input:focus {
-  outline: none;
-  border-color: #0887FF;
-  box-shadow: 0 0 0 2px rgba(8, 135, 255, 0.1);
-} */
-
-.property-loss-item .btn-remove {
-  background-color: #f5f5f5;
-  color: #666;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.property-loss-item .btn-remove:hover {
-  background-color: #e0e0e0;
-  color: #333;
-}
-
 .btn-add-icon {
-  /* 基础样式保留 */
-  background-color: #f2f4f7;
+  background-color: #F5F7FA;
   color: rgb(20, 19, 19);
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  width: 30px;
-  height: 40px;
-  border-radius: 8px;
+  width: 40px;
+  height: 35px; 
   /* 核心：加号垂直水平居中 */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 25px;
+  font-size: 20px; 
   font-weight: normal;
+  line-height: 1; /* 确保垂直居中 */
   padding: 0;
   margin-top: 8px;
+  border-radius: 8px; 
 }
 
-.btn-add-icon:focus {
+.desc-add-icon:focus,
+.btn-remove-icon:focus,
+.btn-add-icon:focus{
   outline: none;
 }
 
-/* .property-loss-item .btn-add:hover {
-  background-color: #0066CC;
-} */
+.desc-add-icon:hover,
+.btn-remove-icon:hover,
+.btn-add-icon:hover {
+  background-color: #4D9F8D ;
+  color: white;
+}
+.btn-remove-icon{
+  background-color: white;
+  color: rgb(20, 19, 19);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 20px;
+  height: 18px; 
+  /* 核心：加号垂直水平居中 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px; 
+  line-height: 1; /* 确保垂直居中 */
+  padding: 0;
+  margin-left: auto;
+  border-radius: 4px; 
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.desc-add-icon {
+  background-color: #F5F7FA;
+  color: #333;
+  border: 1px solid #E5E5E5; /* 匹配截图的浅边框 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto; /* 自适应宽度，避免过宽 */
+  height: 30px; /* 匹配截图按钮高度 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* 关键：加号和文字之间的间距，解决拥挤 */
+  padding: 0 6px; 
+  margin: 0; /* 清除多余外边距，避免和两侧距离过远 */
+  border-radius: 8px; /* 匹配截图的圆角大小 */
+  font-size: 11px; 
+  font-weight: normal;
+  line-height: 1;
+  white-space: nowrap; /* 防止文字换行 */
+}
+
+
+.desc-add-icon span {
+  font-weight: bold;
+}
+
+.desc-add-icon span:first-child {
+  font-size: 16px; /* 加号字体稍大，更醒目 */
+}
 
 .float-right {
   float: right;
@@ -3760,25 +3738,19 @@ export default {
 }
 
 /* ============ 损失类型信息区块样式 ============ */
-.loss-type-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+
 
 .loss-type-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
+  flex-wrap: wrap; 
+  gap: 12px; 
+  margin-bottom: 12px;
+  align-items: center;
 }
 
 .loss-type-item {
-  flex: 1;
-  min-width: 100px;
-  /* 减小最小宽度 */
-  max-width: 150px;
-  /* 添加最大宽度限制 */
+  min-width: auto; /* 取消最小宽度限制 */
+  max-width: none; /* 取消最大宽度限制 */
 }
 
 /* ============ 联系人信息区块样式 ============ */
@@ -3929,8 +3901,6 @@ export default {
   border-radius: 8px;
   width: fit-content;
   background-color: white;
-
-
 }
 
 
@@ -3947,12 +3917,39 @@ export default {
   /* 防止文字换行 */
 }
 
+.loss-checkbox-label{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 11px;
+  color: #333;
+  margin-bottom: 0;
+  text-align: left;
+  white-space: nowrap;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  gap: 4px;
+  /* 复选框和文字之间的间距 */
+  border-radius: 8px;
+  width: fit-content;
+  background-color: white;
+  font-weight: bold;
+}
+
 .checkbox-label input {
   margin-right: 8px;
 }
 
 /* 单选框组也左对齐 */
 .radio-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  text-align: left;
+  height: 20px;
+  /* 确保文字左对齐 */
+}
+.radio-group.height {
   display: flex;
   gap: 16px;
   align-items: center;
@@ -4228,6 +4225,10 @@ input[type="radio"]:checked {
   margin: 0;
   font-size: 13px;
   color: #333;
+  gap:5px;
+  display: flex;
+  align-items: center; 
+  
 }
 
 .section-content {
@@ -4377,8 +4378,7 @@ input[type="radio"]:checked {
 .person-injury-list,
 .case-desc-list {
   margin-top: 16px;
-  padding: 16px;
-  background-color: #f8f9fa;
+  background-color: white;
   border-radius: 4px;
 }
 

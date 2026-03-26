@@ -205,7 +205,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
   color: #333;
-  background-color: #f5f5f5;
+  background-color: #F5F7FA;
   overflow-y: auto; /* 允许整页垂直滚动 */
 }
 
@@ -215,6 +215,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
+  background-color: #F5F7FA;
 }
 
 /* 新增：顶部系统标题栏样式 */
@@ -267,19 +268,20 @@ body {
 /* 主内容区 */
 .main-content {
   flex: 1;
-  background-color: #ffffff;
+  background-color: #F5F7FA;
   border-radius: 8px;
   box-sizing: border-box;
   max-width: calc(100% - 180px); 
   width: 100%;
   margin-left: 0; 
+   padding-bottom: 160px !important;
 }
 
 /* 固定的右侧导航栏 */
 .sidebar-fixed {
   width: 150px; 
   flex-shrink: 0;
-  background-color: #f9fafb;
+  background-color: #F5F7FA;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
   overflow-x: hidden;
@@ -305,21 +307,22 @@ body {
 .form-actions-sticky {
   position: fixed;
   bottom: 0;
-  left: 24px;              /* 与主内容区左边距一致 */
-  right: 174px;            /* 与右侧导航栏宽度相加，给导航栏留出空间 */
+  left: 0;
+  right: 0; /* 替代100%宽度，避免滚动条问题 */
   z-index: 200;
-  height: 40px;
+  height: auto; /* 取消固定高度，由内边距自适应 */
   background-color: #ffffff;
-  border-top: 1px solid #858789;
+  border-top: 1px solid #e5e5e5; /* 替换深灰色边框，匹配截图浅边框 */
   border-bottom: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.02); /* 阴影方向改为向上，更自然 */
   display: flex;
-  justify-content: center;
+  justify-content: center; /* 按钮居中，匹配截图 */
   align-items: center;
-  gap: 16px;
-  padding: 10px 20px;
+  gap: 16px; /* 按钮间距 */
+  padding: 12px 20px; /* 上下内边距，匹配截图按钮高度 */
   flex-wrap: wrap;
-  border-radius: 8px;
+  /* 去掉圆角：截图中底部栏无圆角，圆角会导致和页面边缘衔接突兀 */
+  border-radius: 0;
 }
 
 /* 按钮样式 */
@@ -336,30 +339,30 @@ body {
 }
 
 .btn-submit {
-  background-color: #007bff;
+  background-color: #3B4DAA;
   color: white;
 }
 
 .btn-submit:hover {
-  background-color: #0056b3;
+  background-color: #3B4DAA;
 }
 
 .btn-save {
-  background-color: #e6efe8;
+  background-color: #F5F7FA;
   color: rgb(21, 20, 20);
 }
 
 .btn-save:hover {
-  background-color: #e6efe8;
+  background-color: #F5F7FA;
 }
 
 .btn-transfer {
-  background-color: #e6e4de;
+  background-color: #F5F7FA ;
   color: #212529;
 }
 
 .btn-transfer:hover {
-  background-color: #52e000;
+  background-color: #4D9F8D;
 }
 
 /* 响应式适配 */
