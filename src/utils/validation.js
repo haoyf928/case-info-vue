@@ -1,29 +1,16 @@
 // src/utils/validation.js
 
-
-
 // ============ 必填字段规则定义 ============
 export const requiredFields = {
-  policyNo: { required: true, message: '保单号不能为空' },
+  // 报案时间信息
+  accidentTime: { required: true, message: '请选择出险时间' },
+  reportTime: { required: true, message: '请选择报案时间' },
+  
+  // 报案基本信息
   isfirstsiteFlag: { required: true, message: '请选择是否现场报案' },
-  lsType: { required: true, message: '请选择险因类型' },
-  damageCode: { required: true, message: '请选择保险事故分类' },
-  licenseNumber: { required: true, message: '车牌号不能为空' },
-  engineNumber: { required: true, message: '发动机号不能为空' },
-  frameNumber: { required: true, message: '车架号不能为空' },
-  driverName: { required: true, message: '驾驶员姓名不能为空' },
-  reportorName: { required: true, message: '报案人姓名不能为空' },
-  reportorPhonenumber: { 
-    required: true, 
-    pattern: /^1[3-9]\d{9}$|^0\d{2,3}-?\d{7,8}$/,
-    message: '请输入正确的手机号码或电话号码'
-  },
-  linkerName: { required: true, message: '联系人姓名不能为空' },
-  linkerPhone: { required: true, message: '联系人电话不能为空' },
-  propFlag: { required: true, message: '请选择是否财产损失' },
-  woundFlag: { required: true, message: '请选择是否人员伤亡' },
-  reporterRelation: { required: true, message: '请选择报案人跟被保险人关系' }, // 修改这里
-  handlerCode: { required: true, message: '请填写受理人编码' }, // 修改这里
+  upadress: { required: true, message: '请选择客户提供位置信息是否准确' },
+  
+  // 出险地点信息
   areaProvince: { required: true, message: '请选择省' },
   areaCity: { required: true, message: '请选择市' },
   areaDistrict: { required: true, message: '请选择区' },
@@ -31,14 +18,10 @@ export const requiredFields = {
   doorNumber: { required: true, message: '请输入门牌号' },
   longitude: { required: true, message: '请输入经度' },
   latitude: { required: true, message: '请输入纬度' },
-  currentAreaProvince: { required: true, message: '请选择车辆目前所在省' },
-  currentAreaCity: { required: true, message: '请选择车辆目前所在市' },
-  currentAreaDistrict: { required: true, message: '请选择车辆目前所在区' },
-  currentStreet: { required: true, message: '请输入车辆目前所在街道' },
-  currentDoorNumber: { required: true, message: '请输入车辆目前所在门牌号' },
-  currentLongitude: { required: true, message: '请输入车辆目前所在地经度' },
-  currentLatitude: { required: true, message: '请输入车辆目前所在地纬度' },
+  // 案件信息
   accidentDescription: { required: true, message: '请填写出险经过' },
+  lsType: { required: true, message: '请选择险因类型' },
+  damageCode: { required: true, message: '请选择保险事故分类' },
   accidentCause: { required: true, message: '请选择出险原因' },
   handleDepartment: { required: true, message: '请选择事故处理部门' },
   handleType: { required: true, message: '请选择事故处理类型' },
@@ -51,17 +34,29 @@ export const requiredFields = {
   accidentReason: { required: true, message: '请选择事故原因' },
   isAlarm: { required: true, message: '请选择是否报警' },
   isDisaster: { required: true, message: '请选择是否巨灾' },
+  isOnSiteSurvey: { required: true, message: '请选择是否需现场查勘' },
   disasterType: { required: true, message: '请选择巨灾类型' },
   disasterName: { required: true, message: '请输入巨灾名称' },
-  isOnSiteSurvey: { required: true, message: '请选择是否需现场查勘' },
-  damageStatus: { required: true, message: '请选择损失情况' },
-  vehicleCanRun: { required: true, message: '请选择车辆能否正常行驶' },
-  vehicleStatus: { required: true, message: '请选择车辆状态' },
-  personName: { required: true, message: '请输入姓名' },
-  personOwnCar: { required: true, message: '请选择归属' },
-  personPayType: { required: true, message: '请选择伤亡情况' },
-  // 财产损失相关字段
-  identityRec: { required: true, message: '请选择归属' }
+  alarmTime: { required: true, message: '请选择报警时间' }, // 条件验证，在表单中处理
+  
+  // 联系人信息
+  reportorName: { required: true, message: '请输入报案人姓名' },
+  reportorPhonenumber: { 
+    required: true, 
+    pattern: /^1[3-9]\d{9}$|^0\d{2,3}-?\d{7,8}$/,
+    message: '请输入正确的手机号码或电话号码'
+  },
+  reporterRelation: { required: true, message: '请选择报案人跟被保险人关系' },
+  linkerName: { required: true, message: '请输入现场联系人姓名' },
+  linkerPhone: { required: true, message: '请输入现场联系人电话' },
+  handlerCode: { required: true, message: '请填写受理人编码' },
+  
+  
+  
+  // 案件状态
+  propFlag: { required: true, message: '请选择是否财产损失' },
+  woundFlag: { required: true, message: '请选择是否人员伤亡' },
+
 }
 
 /**
@@ -91,7 +86,7 @@ export function validateRequiredFields(formData, requiredFields) {
  * 校验手机号格式
  */
 export function validatePhone(phone) {
-  const phoneRegex = /^1[3-9]\d{9}$/
+  const phoneRegex = /^1[3-9]\d{9}$|^0\d{2,3}-?\d{7,8}$/
   return phoneRegex.test(phone)
 }
 
@@ -119,7 +114,26 @@ export function validateForm(formData, rules) {
   for (const field in rules) {
     const rule = rules[field]
     const value = formData[field]
-    if (rule.required && (!value || value.trim() === '')) {
+    
+    // 特殊处理报警时间：只有当isAlarm为'1'时才需要验证
+    if (field === 'alarmTime' && (formData.isAlarm !== '1' && formData.isAlarm !== 1)) {
+      continue
+    }
+    
+    // 特殊处理巨灾相关字段：只有当isDisaster为'1'时才需要验证
+    if ((field === 'disasterType' || field === 'disasterName') && (formData.isDisaster !== '1' && formData.isDisaster !== 1)) {
+      continue
+    }
+    
+    // 特殊处理车辆目前所在地信息：只有当isfirstsiteFlag为'0'时才需要验证
+    if (
+      ['currentAreaProvince', 'currentAreaCity', 'currentAreaDistrict', 'currentStreet', 'currentDoorNumber', 'currentLongitude', 'currentLatitude'].includes(field) &&
+      (formData.isfirstsiteFlag !== '0' && formData.isfirstsiteFlag !== 0)
+    ) {
+      continue
+    }
+    
+    if (rule.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
       errors[field] = rule.message || `${field}不能为空`
       continue
     }

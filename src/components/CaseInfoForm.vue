@@ -260,7 +260,6 @@
           <div class="contact-form-group">
             <label><i class="iconfont icon-yun"></i> 天气情况</label>
             <select v-model="caseInfo.weatherSituation" ref="weatherSituation"
-              @change="onFieldInput('weatherSituation')" :class="{ 'input-error': validationErrors.weatherSituation }"
               class="form-input select-sm">
               <option value="">请选择</option>
               <option value="0">晴</option>
@@ -275,8 +274,7 @@
           <div class="contact-form-group">
             <label><i class="iconfont icon-tishi"></i> 出险地点分类 </label>
             <select v-model="caseInfo.damageLocationType" ref="damageLocationType"
-              @change="onFieldInput('damageLocationType')"
-              :class="{ 'input-error': validationErrors.damageLocationType }" class="form-input select-sm">
+               class="form-input select-sm">
               <option value="">请选择</option>
               <option value="0">道路</option>
               <option value="1">停车场</option>
@@ -1478,7 +1476,6 @@
 <script>
 // 引入校验工具和定位工具
 import { validateForm, requiredFields } from '@/utils/validation'
-import { scrollToElement, highlightError, showError } from '@/utils/domUtils'
 
 export default {
   name: 'CaseInfoForm',
@@ -2301,14 +2298,50 @@ export default {
     },
 
     // ============ 校验并提交（核心方法） ============
-    // ============ 校验并提交（核心方法） ============
     async validateAndSubmit() {
       // 1. 清除之前的错误
       this.globalError = ''
+      this.validationErrors = {}
       this.clearErrorHighlights()
+      // 确保 DOM 完全更新后再进行验证
+      await this.$nextTick()
+
+      // 根据条件动态调整验证规则
+      let dynamicRequiredFields = { ...requiredFields }
+
+      // 如果不是现场报案(isfirstsiteFlag === '0')，则需要验证车辆目前所在地信息
+      if (this.caseInfo.isfirstsiteFlag === '0' || this.caseInfo.isfirstsiteFlag === 0) {
+        dynamicRequiredFields = {
+          ...dynamicRequiredFields,
+          currentAreaProvince: { required: true, message: '请选择车辆目前所在省' },
+          currentAreaCity: { required: true, message: '请选择车辆目前所在市' },
+          currentAreaDistrict: { required: true, message: '请选择车辆目前所在区' },
+          currentStreet: { required: true, message: '请输入车辆目前所在街道' },
+          currentDoorNumber: { required: true, message: '请输入车辆目前所在门牌号' },
+          currentLongitude: { required: true, message: '请输入车辆目前所在地经度' },
+          currentLatitude: { required: true, message: '请输入车辆目前所在地纬度' }
+        }
+      }
+
+      // 如果选择了报警(isAlarm === '1')，则需要验证报警时间
+      if (this.caseInfo.isAlarm === '1' || this.caseInfo.isAlarm === 1) {
+        dynamicRequiredFields = {
+          ...dynamicRequiredFields,
+          alarmTime: { required: true, message: '请选择报警时间' }
+        }
+      }
+
+      // 如果选择了巨灾(isDisaster === '1')，则需要验证巨灾相关信息
+      if (this.caseInfo.isDisaster === '1' || this.caseInfo.isDisaster === 1) {
+        dynamicRequiredFields = {
+          ...dynamicRequiredFields,
+          disasterType: { required: true, message: '请选择巨灾类型' },
+          disasterName: { required: true, message: '请输入巨灾名称' }
+        }
+      }
 
       // 2. 执行表单校验
-      const errors = validateForm(this.caseInfo, requiredFields)
+      const errors = validateForm(this.caseInfo, dynamicRequiredFields)
 
       // 3. 验证车辆信息
       const vehicleErrors = this.validateVehicleInfo()
@@ -2331,32 +2364,144 @@ export default {
       if (Object.keys(allErrors).length > 0) {
         // 更新验证错误
         this.validationErrors = allErrors
+        // 等待 DOM 更新，确保错误样式已经应用
+        await this.$nextTick()
+        await this.$nextTick()
 
         // 展开包含错误字段的区块
         this.expandSectionsWithErrors(allErrors)
 
         // 等待 DOM 更新后滚动定位
         await this.$nextTick()
+        await this.$nextTick() // 确保展开动画完成
 
         // 滚动到第一个错误字段
-        this.scrollToFirstError(allErrors)
+        const firstErrorField = Object.keys(allErrors)[0]
+        this.scrollToFirstError(firstErrorField)
 
         // 显示错误提示
-        this.globalError = '请完善以下必填信息，共 ' + Object.keys(allErrors).length + ' 项'
-        setTimeout(() => {
-          this.globalError = ''
-        }, 5000)
+        this.globalError = `请完善以下必填信息，共 ${Object.keys(allErrors).length} 项`
 
-        // 不要在这里返回 false，而是继续执行后续代码
+        return false // 返回 false 表示验证失败
       } else {
         // 7. 校验通过，提交表单
         this.$emit('submit', this.caseInfo)
         return true
       }
-
-      // 即使有错误也返回 true，因为我们仍需要完成前面的操作
-      return Object.keys(allErrors).length === 0
     },
+
+// 改进的清除错误高亮方法
+clearErrorHighlights() {
+  // 清除所有表单元素的错误类
+  const errorInputs = document.querySelectorAll('.input-error')
+  errorInputs.forEach(input => {
+    input.classList.remove('input-error')
+  })
+  
+  // 清除所有错误消息
+  const errorMessages = document.querySelectorAll('.error-message')
+  errorMessages.forEach(msg => {
+    msg.remove()
+  })
+  
+  // 清除验证错误对象
+  this.validationErrors = {}
+},
+
+// 改进的错误字段滚动定位
+async scrollToFirstError(firstErrorField) {
+  if (!firstErrorField) return
+
+  // 等待 DOM 更新
+  await this.$nextTick()
+  await this.$nextTick()
+
+  let element = null
+  
+  // 方法1: 尝试通过 ref 获取
+  if (this.$refs[firstErrorField]) {
+    element = Array.isArray(this.$refs[firstErrorField]) 
+      ? this.$refs[firstErrorField][0] 
+      : this.$refs[firstErrorField]
+  }
+  
+  // 方法2: 通过 CSS 选择器查找
+  if (!element) {
+    // 查找对应的输入框、选择框或文本域
+    element = document.querySelector(`[v-model*="${firstErrorField}"]`) ||
+              document.querySelector(`[name="${firstErrorField}"]`) ||
+              document.querySelector(`#${firstErrorField}`) ||
+              document.querySelector(`input[v-model*="${firstErrorField}"]`) ||
+              document.querySelector(`select[v-model*="${firstErrorField}"]`) ||
+              document.querySelector(`textarea[v-model*="${firstErrorField}"]`)
+  }
+  
+  // 方法3: 通过标签文本查找
+  if (!element) {
+    const label = Array.from(document.querySelectorAll('label'))
+      .find(l => l.textContent.includes(this.getFieldLabel(firstErrorField)))
+    if (label) {
+      // 查找标签附近的输入元素
+      const formGroup = label.closest('.form-group')
+      if (formGroup) {
+        element = formGroup.querySelector('input, select, textarea, .el-date-editor')
+      }
+    }
+  }
+  
+  // 方法4: 作为最后手段，查找带错误类的元素
+  if (!element) {
+    element = document.querySelector('.input-error')
+  }
+
+  if (element) {
+    // 添加错误样式
+    if (element.classList && !element.classList.contains('input-error')) {
+      element.classList.add('input-error')
+    }
+    
+    // 滚动到元素并聚焦
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest'
+    })
+    
+    // 如果是输入框，尝试聚焦
+    if (element.tagName === 'INPUT' || element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') {
+      element.focus()
+    }
+    
+    // 添加临时高亮效果
+    element.style.transition = 'all 0.3s ease'
+    element.style.boxShadow = '0 0 0 2px rgba(255, 77, 79, 0.5)'
+    element.style.borderColor = '#ff4d4f'
+    
+    // 3秒后移除高亮效果
+    setTimeout(() => {
+      if (element.style) {
+        element.style.boxShadow = ''
+        element.style.borderColor = ''
+      }
+    }, 3000)
+  } else {
+    console.warn(`未找到错误字段 "${firstErrorField}" 对应的DOM元素`)
+    
+    // 如果找不到具体元素，至少滚动到包含该字段的区块
+    const section = this.getFieldSection(firstErrorField)
+    if (section) {
+      const sectionElement = document.getElementById(`section-${section}`)
+      if (sectionElement) {
+        sectionElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }
+    }
+  }
+},
+    
+    
 
     // 新增：验证财产损失信息的方法
     validatePropertyLossInfo() {
@@ -2461,58 +2606,259 @@ export default {
 
       return errors
     },
-    // ============ 展开包含错误的区块 ============
+    // 改进 expandSectionsWithErrors 方法，确保区块展开
     expandSectionsWithErrors(errors) {
       const fieldSectionMap = {
-        policyNo: 'policyInfo',
+        // 报案信息区块
+        accidentTime: 'reportInfo',
+        reportTime: 'reportInfo',
         isfirstsiteFlag: 'reportInfo',
         weatherSituation: 'reportInfo',
-        damageAddress: 'reportInfo',
+        damageLocationType: 'reportInfo',
         areaProvince: 'reportInfo',
         areaCity: 'reportInfo',
         areaDistrict: 'reportInfo',
+        street: 'reportInfo',
+        doorNumber: 'reportInfo',
+        longitude: 'reportInfo',
+        latitude: 'reportInfo',
+        currentAreaProvince: 'reportInfo',
+        currentAreaCity: 'reportInfo',
+        currentAreaDistrict: 'reportInfo',
+        currentStreet: 'reportInfo',
+        currentDoorNumber: 'reportInfo',
+        currentLongitude: 'reportInfo',
+        currentLatitude: 'reportInfo',
+        accidentDescription: 'reportInfo',
         lsType: 'reportInfo',
         damageCode: 'reportInfo',
+        accidentCause: 'reportInfo',
+        handleDepartment: 'reportInfo',
+        handleType: 'reportInfo',
+        responsibility: 'reportInfo',
+        driverIsInsured: 'reportInfo',
+        insuredCertType: 'reportInfo',
+        emergencyLevel: 'reportInfo',
+        isOutProvince: 'reportInfo',
+        isWeChatClaim: 'reportInfo',
+        accidentReason: 'reportInfo',
+        isAlarm: 'reportInfo',
+        alarmTime: 'reportInfo',
+        isDisaster: 'reportInfo',
+        disasterType: 'reportInfo',
+        disasterName: 'reportInfo',
+        isOnSiteSurvey: 'reportInfo',
+
+        // 联系人信息区块
+        reportorName: 'contactInfo',
+        reportorPhonenumber: 'contactInfo',
+        reporterRelation: 'contactInfo',
+        linkerName: 'contactInfo',
+        linkerPhone: 'contactInfo',
+        handlerCode: 'contactInfo',
+
+        // 车辆信息区块
         licenseNumber: 'vehicleInfo',
         engineNumber: 'vehicleInfo',
         frameNumber: 'vehicleInfo',
         driverName: 'vehicleInfo',
         damageStatus: 'vehicleInfo',
         vehicleCanRun: 'vehicleInfo',
-        reportorName: 'contactInfo',
-        reportorPhonenumber: 'contactInfo',
-        linkerName: 'contactInfo',
-        linkerPhone: 'contactInfo',
+        vehicleStatus: 'vehicleInfo',
+
+        // 案件状态
         propFlag: 'propertyLoss',
-        woundFlag: 'personInjury',
-        // 财产损失字段映射
-        'identityRec_': 'propertyLoss',
-        'lossSituation_': 'propertyLoss',
-        // 人员伤亡字段映射
-        'personName_': 'personInjury',
-        'personOwnCar_': 'personInjury',
-        'personPayType_': 'personInjury'
+        woundFlag: 'personInjury'
       }
 
-      const firstErrorField = Object.keys(errors)[0]
-      let section = fieldSectionMap[firstErrorField]
+      // 遍历所有错误，展开涉及的区块
+      Object.keys(errors).forEach(errorField => {
+        let section = fieldSectionMap[errorField]
 
-      // 如果没有直接匹配，检查前缀匹配
-      if (!section) {
-        for (const [prefix, sec] of Object.entries(fieldSectionMap)) {
-          if (prefix.endsWith('_') && firstErrorField.startsWith(prefix)) {
-            section = sec
-            break
+        // 如果没有直接匹配，检查前缀匹配（针对动态字段）
+        if (!section) {
+          for (const [prefix, sec] of Object.entries(fieldSectionMap)) {
+            if (prefix.endsWith('_') && errorField.startsWith(prefix)) {
+              section = sec
+              break
+            }
+          }
+        }
+
+        if (section) {
+          const sectionKey = `${section}Expanded`
+          // 确保区块展开
+          this[sectionKey] = true
+        }
+      })
+
+      // 等待 DOM 更新后滚动到第一个错误区块
+      this.$nextTick(() => {
+        const firstErrorField = Object.keys(errors)[0]
+        if (firstErrorField) {
+          let section = fieldSectionMap[firstErrorField]
+
+          if (!section) {
+            for (const [prefix, sec] of Object.entries(fieldSectionMap)) {
+              if (prefix.endsWith('_') && firstErrorField.startsWith(prefix)) {
+                section = sec
+                break
+              }
+            }
+          }
+
+          if (section) {
+            const sectionElement = document.getElementById(`section-${section}`)
+            if (sectionElement) {
+              // 使用 setTimeout 确保滚动发生
+              setTimeout(() => {
+                sectionElement.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start'
+                })
+              }, 100)
+            }
+          }
+        }
+      })
+    },
+
+    // 完全重写 scrollToFirstError 方法，使其更可靠
+    async scrollToFirstError(firstErrorField) {
+      if (!firstErrorField) return
+
+      console.log(`滚动到错误字段: ${firstErrorField}`)
+
+      // 等待 DOM 完全更新
+      await this.$nextTick()
+      await this.$nextTick()
+
+      let element = null
+
+      // 方法1: 通过 ref 查找
+      if (this.$refs[firstErrorField]) {
+        element = Array.isArray(this.$refs[firstErrorField])
+          ? this.$refs[firstErrorField][0]
+          : this.$refs[firstErrorField]
+      }
+
+      // 方法2: 通过 v-model 属性查找（更通用的方式）
+      if (!element) {
+        // 构建选择器，查找包含对应 v-model 的元素
+        const selectors = [
+          `[v-model*="${firstErrorField}"]`,
+          `[v-model="${firstErrorField}"]`,
+          `input[v-model*="${firstErrorField}"]`,
+          `select[v-model*="${firstErrorField}"]`,
+          `textarea[v-model*="${firstErrorField}"]`,
+          // 特殊处理车辆信息字段
+          ...(() => {
+            if (firstErrorField.startsWith('vehicleList')) {
+              const match = firstErrorField.match(/vehicleList(\d+)_(.*)/)
+              if (match) {
+                const index = match[1]
+                const field = match[2]
+                return [`#vehicle-info-${index} [v-model*="${field}"]`]
+              }
+            }
+            return []
+          })(),
+          // 特殊处理财产损失字段
+          ...(() => {
+            if (firstErrorField.startsWith('identityRec_') || firstErrorField.startsWith('lossSituation_')) {
+              const parts = firstErrorField.split('_')
+              if (parts.length === 2) {
+                const field = parts[0]
+                const index = parts[1]
+                return [`.property-loss-item:nth-child(${parseInt(index) + 1}) [v-model*="${field}"]`]
+              }
+            }
+            return []
+          })(),
+          // 特殊处理人员伤亡字段
+          ...(() => {
+            if (firstErrorField.startsWith('personName_') || firstErrorField.startsWith('personOwnCar_') || firstErrorField.startsWith('personPayType_')) {
+              const parts = firstErrorField.split('_')
+              if (parts.length === 2) {
+                const field = parts[0]
+                const index = parts[1]
+                return [`.person-injury-item:nth-child(${parseInt(index) + 1}) [v-model*="${field}"]`]
+              }
+            }
+            return []
+          })()
+        ]
+
+        for (const selector of selectors) {
+          try {
+            element = document.querySelector(selector)
+            if (element) break
+          } catch (e) {
+            // 忽略无效选择器
           }
         }
       }
 
-      if (section) {
-        const sectionKey = `${section}Expanded`
-        this[sectionKey] = true
+      // 方法3: 通过标签文本查找
+      if (!element) {
+        const labelText = this.getFieldLabel(firstErrorField)
+        const labels = document.querySelectorAll('label')
+        for (let i = 0; i < labels.length; i++) {
+          if (labels[i].textContent.includes(labelText)) {
+            const formGroup = labels[i].closest('.form-group, .contact-form-group')
+            if (formGroup) {
+              element = formGroup.querySelector('input, select, textarea, .el-date-editor')
+              break
+            }
+          }
+        }
+      }
 
-        // 滚动到对应区块
-        this.$nextTick(() => {
+      // 方法4: 通过错误类查找
+      if (!element) {
+        element = document.querySelector(`.input-error[name*="${firstErrorField}"]`) ||
+          document.querySelector(`.input-error[v-model*="${firstErrorField}"]`) ||
+          document.querySelector('.input-error') // 作为最后手段
+      }
+
+      if (element) {
+        console.log(`找到元素:`, element)
+
+        // 确保元素可见
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        })
+
+        // 添加焦点和高亮
+        if (element.focus) {
+          element.focus()
+        }
+
+        // 确保错误样式存在
+        if (element.classList && !element.classList.contains('input-error')) {
+          element.classList.add('input-error')
+        }
+
+        // 添加视觉反馈
+        const originalBorder = element.style.border
+        const originalBoxShadow = element.style.boxShadow
+
+        element.style.border = '2px solid #ff4d4f'
+        element.style.boxShadow = '0 0 0 2px rgba(255, 77, 79, 0.2)'
+
+        // 3秒后恢复原始样式
+        setTimeout(() => {
+          element.style.border = originalBorder
+          element.style.boxShadow = originalBoxShadow
+        }, 3000)
+      } else {
+        console.warn(`未找到错误字段 "${firstErrorField}" 对应的DOM元素`)
+
+        // 如果找不到具体元素，至少滚动到包含该字段的区块
+        const section = this.getFieldSection(firstErrorField)
+        if (section) {
           const sectionElement = document.getElementById(`section-${section}`)
           if (sectionElement) {
             sectionElement.scrollIntoView({
@@ -2520,135 +2866,78 @@ export default {
               block: 'start'
             })
           }
-        })
+        }
       }
     },
 
-    // ============ 滚动到第一个错误字段 ============
-    async scrollToFirstError(errors) {
-      const firstErrorField = Object.keys(errors)[0]
-      if (!firstErrorField) return
+    // 辅助方法：获取字段标签文本
+    getFieldLabel(fieldName) {
+      const labelMap = {
+        'accidentTime': '出险时间',
+        'reportTime': '报案时间',
+        'areaProvince': '出险地点',
+        'areaCity': '出险地点',
+        'areaDistrict': '出险地点',
+        'street': '出险地点',
+        'doorNumber': '出险地点',
+        'longitude': '经度',
+        'latitude': '纬度',
+        'reportorName': '报案人姓名',
+        'reportorPhonenumber': '报案电话',
+        'linkerName': '现场联系人姓名',
+        'linkerPhone': '现场联系人电话',
+        'lsType': '险因类型',
+        'damageCode': '保险事故分类',
+        'accidentCause': '出险原因',
+        'handleDepartment': '事故处理部门',
+        'handleType': '事故处理类型',
+        'responsibility': '事故责任',
+        'driverIsInsured': '驾驶员是否被保险人',
+        'insuredCertType': '被保险人证件类型',
+        'emergencyLevel': '紧急程度',
+        'isOutProvince': '是否异地',
+        'isWeChatClaim': '是否微信理赔',
+        'accidentReason': '事故原因',
+        'isDisaster': '是否巨灾',
+        'isOnSiteSurvey': '是否需现场查勘',
+        'reporterRelation': '报案人跟被保险人关系'
+      };
 
-      // 等待 DOM 更新
-      await this.$nextTick()
-      await this.$nextTick() // 确保展开的区块DOM已渲染
+      return labelMap[fieldName] || fieldName;
+    },
 
-      // 获取字段引用
-      let element = null
+    // 辅助方法：获取字段所属区块
+    getFieldSection(fieldName) {
+      const sectionMap = {
+        'accidentTime': 'reportInfo',
+        'reportTime': 'reportInfo',
+        'areaProvince': 'reportInfo',
+        'areaCity': 'reportInfo',
+        'areaDistrict': 'reportInfo',
+        'longitude': 'reportInfo',
+        'latitude': 'reportInfo',
+        'reportorName': 'contactInfo',
+        'reportorPhonenumber': 'contactInfo',
+        'linkerName': 'contactInfo',
+        'linkerPhone': 'contactInfo',
+        'lsType': 'reportInfo',
+        'damageCode': 'reportInfo',
+        'accidentCause': 'reportInfo',
+        'handleDepartment': 'reportInfo',
+        'handleType': 'reportInfo',
+        'responsibility': 'reportInfo',
+        'driverIsInsured': 'reportInfo',
+        'insuredCertType': 'reportInfo',
+        'emergencyLevel': 'reportInfo',
+        'isOutProvince': 'reportInfo',
+        'isWeChatClaim': 'reportInfo',
+        'accidentReason': 'reportInfo',
+        'isDisaster': 'reportInfo',
+        'isOnSiteSurvey': 'reportInfo',
+        'reporterRelation': 'contactInfo'
+      };
 
-      // 尝试获取普通的 ref
-      if (this.$refs[firstErrorField]) {
-        element = this.$refs[firstErrorField]
-        if (Array.isArray(element)) {
-          element = element[0]
-        }
-      }
-
-      // 如果没有找到普通 ref，则查找 Element Plus 组件的包装元素
-      if (!element) {
-        // 查找具有对应类名的 Element Plus 组件
-        const elDatePickerElements = document.querySelectorAll('.el-date-editor')
-        for (let i = 0; i < elDatePickerElements.length; i++) {
-          const el = elDatePickerElements[i]
-          // 检查这个日期选择器是否对应于错误字段
-          if (el.querySelector('input') &&
-            (el.querySelector('input').name === firstErrorField ||
-              el.querySelector('input').id === firstErrorField ||
-              el.closest('.form-group')?.querySelector('label')?.textContent.includes(firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase()))) {
-            element = el
-            break
-          }
-        }
-      }
-
-      // 最后尝试通过查询特定的选择器来查找
-      if (!element) {
-        // 尝试通过标签文本关联字段
-        const labels = document.querySelectorAll('label')
-        for (let i = 0; i < labels.length; i++) {
-          if (labels[i].textContent.toLowerCase().includes(
-            firstErrorField.replace(/([A-Z])/g, ' $1').toLowerCase().replace('time', '').trim())) {
-
-            const formGroup = labels[i].closest('.form-group')
-            if (formGroup) {
-              const datePicker = formGroup.querySelector('.el-date-editor')
-              if (datePicker) {
-                element = datePicker
-                break
-              }
-            }
-          }
-        }
-      }
-
-      if (element) {
-        // 添加错误样式
-        element.classList.add('input-error')
-
-        // 滚动到元素
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: 'nearest'
-        })
-
-        // 添加视觉反馈
-        element.style.transition = 'box-shadow 0.3s ease'
-        element.style.boxShadow = '0 0 0 2px rgba(255, 77, 79, 0.5)'
-
-        // 3秒后移除视觉反馈
-        setTimeout(() => {
-          if (element.style) {
-            element.style.boxShadow = ''
-          }
-        }, 3000)
-      } else {
-        console.warn('找不到错误字段元素:', firstErrorField)
-
-        // 如果真的找不到元素，至少展开包含错误字段的部分
-        const fieldSectionMap = {
-          policyNo: 'policyInfo',
-          accidentTime: 'reportInfo',
-          reportTime: 'reportInfo',
-          alarmTime: 'reportInfo',
-          isfirstsiteFlag: 'reportInfo',
-          weatherSituation: 'reportInfo',
-          damageAddress: 'reportInfo',
-          areaProvince: 'reportInfo',
-          areaCity: 'reportInfo',
-          areaDistrict: 'reportInfo',
-          lsType: 'reportInfo',
-          damageCode: 'reportInfo',
-          licenseNumber: 'vehicleInfo',
-          engineNumber: 'vehicleInfo',
-          frameNumber: 'vehicleInfo',
-          driverName: 'vehicleInfo',
-          vehicleCanRun: 'vehicleInfo',
-          reportorName: 'contactInfo',
-          reportorPhonenumber: 'contactInfo',
-          linkerName: 'contactInfo',
-          linkerPhone: 'contactInfo',
-          propFlag: 'propertyLoss',
-          woundFlag: 'personInjury'
-        }
-
-        const section = fieldSectionMap[firstErrorField]
-        if (section) {
-          const sectionKey = `${section}Expanded`
-          this[sectionKey] = true
-
-          // 滚动到对应区块
-          this.$nextTick(() => {
-            const sectionElement = document.getElementById(`section-${section}`)
-            if (sectionElement) {
-              sectionElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              })
-            }
-          })
-        }
-      }
+      return sectionMap[fieldName] || 'reportInfo';
     },
     highlightError(element) {
       if (element) {
@@ -2680,17 +2969,6 @@ export default {
       this.$emit('transfer', this.caseInfo)
     },
 
-    // ============ 添加/删除财产损失 ============
-    addPropertyLoss() {
-      this.propertyLossList.push({
-        propertyName: '',
-        identityRec: '',
-        lossSituation: ''
-      })
-    },
-    removePropertyLoss(index) {
-      this.propertyLossList.splice(index, 1)
-    },
 
     // ============ 添加/删除人员伤亡 ============
     addPersonInjury() {
