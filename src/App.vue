@@ -13,24 +13,16 @@
     <div class="app-container">
       <!-- 主内容区 -->
       <main class="main-content">
-        <CaseInfoForm 
-          ref="caseForm" 
-          :case-info="caseInfo" 
-          @submit="handleSubmit" 
-          @save="handleSave"
-          @transfer="handleTransfer" 
-        />
+        <CaseInfoForm ref="caseForm" :case-info="caseInfo" @submit="handleSubmit" @save="handleSave"
+          @transfer="handleTransfer" />
       </main>
 
       <!-- 右侧固定导航栏 -->
       <aside class="sidebar-fixed">
-        <SidebarNavigation 
-          :active-tab="activeTab" 
-          @tab-change="handleTabChange" 
-        />
+        <SidebarNavigation :active-tab="activeTab" @tab-change="handleTabChange" />
       </aside>
     </div>
-    
+
     <!-- 固定在底部的按钮区域 - 从 CaseInfoForm 移至此处 -->
     <div class="form-actions-sticky">
       <button type="button" @click="validateAndSubmit" class="btn-submit">
@@ -156,26 +148,26 @@ export default {
       console.log('转专岗数据:', caseInfo)
       alert('转专岗成功！')
     },
-    
+
     // 从 App.vue 触发的事件处理方法
     validateAndSubmit() {
       if (this.$refs.caseForm) {
         this.$refs.caseForm.validateAndSubmit()
       }
     },
-    
+
     handleSaveFromApp() {
       if (this.$refs.caseForm) {
         this.$refs.caseForm.handleSave()
       }
     },
-    
+
     handleTransferFromApp() {
       if (this.$refs.caseForm) {
         this.$refs.caseForm.handleTransfer()
       }
     },
-    
+
     handleTabChange(tab) {
       console.log('导航栏点击:', tab)
       this.activeTab = tab
@@ -206,10 +198,10 @@ body {
   font-size: 14px;
   color: #333;
   background-color: #F5F7FA;
-  overflow-y: auto; /* 允许整页垂直滚动 */
+  overflow-y: auto;
 }
 
-/* 整体页面容器：垂直布局（顶部栏 + 内容） */
+/* 整体页面容器 */
 .app-wrapper {
   display: flex;
   flex-direction: column;
@@ -218,33 +210,26 @@ body {
   background-color: #F5F7FA;
 }
 
-/* 新增：顶部系统标题栏样式 */
+/* 顶部标题栏 */
 .app-header {
   height: 40px;
   line-height: 40px;
   width: 100%;
-  padding: 0px;
-  padding-left: 2rem ;
+  padding: 0 2rem;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   z-index: 200;
   position: fixed;
   top: 0;
+  left: 0;
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.system-icon {
-  font-size: 24px; /* 图标大小，按需调整（推荐20-28px） */
-  color: #0056a4; /* 替代行内style，统一管理 */
-  vertical-align: middle;
 }
 
 .system-title {
@@ -254,79 +239,61 @@ body {
   margin: 0;
 }
 
-/* 双栏布局容器：占满剩余高度 */
+/* 双栏布局容器 */
 .app-container {
   display: flex;
   flex-direction: row;
   flex: 1;
-  padding: 4px 30px !important;
-  gap: 24px;
+  /* 顶栏高度 */
+  padding: 6px 24px;
+  gap: 20px;
   width: 100%;
-  box-sizing: border-box;
+  position: relative;
 }
 
 /* 主内容区 */
 .main-content {
   flex: 1;
-  background-color: #F5F7FA;
-  border-radius: 8px;
-  box-sizing: border-box;
-  max-width: calc(100% - 180px); 
   width: 100%;
-  margin-left: 0; 
-   padding-bottom: 160px !important;
+  max-width: calc(100% - 170px);
+  padding-bottom: 160px !important;
+  margin-left: 0;
 }
 
-/* 固定的右侧导航栏 */
+/* 右侧固定导航栏 */
 .sidebar-fixed {
-  width: 150px; 
+  width: 150px;
   flex-shrink: 0;
-  background-color: #F5F7FA;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 100;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  position: fixed; /* 固定定位 */
+  position: fixed;
   right: 24px;
-  top: 50px; /* 调整距离顶部的高度，给标题栏留出更多空间 */
-  height: calc(100vh - 120px); /* 相应调整高度计算 */
-  border-radius: 8px;
-  box-sizing: border-box; /* 确保盒模型正确计算 */
+  top: 60px;
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+  z-index: 100;
 }
 
-
-
-/* 隐藏滚动条 */
-::v-deep .main-content-centered::-webkit-scrollbar,
-::v-deep .sidebar-fixed::-webkit-scrollbar {
-  display: none;
-}
-
-/* 固定在底部的按钮区域 */
+/* 底部按钮 */
 .form-actions-sticky {
   position: fixed;
   bottom: 0;
   left: 0;
-  right: 0; /* 替代100%宽度，避免滚动条问题 */
+  right: 0;
   z-index: 200;
-  height: auto; /* 取消固定高度，由内边距自适应 */
   background-color: #ffffff;
-  border-top: 1px solid #e5e5e5; /* 替换深灰色边框，匹配截图浅边框 */
-  border-bottom: none;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.02); /* 阴影方向改为向上，更自然 */
+  border-top: 1px solid #e5e5e5;
   display: flex;
-  justify-content: center; /* 按钮居中，匹配截图 */
+  justify-content: center;
   align-items: center;
-  gap: 16px; /* 按钮间距 */
-  padding: 12px 20px; /* 上下内边距，匹配截图按钮高度 */
+  gap: 16px;
+  padding: 12px 20px;
   flex-wrap: wrap;
-  /* 去掉圆角：截图中底部栏无圆角，圆角会导致和页面边缘衔接突兀 */
   border-radius: 0;
 }
 
 /* 按钮样式 */
-.btn-submit, .btn-save, .btn-transfer {
+.btn-submit,
+.btn-save,
+.btn-transfer {
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
@@ -336,6 +303,7 @@ body {
   gap: 6px;
   font-size: 12px;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .btn-submit {
@@ -344,62 +312,89 @@ body {
 }
 
 .btn-submit:hover {
-  background-color: #3B4DAA;
+  opacity: 0.9;
 }
 
-.btn-save {
-  background-color: #F5F7FA;
-  color: rgb(21, 20, 20);
-}
-
-.btn-save:hover {
-  background-color: #F5F7FA;
-}
-
+.btn-save,
 .btn-transfer {
-  background-color: #F5F7FA ;
+  background-color: #F5F7FA;
   color: #212529;
 }
 
 .btn-transfer:hover {
   background-color: #4D9F8D;
+  color: #fff;
 }
 
-/* 响应式适配 */
+/* ------------------------------ */
+/* ✅ 响应式：平板 768~1024 */
+/* ------------------------------ */
 @media (max-width: 1024px) {
   .app-container {
     flex-direction: column;
-    padding: 12px;
+    padding: 12px 16px;
   }
 
   .main-content {
     max-width: 100%;
-    margin-right: 0; /* 小屏幕上去掉右边距 */
-    margin-bottom: 120px; /* 为固定导航留出空间 */
+    padding-bottom: 200px !important;
   }
 
+  /* 右侧导航变成顶部横向 */
   .sidebar-fixed {
-    position: fixed;
-    bottom: 0;
-    top: auto;
-    left: 0;
-    right: 0;
+    position: relative;
     width: 100%;
-    height: 120px;
-    border-radius: 0;
-    z-index: 1000;
-    right: 0; /* 重置right值 */
-    top: auto; /* 重置top值 */
+    height: auto;
+    max-height: 120px;
+    right: auto;
+    top: auto;
+    margin-bottom: 12px;
   }
-  
+}
+
+/* ------------------------------ */
+/* ✅ 响应式：手机 <768 */
+/* ------------------------------ */
+@media (max-width: 768px) {
   .app-header {
-    position: static; /* 在小屏幕上取消sticky定位 */
+    padding: 0 12px;
   }
-  
+
+  .app-container {
+    padding: 8px 12px;
+  }
+
+  .main-content {
+    padding-bottom: 220px !important;
+  }
+
   .form-actions-sticky {
-    left: 12px;
-    right: 12px;
-    border-radius: 8px 8px 0 0;
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .btn-submit,
+  .btn-save,
+  .btn-transfer {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ------------------------------ */
+/* ✅ 超小屏幕 <480 */
+/* ------------------------------ */
+@media (max-width: 480px) {
+  .form-actions-sticky {
+    justify-content: space-between;
+    padding: 8px 6px;
+  }
+
+  .btn-submit,
+  .btn-save,
+  .btn-transfer {
+    flex: 1;
+    justify-content: center;
   }
 }
 </style>

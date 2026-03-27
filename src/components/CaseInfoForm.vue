@@ -147,7 +147,7 @@
     <!-- ============ 历史报案记录区块 ============ -->
     <section class="policy-card" id="section-historyReport">
       <div class="section-header-other no-border">
-        <h3><i class="icon-history"></i> 历史报案记录</h3>
+        <h3><i class="iconfont icon-lishijilu" style="color: #3B4DAA !important;"></i> 历史报案记录</h3>
         <span class="record-count">{{ historyReports.length }} 条记录</span>
         <span class="toggle-icon" @click="toggleSection('historyReport')">
           <i :class="historyReportExpanded ? 'iconfont icon-arrow-down' : 'iconfont icon-shouqi'"></i>
@@ -3220,6 +3220,7 @@ async scrollToFirstError(firstErrorField) {
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  margin-right:10px ;
 
 }
 
@@ -3250,7 +3251,7 @@ async scrollToFirstError(firstErrorField) {
 /* 信息展示按钮 */
 .btn-info-display {
   padding: 6px 12px;
-  background-color: white;
+  background-color: hsla(0, 8%, 97%, 0.924);
   color: #111111;
   border: none;
   border-radius: 8px;
@@ -3264,8 +3265,9 @@ async scrollToFirstError(firstErrorField) {
 }
 
 .btn-info-display:hover {
-  background-color: #e6f7ff;
-  border-color: #91d5ff;
+  background-color: #4D9F8D;
+  border-color: #4D9F8D;
+  color: white;
 }
 
 /* 日期选择器样式 */
@@ -3937,10 +3939,7 @@ async scrollToFirstError(firstErrorField) {
   transition: none;
 }
 
-.section-header.no-border:hover {
-  background-color: white;
-  /* 保持原始背景色，无变化 */
-}
+
 
 .record-count {
   font-size: 10px;
