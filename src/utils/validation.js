@@ -1,5 +1,7 @@
 // src/utils/validation.js
 
+
+
 // ============ 必填字段规则定义 ============
 export const requiredFields = {
   policyNo: { required: true, message: '保单号不能为空' },
@@ -21,22 +23,13 @@ export const requiredFields = {
   linkerPhone: { required: true, message: '联系人电话不能为空' },
   propFlag: { required: true, message: '请选择是否财产损失' },
   woundFlag: { required: true, message: '请选择是否人员伤亡' },
-   reporterRelation: {
-    rule: 'required',
-    message: '请填写报案人跟被保险人关系'
-  },
-  reporterCertType: {
-    rule: 'required',
-    message: '请填写报案人证件类型'
-  },
-  reporterCertNo: {
-    rule: 'required',
-    message: '请填写报案人证件号码'
-  },
-  handlerCode: {
-    rule: 'required',
-    message: '请填写受理人编码'
-  },
+  reporterRelation: { required: true, message: '请选择报案人跟被保险人关系' }, // 修改这里
+  reporterCertType: { required: true, message: '请选择报案人证件类型' }, // 修改这里
+  reporterCertNo: { required: true, message: '请填写报案人证件号码' }, // 修改这里
+  handlerCode: { required: true, message: '请填写受理人编码' }, // 修改这里
+  areaProvince: { required: true, message: '请选择省' },
+  areaCity: { required: true, message: '请选择市' },
+  areaDistrict: { required: true, message: '请选择区' },
   street: { required: true, message: '请输入街道' },
   doorNumber: { required: true, message: '请输入门牌号' },
   longitude: { required: true, message: '请输入经度' },
@@ -64,13 +57,14 @@ export const requiredFields = {
   disasterType: { required: true, message: '请选择巨灾类型' },
   disasterName: { required: true, message: '请输入巨灾名称' },
   isOnSiteSurvey: { required: true, message: '请选择是否需现场查勘' },
-  licenseNumber: { required: true, message: '请输入标的车车牌' },
-  driverName: { required: true, message: '请输入驾驶员姓名' },
-  engineNumber: { required: true, message: '请输入发动机号' },
-  frameNumber: { required: true, message: '请输入车架号' },
   damageStatus: { required: true, message: '请选择损失情况' },
   vehicleCanRun: { required: true, message: '请选择车辆能否正常行驶' },
-  vehicleStatus: { required: true, message: '请选择车辆状态' }
+  vehicleStatus: { required: true, message: '请选择车辆状态' },
+  personName: { required: true, message: '请输入姓名' },
+  personOwnCar: { required: true, message: '请选择归属' },
+  personPayType: { required: true, message: '请选择伤亡情况' },
+  // 财产损失相关字段
+  identityRec: { required: true, message: '请选择归属' }
 }
 
 /**

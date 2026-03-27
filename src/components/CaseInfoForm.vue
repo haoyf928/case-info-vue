@@ -244,7 +244,7 @@
         <!-- 第二行：是否现场报案、天气情况、出险地点分类 -->
         <div class="contact-form-row">
           <div class="form-group">
-            <label>是否现场报案 <span class="required">*</span></label>
+            <label>是否现场报案</label>
             <div class="radio-group">
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.isfirstsiteFlag" value="1"
@@ -328,11 +328,11 @@
                 :class="{ 'input-error': validationErrors.doorNumber }" placeholder="门牌号" class="form-input" />
 
               <button type="button" class="btn-search" @click="searchAddress">
-                <i class="iconfont icon-dingwei"></i> 路名索检
+                <i class="iconfont icon-dingwei" style="color: white !important;"></i> 路名索检
               </button>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group radio">
             <label>客户提供位置信息不准</label>
             <div class="radio-group">
               <label class="radio-label">
@@ -406,7 +406,7 @@
                 :class="{ 'input-error': validationErrors.currentDoorNumber }" placeholder="门牌号" class="form-input" />
 
               <button type="button" class="btn-search" @click="searchCurrentAddress">
-                <i class="iconfont icon-dingwei"></i> 路名索检
+                <i class="iconfont icon-dingwei" style="color: white !important;"></i> 路名索检
               </button>
             </div>
           </div>
@@ -432,10 +432,14 @@
         <!-- 第七行：出险经过 -->
         <div class="form-row">
           <div class="form-group full-width">
-            <label>出险经过 <span class="required">*</span></label>
-            <textarea v-model="caseInfo.accidentDescription" @input="onFieldInput('accidentDescription')" rows="5"
-              class="form-input" placeholder="请详细描述出险经过..."></textarea>
-          </div>
+  <label>出险经过 <span class="required">*</span></label>
+  <textarea v-model="caseInfo.accidentDescription" 
+            @input="onFieldInput('accidentDescription')" 
+            rows="5"
+            :class="{ 'input-error': validationErrors.accidentDescription }"
+            class="form-input" 
+            placeholder="请详细描述出险经过..."></textarea>
+</div>
         </div>
 
         <!-- 第八行：多列下拉选择 -->
@@ -587,7 +591,7 @@
         <!-- 第十一行：是否报警、报警时间 -->
         <div class="contact-form-row">
           <div class="form-group">
-            <label>是否报警 <span class="required">*</span></label>
+            <label>是否报警 </label>
             <div class="radio-group height">
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.isAlarm" value="1" @change="onFieldInput('isAlarm')" /> 是
@@ -616,7 +620,7 @@
         <div class="contact-form-row">
           <div class="form-group">
             <label>是否巨灾 <span class="required">*</span></label>
-            <div class="radio-group height">
+            <div class="radio-group height" :class="{ 'radio-group-error': validationErrors.isDisaster }">
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.isDisaster" value="1" @change="onFieldInput('isDisaster')" /> 是
               </label>
@@ -649,7 +653,7 @@
         <div class="contact-form-row">
           <div class="form-group">
             <label>是否需现场查勘 <span class="required">*</span></label>
-            <div class="radio-group">
+            <div class="radio-group" :class="{ 'radio-group-error': validationErrors.isOnSiteSurvey }">
               <label class="radio-label">
                 <input type="radio" v-model="caseInfo.isOnSiteSurvey" value="1"
                   @change="onFieldInput('isOnSiteSurvey')" /> 是
@@ -806,7 +810,6 @@
               {{ validationErrors.reportorName }}
             </span>
           </div>
-
           <div class="form-group">
             <label>报案电话 <span class="required">*</span></label>
             <input type="text" v-model="caseInfo.reportorPhonenumber" ref="reportorPhonenumber"
@@ -830,9 +833,6 @@
               <option value="3">父母</option>
               <option value="4">其他</option>
             </select>
-            <span v-if="validationErrors.reporterRelation" class="error-message">
-              {{ validationErrors.reporterRelation }}
-            </span>
           </div>
 
           <div class="form-group">
@@ -870,7 +870,6 @@
               {{ validationErrors.linkerName }}
             </span>
           </div>
-
           <div class="form-group">
             <label>现场联系人电话 <span class="required">*</span></label>
             <input type="text" v-model="caseInfo.linkerPhone" ref="linkerPhone" @input="onFieldInput('linkerPhone')"
@@ -879,8 +878,6 @@
               {{ validationErrors.linkerPhone }}
             </span>
           </div>
-
-          <!-- 联系人手机 -->
           <div class="form-group">
             <label>联系人手机</label>
             <input type="text" v-model="caseInfo.linkerMobile" @input="onFieldInput('linkerMobile')"
@@ -946,7 +943,7 @@
             </div>
 
             <div class="form-group">
-              <label>损失情况 <span class="required">*</span></label>
+              <label>损失情况</label>
               <div class="radio-group">
                 <label class="radio-label">
                   <input type="radio" v-model="vehicleList[0].damageStatus" value="1"
@@ -1089,7 +1086,7 @@
             </div>
 
             <div class="form-group">
-              <label>损失情况 <span class="required">*</span></label>
+              <label>损失情况</label>
               <div class="radio-group">
                 <label class="radio-label">
                   <input type="radio" v-model="vehicle.damageStatus" value="1"
@@ -1238,32 +1235,28 @@
               </div>
 
               <div class="contact-form-group">
-                <label>归属 <span class="required">*</span></label>
-                <select v-model="item.identityRec" @change="onFieldInput(`identityRec_${index}`)"
-                  class="form-input select-sm" :class="{ 'input-error': validationErrors[`identityRec_${index}`] }">
-                  <option value="">请选择</option>
-                  <option value="0">第三者</option>
-                  <option value="1">车上人员</option>
-                  <option value="2">本车</option>
-                </select>
-                <span v-if="validationErrors[`identityRec_${index}`]" class="error-message">
-                  {{ validationErrors[`identityRec_${index}`] }}
-                </span>
-              </div>
+        <label>归属 <span class="required">*</span></label>
+        <select v-model="item.identityRec" @change="onFieldInput(`identityRec_${index}`)"
+          class="form-input select-sm" :class="{ 'input-error': validationErrors[`identityRec_${index}`] }">
+          <option value="">请选择</option>
+          <option value="0">第三者</option>
+          <option value="1">车上人员</option>
+          <option value="2">本车</option>
+        </select>
+        <span v-if="validationErrors[`identityRec_${index}`]" class="error-message">
+          {{ validationErrors[`identityRec_${index}`] }}
+        </span>
+      </div>
 
               <div class="contact-form-group">
                 <label>损失情况</label>
-                <select v-model="item.lossSituation" @change="onFieldInput(`lossSituation_${index}`)"
-                  class="form-input select-sm" :class="{ 'input-error': validationErrors[`lossSituation_${index}`] }">
+                <select v-model="item.lossSituation"class="form-input select-sm">
                   <option value="">请选择</option>
                   <option value="0">轻微损坏</option>
                   <option value="1">中度损坏</option>
                   <option value="2">严重损坏</option>
                   <option value="3">完全损毁</option>
                 </select>
-                <span v-if="validationErrors[`lossSituation_${index}`]" class="error-message">
-                  {{ validationErrors[`lossSituation_${index}`] }}
-                </span>
               </div>
             </div>
           </div>
@@ -1316,7 +1309,10 @@
             <div class="injury-grid-row">
               <div class="contact-form-group">
                 <label>姓名<span class="required">*</span></label>
-                <input type="text" v-model="item.name" class="form-input" />
+                <input type="text" v-model="item.name" 
+                @input="onFieldInput(`personName_${index}`)"
+               :class="{ 'input-error': validationErrors[`personName_${index}`] }"
+                class="form-input" />
               </div>
               <div class="contact-form-group">
                 <label>性别</label>
@@ -1328,7 +1324,10 @@
               </div>
               <div class="contact-form-group">
                 <label>归属<span class="required">*</span></label>
-                <select v-model="item.owncar" class="form-input select-sm">
+                <select v-model="item.owncar" 
+                @change="onFieldInput(`personOwnCar_${index}`)"
+                :class="{ 'input-error': validationErrors[`personOwnCar_${index}`] }"
+                class="form-input select-sm">
                   <option value="">请选择</option>
                   <option value="0">第三者</option>
                   <option value="1">车上人员</option>
@@ -1336,7 +1335,10 @@
               </div>
               <div class="contact-form-group">
                 <label>伤亡情况</label>
-                <select v-model="item.persionpayType" class="form-input select-sm">
+                <select v-model="item.persionpayType"
+                @change="onFieldInput(`personPayType_${index}`)"
+                :class="{ 'input-error': validationErrors[`personPayType_${index}`] }" 
+                class="form-input select-sm">
                   <option value="">请选择</option>
                   <option value="0">轻伤</option>
                   <option value="1">重伤</option>
@@ -1934,198 +1936,219 @@ export default {
 
       return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
     },
-
     // 实时验证并清除错误
-    validateFieldRealTime(fieldName) {
-      // 处理车辆信息字段的验证
-      if (fieldName.startsWith('vehicleList')) {
-        const match = fieldName.match(/vehicleList(\d+)_(.*)/);
-        if (match) {
-          const index = parseInt(match[1]);
-          const field = match[2];
+    // 实时验证并清除错误
+validateFieldRealTime(fieldName) {
+  // 处理车辆信息字段的验证
+  if (fieldName.startsWith('vehicleList')) {
+    const match = fieldName.match(/vehicleList(\d+)_(.*)/);
+    if (match) {
+      const index = parseInt(match[1]);
+      const field = match[2];
 
-          let value = '';
-          if (this.vehicleList[index] && this.vehicleList[index][field] !== undefined) {
-            value = this.vehicleList[index][field];
-          }
-
-          // 根据字段类型进行验证
-          if (field === 'licenseNumber' || field === 'engineNumber' || field === 'frameNumber') {
-            if (!value || value.trim() === '') {
-              this.validationErrors[fieldName] = '此项为必填项';
-            } else {
-              delete this.validationErrors[fieldName];
-            }
-          } else if (field === 'driverName') {
-            if (!value || value.trim() === '') {
-              this.validationErrors[fieldName] = '此项为必填项';
-            } else if (!this.validationRules.name.pattern.test(value.trim())) {
-              this.validationErrors[fieldName] = this.validationRules.name.message;
-            } else {
-              delete this.validationErrors[fieldName];
-            }
-          } else if (field === 'damageStatus' || field === 'vehicleCanRun') {
-            if (!value) {
-              this.validationErrors[fieldName] = '请选择';
-            } else {
-              delete this.validationErrors[fieldName];
-            }
-          } else {
-            // 其他字段的验证
-            if (value && value.trim() !== '') {
-              delete this.validationErrors[fieldName];
-            } else {
-              delete this.validationErrors[fieldName]; // 非必填项
-            }
-          }
-        }
-        return;
+      let value = '';
+      if (this.vehicleList[index] && this.vehicleList[index][field] !== undefined) {
+        value = this.vehicleList[index][field];
       }
 
-      // 特殊处理时间字段的验证 - 使用北京时间
-      // if (fieldName === 'accidentTime' || fieldName === 'reportTime' || fieldName === 'alarmTime') {
-      //   // 获取当前北京时间
-      //   const now = new Date();
-      //   const utcOffset = now.getTimezoneOffset() * 60000; // 分钟转毫秒
-      //   const currentBeijingTime = new Date(now.getTime() + utcOffset + (8 * 3600000)); // 当前北京时间
-
-      //   if (this.caseInfo[fieldName]) {
-      //     const selectedTime = new Date(this.caseInfo[fieldName]);
-
-      //     // 直接比较时间戳，确保使用北京时间
-      //     if (selectedTime.getTime() > currentBeijingTime.getTime()) {
-      //       // 设置错误信息
-      //       if (fieldName === 'accidentTime') {
-      //         this.validationErrors[fieldName] = '出险时间不能晚于当前时间';
-      //       } else if (fieldName === 'reportTime') {
-      //         this.validationErrors[fieldName] = '报案时间不能晚于当前时间';
-      //       } else if (fieldName === 'alarmTime') {
-      //         this.validationErrors[fieldName] = '报警时间不能晚于当前时间';
-      //       }
-      //       return; // 提前返回，不执行后续验证
-      //     } else {
-      //       // 如果时间合法，清除错误信息
-      //       delete this.validationErrors[fieldName];
-      //     }
-      //   }
-      // }
-      // 添加姓名、手机号、证件号校验
-      if (fieldName === 'reportorName' || fieldName === 'linkerName') {
-        // 姓名校验
-        const nameValue = this.caseInfo[fieldName];
-        if (nameValue && nameValue.trim() !== '') {
-          if (!this.validationRules.name.pattern.test(nameValue.trim())) {
-            this.validationErrors[fieldName] = this.validationRules.name.message;
-          } else {
-            delete this.validationErrors[fieldName];
-          }
+      // 根据字段类型进行验证
+      if (field === 'licenseNumber' || field === 'engineNumber' || field === 'frameNumber') {
+        if (!value || value.trim() === '') {
+          this.validationErrors[fieldName] = '此项为必填项';
         } else {
-          // 如果是必填项且为空
-          if (requiredFields[fieldName]) {
-            this.validationErrors[fieldName] = '此项为必填项';
-          } else {
-            delete this.validationErrors[fieldName];
-          }
+          delete this.validationErrors[fieldName];
         }
-        return;
-      }
-
-      if (fieldName === 'reportorPhonenumber' || fieldName === 'linkerPhone' || fieldName === 'linkerMobile') {
-        // 手机号校验
-        const phoneValue = this.caseInfo[fieldName];
-        if (phoneValue && phoneValue.trim() !== '') {
-          if (!this.validationRules.phone.pattern.test(phoneValue.trim())) {
-            this.validationErrors[fieldName] = this.validationRules.phone.message;
-          } else {
-            delete this.validationErrors[fieldName];
-          }
+      } else if (field === 'driverName') {
+        if (!value || value.trim() === '') {
+          this.validationErrors[fieldName] = '此项为必填项';
+        } else if (!this.validationRules.name.pattern.test(value.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.name.message;
         } else {
-          // 如果是必填项且为空
-          if (requiredFields[fieldName]) {
-            this.validationErrors[fieldName] = '此项为必填项';
-          } else {
-            delete this.validationErrors[fieldName];
-          }
+          delete this.validationErrors[fieldName];
         }
-        return;
-      }
-
-      if (fieldName === 'reporterCertNo') {
-        // 证件号校验 - 根据证件类型选择不同的校验规则
-        const certNoValue = this.caseInfo[fieldName];
-        const certType = this.caseInfo.reporterCertType;
-
-        if (certNoValue && certNoValue.trim() !== '') {
-          if (certType === '124001') { // 身份证
-            if (!this.validationRules.idCard.pattern.test(certNoValue.trim())) {
-              this.validationErrors[fieldName] = this.validationRules.idCard.message;
-            } else {
-              delete this.validationErrors[fieldName];
-            }
-          } else if (certType === '124002') { // 护照
-            if (!this.validationRules.passport.pattern.test(certNoValue.trim())) {
-              this.validationErrors[fieldName] = this.validationRules.passport.message;
-            } else {
-              delete this.validationErrors[fieldName];
-            }
-          } else if (certType === '124003') { // 驾驶证
-            if (!this.validationRules.driverLicense.pattern.test(certNoValue.trim())) {
-              this.validationErrors[fieldName] = this.validationRules.driverLicense.message;
-            } else {
-              delete this.validationErrors[fieldName];
-            }
-          } else {
-            // 如果没有选择证件类型，暂时不校验
-            delete this.validationErrors[fieldName];
-          }
+      } else if (field === 'damageStatus' || field === 'vehicleCanRun') {
+        if (!value) {
+          this.validationErrors[fieldName] = '请选择';
         } else {
-          // 如果是必填项且为空
-          if (requiredFields[fieldName]) {
-            this.validationErrors[fieldName] = '此项为必填项';
-          } else {
-            delete this.validationErrors[fieldName];
-          }
+          delete this.validationErrors[fieldName];
         }
-        return;
-      }
-
-
-      if (fieldName === 'lossTypes') {
-        // 不进行验证逻辑，直接返回
-        return;
-      }
-      const fieldConfig = requiredFields[fieldName];
-      if (!fieldConfig) return;
-
-      let value = this.caseInfo[fieldName];
-
-      // 根据字段类型处理值
-      if (typeof value === 'string') {
-        value = value.trim();
-      } else if (typeof value === 'number') {
-        // 数字类型的值保持不变
-      } else if (typeof value === 'boolean') {
-        // 布尔类型的值保持不变
-      } else if (value === null || value === undefined) {
-        // null 或 undefined 转换为适当的值
-        value = '';
-      }
-
-      const errors = validateForm({ [fieldName]: value }, { [fieldName]: fieldConfig });
-
-      if (errors[fieldName]) {
-        // 字段仍有错误，保持错误状态
-        this.validationErrors[fieldName] = errors[fieldName];
       } else {
-        // 字段验证通过，清除错误
-        delete this.validationErrors[fieldName];
-
-        // 如果没有其他错误了，清除全局错误
-        if (Object.keys(this.validationErrors).length === 0) {
-          this.globalError = '';
+        // 其他字段的验证
+        if (value && value.trim() !== '') {
+          delete this.validationErrors[fieldName];
+        } else {
+          delete this.validationErrors[fieldName]; // 非必填项
         }
       }
-    },
+      return;
+    }
+  }
+
+  // 处理财产损失字段的验证
+  if (fieldName.startsWith('identityRec_')) {
+    const index = fieldName.split('_')[1];
+    const item = this.propertyLossList[index];
+    if (!item.identityRec) {
+      this.validationErrors[fieldName] = '请选择归属';
+    } else {
+      delete this.validationErrors[fieldName];
+    }
+    return;
+  }
+
+  // 处理人员伤亡字段的验证
+  if (fieldName.startsWith('personName_')) {
+    const index = fieldName.split('_')[1];
+    const item = this.personInjuryList[index];
+    if (!item.name || item.name.trim() === '') {
+      this.validationErrors[fieldName] = '请输入姓名';
+    } else if (!this.validationRules.name.pattern.test(item.name.trim())) {
+      this.validationErrors[fieldName] = this.validationRules.name.message;
+    } else {
+      delete this.validationErrors[fieldName];
+    }
+    return;
+  }
+
+  if (fieldName.startsWith('personOwnCar_')) {
+    const index = fieldName.split('_')[1];
+    const item = this.personInjuryList[index];
+    if (!item.owncar) {
+      this.validationErrors[fieldName] = '请选择归属';
+    } else {
+      delete this.validationErrors[fieldName];
+    }
+    return;
+  }
+
+  if (fieldName.startsWith('personPayType_')) {
+    const index = fieldName.split('_')[1];
+    const item = this.personInjuryList[index];
+    if (!item.persionpayType) {
+      this.validationErrors[fieldName] = '请选择伤亡情况';
+    } else {
+      delete this.validationErrors[fieldName];
+    }
+    return;
+  }
+
+  // 添加姓名、手机号、证件号校验
+  if (fieldName === 'reportorName' || fieldName === 'linkerName') {
+    // 姓名校验
+    const nameValue = this.caseInfo[fieldName];
+    if (nameValue && nameValue.trim() !== '') {
+      if (!this.validationRules.name.pattern.test(nameValue.trim())) {
+        this.validationErrors[fieldName] = this.validationRules.name.message;
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    } else {
+      // 如果是必填项且为空
+      if (requiredFields[fieldName]) {
+        this.validationErrors[fieldName] = '此项为必填项';
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    }
+    return;
+  }
+
+  if (fieldName === 'reportorPhonenumber' || fieldName === 'linkerPhone' || fieldName === 'linkerMobile') {
+    // 手机号校验
+    const phoneValue = this.caseInfo[fieldName];
+    if (phoneValue && phoneValue.trim() !== '') {
+      if (!this.validationRules.phone.pattern.test(phoneValue.trim())) {
+        this.validationErrors[fieldName] = this.validationRules.phone.message;
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    } else {
+      // 如果是必填项且为空
+      if (requiredFields[fieldName]) {
+        this.validationErrors[fieldName] = '此项为必填项';
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    }
+    return;
+  }
+
+  if (fieldName === 'reporterCertNo') {
+    // 证件号校验 - 根据证件类型选择不同的校验规则
+    const certNoValue = this.caseInfo[fieldName];
+    const certType = this.caseInfo.reporterCertType;
+
+    if (certNoValue && certNoValue.trim() !== '') {
+      if (certType === '124001') { // 身份证
+        if (!this.validationRules.idCard.pattern.test(certNoValue.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.idCard.message;
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else if (certType === '124002') { // 护照
+        if (!this.validationRules.passport.pattern.test(certNoValue.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.passport.message;
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else if (certType === '124003') { // 驾驶证
+        if (!this.validationRules.driverLicense.pattern.test(certNoValue.trim())) {
+          this.validationErrors[fieldName] = this.validationRules.driverLicense.message;
+        } else {
+          delete this.validationErrors[fieldName];
+        }
+      } else {
+        // 如果没有选择证件类型，暂时不校验
+        delete this.validationErrors[fieldName];
+      }
+    } else {
+      // 如果是必填项且为空
+      if (requiredFields[fieldName]) {
+        this.validationErrors[fieldName] = '此项为必填项';
+      } else {
+        delete this.validationErrors[fieldName];
+      }
+    }
+    return;
+  }
+
+
+  if (fieldName === 'lossTypes') {
+    // 不进行验证逻辑，直接返回
+    return;
+  }
+  const fieldConfig = requiredFields[fieldName];
+  if (!fieldConfig) return;
+
+  let value = this.caseInfo[fieldName];
+
+  // 根据字段类型处理值
+  if (typeof value === 'string') {
+    value = value.trim();
+  } else if (typeof value === 'number') {
+    // 数字类型的值保持不变
+  } else if (typeof value === 'boolean') {
+    // 布尔类型的值保持不变
+  } else if (value === null || value === undefined) {
+    // null 或 undefined 转换为适当的值
+    value = '';
+  }
+
+  const errors = validateForm({ [fieldName]: value }, { [fieldName]: fieldConfig });
+
+  if (errors[fieldName]) {
+    // 字段仍有错误，保持错误状态
+    this.validationErrors[fieldName] = errors[fieldName];
+  } else {
+    // 字段验证通过，清除错误
+    delete this.validationErrors[fieldName];
+
+    // 如果没有其他错误了，清除全局错误
+    if (Object.keys(this.validationErrors).length === 0) {
+      this.globalError = '';
+    }
+  }
+},
 
     // 在用户输入时调用此方法
     onFieldInput(fieldName) {
@@ -2302,105 +2325,232 @@ export default {
       } else {
         delete this.validationErrors[fieldName]
       }
-      if (fieldName.startsWith('identityRec_')) {
-        const index = fieldName.split('_')[1]
-        const item = this.propertyLossList[index]
-        if (!item.identityRec) {
-          this.validationErrors[fieldName] = '请选择归属'
-        } else {
-          delete this.validationErrors[fieldName]
-        }
-      }
-      if (fieldName.startsWith('lossSituation_')) {
-        const index = fieldName.split('_')[1]
-        const item = this.propertyLossList[index]
-        if (!item.lossSituation) {
-          this.validationErrors[fieldName] = '请选择损失情况'
-        } else {
-          delete this.validationErrors[fieldName]
-        }
-      }
 
     },
 
     // ============ 校验并提交（核心方法） ============
-    // ============ 校验并提交（核心方法） ============
-    async validateAndSubmit() {
-      // 1. 清除之前的错误
+// ============ 校验并提交（核心方法） ============
+async validateAndSubmit() {
+  // 1. 清除之前的错误
+  this.globalError = ''
+  this.clearErrorHighlights()
+
+  // 2. 执行表单校验
+  const errors = validateForm(this.caseInfo, requiredFields)
+
+  // 3. 验证车辆信息
+  const vehicleErrors = this.validateVehicleInfo()
+  
+  // 4. 验证财产损失信息
+  const propertyLossErrors = this.validatePropertyLossInfo()
+  
+  // 5. 验证人员伤亡信息
+  const personInjuryErrors = this.validatePersonInjuryInfo()
+  
+  // 合并所有错误
+  const allErrors = { 
+    ...errors, 
+    ...vehicleErrors,
+    ...propertyLossErrors,
+    ...personInjuryErrors
+  }
+
+  // 6. 如果有错误，定位到第一个错误字段
+  if (Object.keys(allErrors).length > 0) {
+    // 更新验证错误
+    this.validationErrors = allErrors
+
+    // 展开包含错误字段的区块
+    this.expandSectionsWithErrors(allErrors)
+
+    // 等待 DOM 更新后滚动定位
+    await this.$nextTick()
+
+    // 滚动到第一个错误字段
+    this.scrollToFirstError(allErrors)
+
+    // 显示错误提示
+    this.globalError = '请完善以下必填信息，共 ' + Object.keys(allErrors).length + ' 项'
+    setTimeout(() => {
       this.globalError = ''
-      this.clearErrorHighlights()
+    }, 5000)
 
-      // 2. 执行表单校验
-      const errors = validateForm(this.caseInfo, requiredFields)
+    // 不要在这里返回 false，而是继续执行后续代码
+  } else {
+    // 7. 校验通过，提交表单
+    this.$emit('submit', this.caseInfo)
+    return true
+  }
 
-      // 3. 如果有错误，定位到第一个错误字段
-      if (Object.keys(errors).length > 0) {
-        // 只保留真正有错误的字段，不清除用户已经填写正确的字段的错误状态
-        this.validationErrors = errors
+  // 即使有错误也返回 true，因为我们仍需要完成前面的操作
+  return Object.keys(allErrors).length === 0
+},
 
-        // 展开包含错误字段的区块
-        this.expandSectionsWithErrors(errors)
-
-        // 等待 DOM 更新后滚动定位
-        await this.$nextTick()
-
-        // 滚动到第一个错误字段
-        this.scrollToFirstError(errors)
-
-        // 显示错误提示
-        this.globalError = '请完善以下必填信息，共 ' + Object.keys(errors).length + ' 项'
-        setTimeout(() => {
-          this.globalError = ''
-        }, 5000)
-
-        // 不要在这里返回 false，而是继续执行后续代码
-      } else {
-        // 4. 校验通过，提交表单
-        this.$emit('submit', this.caseInfo)
-        return true
+// 新增：验证财产损失信息的方法
+validatePropertyLossInfo() {
+  const errors = {}
+  
+  // 验证财产损失信息（只有当选择"有财产损失"时才验证）
+  if (this.caseInfo.propFlag === '1' && this.propertyLossList.length > 0) {
+    for (let i = 0; i < this.propertyLossList.length; i++) {
+      const item = this.propertyLossList[i]
+      
+      // 验证归属字段
+      if (!item.identityRec) {
+        const fieldName = `identityRec_${i}`
+        errors[fieldName] = '请选择归属'
       }
+      
+      // 验证损失情况字段
+      if (!item.lossSituation) {
+        const fieldName = `lossSituation_${i}`
+        errors[fieldName] = '请选择损失情况'
+      }
+    }
+  }
+  
+  return errors
+},
 
-      // 即使有错误也返回 true，因为我们仍需要完成前面的操作
-      return Object.keys(errors).length === 0
-    },
+// 新增：验证人员伤亡信息的方法
+validatePersonInjuryInfo() {
+  const errors = {}
+  
+  // 验证人员伤亡信息（只有当选择"有人员伤亡"时才验证）
+  if (this.caseInfo.woundFlag === '1' && this.personInjuryList.length > 0) {
+    for (let i = 0; i < this.personInjuryList.length; i++) {
+      const item = this.personInjuryList[i]
+      
+      // 验证姓名字段
+      if (!item.name || item.name.trim() === '') {
+        const fieldName = `personName_${i}`
+        errors[fieldName] = '请输入姓名'
+      } else if (!this.validationRules.name.pattern.test(item.name.trim())) {
+        const fieldName = `personName_${i}`
+        errors[fieldName] = this.validationRules.name.message
+      }
+      
+      // 验证归属字段
+      if (!item.owncar) {
+        const fieldName = `personOwnCar_${i}`
+        errors[fieldName] = '请选择归属'
+      }
+      
+      // 验证伤亡情况字段
+      if (!item.persionpayType) {
+        const fieldName = `personPayType_${i}`
+        errors[fieldName] = '请选择伤亡情况'
+      }
+    }
+  }
+  
+  return errors
+},
+
+// 新增：验证车辆信息的方法
+validateVehicleInfo() {
+  const errors = {}
+  
+  // 遍历所有车辆信息
+  for (let i = 0; i < this.vehicleList.length; i++) {
+    const vehicle = this.vehicleList[i]
+    
+    // 验证必填字段
+    if (!vehicle.licenseNumber || vehicle.licenseNumber.trim() === '') {
+      const fieldName = `vehicleList${i}_licenseNumber`
+      errors[fieldName] = '请输入车辆车牌号'
+    }
+    
+    if (!vehicle.driverName || vehicle.driverName.trim() === '') {
+      const fieldName = `vehicleList${i}_driverName`
+      errors[fieldName] = '请输入驾驶员姓名'
+    }
+    
+    if (!vehicle.engineNumber || vehicle.engineNumber.trim() === '') {
+      const fieldName = `vehicleList${i}_engineNumber`
+      errors[fieldName] = '请输入发动机号'
+    }
+    
+    if (!vehicle.frameNumber || vehicle.frameNumber.trim() === '') {
+      const fieldName = `vehicleList${i}_frameNumber`
+      errors[fieldName] = '请输入车架号'
+    }
+    
+    if (!vehicle.damageStatus) {
+      const fieldName = `vehicleList${i}_damageStatus`
+      errors[fieldName] = '请选择损失情况'
+    }
+    
+    if (!vehicle.vehicleCanRun) {
+      const fieldName = `vehicleList${i}_vehicleCanRun`
+      errors[fieldName] = '请选择车辆能否正常行驶'
+    }
+  }
+  
+  return errors
+},
     // ============ 展开包含错误的区块 ============
     expandSectionsWithErrors(errors) {
-      const fieldSectionMap = {
-        policyNo: 'policyInfo',
-        isfirstsiteFlag: 'reportInfo',
-        weatherSituation: 'reportInfo',
-        damageAddress: 'reportInfo',
-        areaProvince: 'reportInfo',
-        areaCity: 'reportInfo',
-        areaDistrict: 'reportInfo',
-        lsType: 'reportInfo',
-        damageCode: 'reportInfo',
-        licenseNumber: 'vehicleInfo',
-        engineNumber: 'vehicleInfo',
-        frameNumber: 'vehicleInfo',
-        driverName: 'vehicleInfo',
-        vehicleCanRun: 'vehicleInfo',
-        reportorName: 'contactInfo',
-        reportorPhonenumber: 'contactInfo',
-        linkerName: 'contactInfo',
-        linkerPhone: 'contactInfo',
-        propFlag: 'propertyLoss',
-        woundFlag: 'personInjury'
+  const fieldSectionMap = {
+    policyNo: 'policyInfo',
+    isfirstsiteFlag: 'reportInfo',
+    weatherSituation: 'reportInfo',
+    damageAddress: 'reportInfo',
+    areaProvince: 'reportInfo',
+    areaCity: 'reportInfo',
+    areaDistrict: 'reportInfo',
+    lsType: 'reportInfo',
+    damageCode: 'reportInfo',
+    licenseNumber: 'vehicleInfo',
+    engineNumber: 'vehicleInfo',
+    frameNumber: 'vehicleInfo',
+    driverName: 'vehicleInfo',
+    damageStatus: 'vehicleInfo',
+    vehicleCanRun: 'vehicleInfo',
+    reportorName: 'contactInfo',
+    reportorPhonenumber: 'contactInfo',
+    linkerName: 'contactInfo',
+    linkerPhone: 'contactInfo',
+    propFlag: 'propertyLoss',
+    woundFlag: 'personInjury',
+    // 财产损失字段映射
+    'identityRec_': 'propertyLoss',
+    'lossSituation_': 'propertyLoss',
+    // 人员伤亡字段映射
+    'personName_': 'personInjury',
+    'personOwnCar_': 'personInjury',
+    'personPayType_': 'personInjury'
+  }
+
+  const firstErrorField = Object.keys(errors)[0]
+  let section = fieldSectionMap[firstErrorField]
+  
+  // 如果没有直接匹配，检查前缀匹配
+  if (!section) {
+    for (const [prefix, sec] of Object.entries(fieldSectionMap)) {
+      if (prefix.endsWith('_') && firstErrorField.startsWith(prefix)) {
+        section = sec
+        break
       }
+    }
+  }
+  
+  if (section) {
+    const sectionKey = `${section}Expanded`
+    this[sectionKey] = true
 
-      const sectionsToExpand = new Set()
-      Object.keys(errors).forEach(field => {
-        const section = fieldSectionMap[field]
-        if (section) {
-          sectionsToExpand.add(section)
-        }
-      })
-
-      sectionsToExpand.forEach(section => {
-        const sectionKey = `${section}Expanded`
-        this[sectionKey] = true
-      })
-    },
+    // 滚动到对应区块
+    this.$nextTick(() => {
+      const sectionElement = document.getElementById(`section-${section}`)
+      if (sectionElement) {
+        sectionElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }
+    })
+  }
+},
 
     // ============ 滚动到第一个错误字段 ============
     async scrollToFirstError(errors) {
@@ -2572,16 +2722,13 @@ export default {
 
     // ============ 添加/删除人员伤亡 ============
     addPersonInjury() {
-      // 确保只有在选择"有"时才添加新的人员伤亡信息
-      if (this.caseInfo.woundFlag === '1') {
         this.personInjuryList.push({
           name: '',
           sex: '',
           owncar: '',
           persionpayType: '',
           isHospitalized: '0'
-        });
-      }
+        })
     },
     removePersonInjury(index) {
       if (this.personInjuryList.length > 1) {
@@ -2959,7 +3106,7 @@ export default {
 
 .btn-search {
   padding: 6px 12px;
-  background-color: #0887FF;
+  background-color: #3B4DAA;
   color: white;
   border: none;
   border-radius: 4px;
@@ -3255,7 +3402,7 @@ export default {
 .float-right {
   float: right;
   margin-left: auto;
-  margin-top: -15px;
+  margin-top: -5px;
   /* 调整垂直对齐 */
 }
 
@@ -3957,24 +4104,7 @@ export default {
   margin-right: 8px;
 }
 
-/* 单选框组也左对齐 */
-.radio-group {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  text-align: left;
-  height: 20px;
-  /* 确保文字左对齐 */
-}
 
-.radio-group.height {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  text-align: left;
-  height: 40px;
-  /* 确保文字左对齐 */
-}
 
 /* ============ 表单行样式 ============ */
 .form-row {
@@ -3989,6 +4119,13 @@ export default {
   margin-bottom: 16px;
   min-width: 80px;
 }
+.form-group.radio {
+  margin-top: 18px;
+  margin-left: 5px;
+  margin-bottom: 0px;
+  min-width: 80px;
+}
+
 
 .vehicle.form-group {
   margin-bottom: 1px;
@@ -4155,7 +4292,6 @@ export default {
 }
 
 /* ============ 单选/复选框样式 ============ */
-.radio-group,
 .checkbox-group {
   display: flex;
   gap: 16px;
@@ -4172,21 +4308,70 @@ export default {
   text-align: left;
 }
 
-.radio-label input,
 .checkbox-label input {
   margin-right: 6px;
   background-color: #3B4DAA !important;
   /* 选中时的填充色 */
+}
+.radio-label input[type="radio"] {
+  appearance: none !important;
+  width: 11px !important;
+  height: 11px !important;
+  border-radius: 50% !important;
+  border: 1px solid black !important;
+  background: transparent !important; /* 未选中时背景透明，内部空白 */
+  position: relative !important;
+  cursor: pointer !important;
+  outline: none !important; /* 去掉聚焦轮廓干扰 */
+  vertical-align: middle;
+  margin-right: 6px;
+  margin-bottom: 5px;
+}
+
+/* 选中状态：固定小圆点尺寸，永不变大 */
+.radio-label input[type="radio"]:checked::after {
+  content: "" !important;
+  width: 4px !important; /* 固定圆点大小，可自行调整 */
+  height: 4px !important;
+  background: #3B4DAA !important;
+  border-radius: 50% !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  box-sizing: border-box !important; /* 防止尺寸溢出 */
+}
+
+/* 选中时边框颜色同步主题色 */
+.radio-label input[type="radio"]:checked {
+  border-color: #3B4DAA !important;
+}
+/* 单选框组也左对齐 */
+.radio-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  text-align: left;
+  height: 20px;
+  /* 确保文字左对齐 */
+}
+
+.radio-group.height {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  text-align: left;
+  height: 40px;
+  /* 确保文字左对齐 */
+}
+
+
+/* 当父容器有错误类时，改变单选按钮样式 */
+.radio-group.radio-group-error input[type="radio"]:not(:checked) {
+  border: 2px solid #f56c6c !important;
 
 }
 
-/* 单选框选中状态 */
-input[type="radio"]:checked {
-  background-color: #3B4DAA !important;
-  /* 设置选中时的填充色 */
-  border-color: #3B4DAA;
-  /* 边框颜色也要设置 */
-}
 
 /* ============ 复选框样式 ============ */
 .checkbox-input {
