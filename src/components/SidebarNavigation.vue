@@ -2,11 +2,15 @@
 <template>
   <div class="sidebar-navigation">
     <ul class="nav-list">
-      <li v-for="item in navItems" :key="item.id" :class="{ active: activeTab === item.id }"
-        @click="onTabClick(item.id)" class="nav-item">
-        <span class="nav-icon">{{ item.icon }}</span>
-        <span class="nav-text">{{ item.text }}</span>
-      </li>
+      <li
+  v-for="item in navItems"
+  :key="item.id"
+  class="nav-item"
+  :class="{ active: activeTab === item.id }"
+  @click="onTabClick(item)"
+>
+  <span class="nav-text">{{ item.text }}</span>
+</li>
     </ul>
   </div>
 </template>
@@ -17,7 +21,8 @@ export default {
   props: {
     activeTab: {
       type: String,
-    required: true  
+      required: true ,
+      default: ''  
     }
   },
   data() {
@@ -36,10 +41,10 @@ export default {
     }
   },
   methods: {
-    onTabClick(tabId) {
-      // 发送事件给父组件
-      this.$emit('tab-change', tabId)
-    }
+    onTabClick(item) {
+    // 🔥 关键：直接传 item.id，绝对不延迟
+    this.$emit('tab-change', item.id)
+  }
   }
 }
 </script>
@@ -69,28 +74,18 @@ export default {
   margin: 0;
   flex: 1;
   overflow-y: auto;
+  
 }
 
 .nav-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
+  padding: 8px 16px;
   cursor: pointer;
   transition: all 0.2s;
   border-bottom: 1px solid #f5f5f5;
 }
-
-.nav-item:hover {
-  background-color: #e8f4fc;
-}
-
-.nav-item.active {
-  background-color: #e3eaed;
-  color: #007bff;
-  border-left: 3px solid #007bff;
-}
-
 .nav-icon {
   font-size: 16px;
   width: 20px;
@@ -99,6 +94,24 @@ export default {
 
 .nav-text {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 300;
 }
+
+
+.nav-item:hover {
+  background-color: #e8f4fc;
+}
+
+.nav-item.active {
+  background-color: #e3eaed;
+  color: #3B4DAA;
+  border-left: 3px solid #3B4DAA;
+}
+
+/* 选中状态 → 强制加粗 */
+.nav-item.active .nav-text {
+  font-weight: 700 !important;
+  color: #3B4DAA !important;
+}
+
 </style>

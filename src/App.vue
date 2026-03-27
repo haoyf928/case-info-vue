@@ -282,7 +282,6 @@ body {
   width: 150px; 
   flex-shrink: 0;
   background-color: #F5F7FA;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 100;
@@ -290,12 +289,13 @@ body {
   -ms-overflow-style: none;
   position: fixed; /* 固定定位 */
   right: 24px;
-  top: 80px; /* 调整距离顶部的高度，给标题栏留出更多空间 */
-  height: calc(100vh - 104px); /* 相应调整高度计算 */
+  top: 50px; /* 调整距离顶部的高度，给标题栏留出更多空间 */
+  height: calc(100vh - 120px); /* 相应调整高度计算 */
   border-radius: 8px;
-  padding-top: 16px; /* 减少内边距 */
   box-sizing: border-box; /* 确保盒模型正确计算 */
 }
+
+
 
 /* 隐藏滚动条 */
 ::v-deep .main-content-centered::-webkit-scrollbar,

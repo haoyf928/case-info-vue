@@ -2772,10 +2772,9 @@ validateVehicleInfo() {
               const offsetTop = 60; // 顶部标题栏高度 + 一些额外空间
               const scrollTop = elementTop - offsetTop;
 
-              // 使用 smooth 滚动到计算好的位置
               window.scrollTo({
                 top: scrollTop,
-                behavior: 'smooth'
+                behavior: 'auto'
               });
 
               // // 高亮区块头部
@@ -2928,43 +2927,12 @@ validateVehicleInfo() {
   /* 从第2列开始，占1列，与上面的性别字段对齐 */
 }
 
-/* 导航栏样式 */
-.sidebar-nav {
-  position: fixed;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1000;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px 0;
-}
 
-.nav-item {
-  padding: 12px 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-}
-
-.nav-item:hover {
-  background-color: #f5f5f5;
-}
-
-.nav-item.active {
-  background-color: #e6f7ff;
-  color: #1890ff;
-  font-weight: bold;
-  border-left: 3px solid #1890ff;
-}
 
 /* 区块高亮样式 */
 .section-header.section-highlighted {
-  background-color: #e6f7ff !important;
-  border-left: 4px solid #1890ff !important;
+  background-color: #F5F7FA !important;
+  border-left: 4px solid #3B4DAA !important;
   transition: all 0.3s ease;
 }
 
@@ -2977,7 +2945,7 @@ validateVehicleInfo() {
   cursor: pointer;
   transition: none;
   gap: 12px;
-  background-color: white;
+  background-color: #F5F7FA ;
 }
 
 .section-header-other {
