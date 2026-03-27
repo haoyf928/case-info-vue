@@ -798,7 +798,6 @@
       <div class="section-header-other no-border">
         <h3><i class="iconfont icon-yonghu" style="color: #3B4DAA ;"></i> 报案人姓名、联系人姓名</h3>
       </div>
-
       <div v-show="contactInfoExpanded" class="section-content">
         <!-- 第一行：4个字段 -->
         <div class="contact-form-row">
@@ -845,7 +844,6 @@
             </select>
           </div>
         </div>
-
         <!-- 第二行：1个字段 -->
         <div class="contact-form-row">
           <!-- 报案人证件号码 -->
@@ -1483,8 +1481,6 @@
       <i class="iconfont icon-008duihuakuang-6" style="color: #3B4DAA;"></i>
       <span>请您保留事故现场，在原地等候查勘，查勘员会立即与您联系。再见。</span>
     </div>
-
-
   </div>
 </template>
 
