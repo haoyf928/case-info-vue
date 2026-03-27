@@ -6,7 +6,6 @@
 export const requiredFields = {
   policyNo: { required: true, message: '保单号不能为空' },
   isfirstsiteFlag: { required: true, message: '请选择是否现场报案' },
-  damageAddress: { required: true, message: '出险地点不能为空' },
   lsType: { required: true, message: '请选择险因类型' },
   damageCode: { required: true, message: '请选择保险事故分类' },
   licenseNumber: { required: true, message: '车牌号不能为空' },
@@ -24,8 +23,6 @@ export const requiredFields = {
   propFlag: { required: true, message: '请选择是否财产损失' },
   woundFlag: { required: true, message: '请选择是否人员伤亡' },
   reporterRelation: { required: true, message: '请选择报案人跟被保险人关系' }, // 修改这里
-  reporterCertType: { required: true, message: '请选择报案人证件类型' }, // 修改这里
-  reporterCertNo: { required: true, message: '请填写报案人证件号码' }, // 修改这里
   handlerCode: { required: true, message: '请填写受理人编码' }, // 修改这里
   areaProvince: { required: true, message: '请选择省' },
   areaCity: { required: true, message: '请选择市' },

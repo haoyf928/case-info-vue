@@ -311,7 +311,7 @@
               </select>
 
               <!-- 区县选择 -->
-              <select v-model="caseInfo.areaDistrict" @change="onFieldInput('damageAddress')"
+              <select v-model="caseInfo.areaDistrict" @change="onFieldInput('areaDistrict')"
                 :disabled="!caseInfo.areaCity" :class="{ 'input-error': validationErrors.areaDistrict }"
                 class="form-input select-sm">
                 <option value="">请选择区</option>
@@ -321,10 +321,10 @@
                 </option>
               </select>
 
-              <input type="text" v-model="caseInfo.street" ref="street" @input="onFieldInput('damageAddress')"
+              <input type="text" v-model="caseInfo.street" ref="street" @input="onFieldInput('street')"
                 :class="{ 'input-error': validationErrors.street }" placeholder="街道" class="form-input" />
 
-              <input type="text" v-model="caseInfo.doorNumber" ref="doorNumber" @input="onFieldInput('damageAddress')"
+              <input type="text" v-model="caseInfo.doorNumber" ref="doorNumber" @input="onFieldInput('doorNumber')"
                 :class="{ 'input-error': validationErrors.doorNumber }" placeholder="门牌号" class="form-input" />
 
               <button type="button" class="btn-search" @click="searchAddress">
@@ -363,7 +363,7 @@
         </div>
 
         <!-- 第五行：车辆目前所在地 -->
-        <div class="form-row" v-if="caseInfo.isfirstsiteFlag === '1' || caseInfo.isfirstsiteFlag === 1">
+        <div class="form-row" v-if="caseInfo.isfirstsiteFlag === '0' || caseInfo.isfirstsiteFlag === 0">
           <div class="form-group full-width">
             <label><i class="iconfont icon-dingwei"></i> 车辆目前所在地 <span class="required">*</span></label>
             <div class="address-inputs">
@@ -413,7 +413,7 @@
         </div>
 
         <!-- 第六行：车辆目前所在地经纬度 -->
-        <div class="form-row" v-if="caseInfo.isfirstsiteFlag === '1' || caseInfo.isfirstsiteFlag === 1">
+        <div class="form-row" v-if="caseInfo.isfirstsiteFlag === '0' || caseInfo.isfirstsiteFlag === 0">
           <div class="form-group">
             <label>车辆目前所在地经度 <span class="required">*</span></label>
             <input type="number" step="0.000001" v-model="caseInfo.currentLongitude" ref="currentLongitude"
@@ -1710,26 +1710,6 @@ export default {
           selected: false,
           hovered: false,
           bodyExpanded: false
-        },
-        {
-          policyNo: '29932070365202500000010',
-          appliName: '李*华',
-          insuredName: '李*华',
-          agentName: '赵晓东',
-          insuranceName: '企业财产保险基本险',
-          policyStartDateStr: '2025/12/01 00:00:00',
-          policyEndDateStr: '2026/11/30 23:59:59',
-          insurerName: '32070103-招商财产保险股份有限公司无锡中心支公司',
-          workUnit: '',
-          customerSource: '',
-          customerTag: '一般客户',
-          customerLevel: '老客户',
-          specialistName: '',
-          specialistPhone: '',
-          serviceLevel: '',
-          selected: false,
-          hovered: false,
-          bodyExpanded: false
         }
       ],
       currentOperatingField: null, // 新增：跟踪当前操作的时间字段
@@ -1904,14 +1884,14 @@ export default {
       // 清空城市和区县选择
       this.caseInfo.areaCity = '';
       this.caseInfo.areaDistrict = '';
-      this.onFieldInput('damageAddress');
+      this.onFieldInput('areaProvince');
     },
 
     // 当选择城市时，清空区县
     onCityChange() {
       // 清空区县选择
       this.caseInfo.areaDistrict = '';
-      this.onFieldInput('damageAddress');
+      this.onFieldInput('areaCity');
     },
     // 获取当前北京时间
     getCurrentBeijingTime() {
@@ -1936,7 +1916,6 @@ export default {
 
       return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
     },
-    // 实时验证并清除错误
     // 实时验证并清除错误
 validateFieldRealTime(fieldName) {
   // 处理车辆信息字段的验证
@@ -2031,7 +2010,18 @@ validateFieldRealTime(fieldName) {
     }
     return;
   }
-
+// 添加对经纬度字段的特殊处理
+  if (fieldName === 'longitude' || fieldName === 'latitude' || 
+      fieldName === 'currentLongitude' || fieldName === 'currentLatitude') {
+    const value = this.caseInfo[fieldName];
+    if (value === null || value === undefined || value === '' || isNaN(parseFloat(value))) {
+      this.validationErrors[fieldName] = '请输入有效的坐标值';
+    } else {
+      // 值有效，删除错误
+      delete this.validationErrors[fieldName];
+    }
+    return;
+  }
   // 添加姓名、手机号、证件号校验
   if (fieldName === 'reportorName' || fieldName === 'linkerName') {
     // 姓名校验
@@ -2101,13 +2091,8 @@ validateFieldRealTime(fieldName) {
         // 如果没有选择证件类型，暂时不校验
         delete this.validationErrors[fieldName];
       }
-    } else {
-      // 如果是必填项且为空
-      if (requiredFields[fieldName]) {
-        this.validationErrors[fieldName] = '此项为必填项';
-      } else {
-        delete this.validationErrors[fieldName];
-      }
+    }else{
+      delete this.validationErrors[fieldName];
     }
     return;
   }
