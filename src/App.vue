@@ -1,7 +1,6 @@
-<!-- src/App.vue -->
 <template>
   <div class="app-wrapper">
-    <!-- 新增：顶部系统标题栏 -->
+    <!-- 顶部系统标题栏 -->
     <header class="app-header">
       <div class="header-left">
         <i class="iconfont icon-shield"></i>
@@ -9,22 +8,52 @@
       </div>
     </header>
 
+    <!-- 选项卡导航 -->
+    <div class="tabs-nav">
+      <button 
+        :class="['tab-btn', { active: currentPage === 'caseForm' }]" 
+        @click="currentPage = 'caseForm'"
+      >
+        案件录入
+      </button>
+      <button 
+        :class="['tab-btn', { active: currentPage === 'policySearch' }]" 
+        @click="currentPage = 'policySearch'"
+      >
+        保单查询
+      </button>
+    </div>
+
     <!-- 原有双栏布局容器 -->
     <div class="app-container">
       <!-- 主内容区 -->
-      <main class="main-content">
-        <CaseInfoForm ref="caseForm" :case-info="caseInfo" @submit="handleSubmit" @save="handleSave"
-          @transfer="handleTransfer" />
+      <main class="main-content"
+      :class="{ 'full-width': currentPage === 'policySearch' }"
+      >
+        <!-- 案件录入表单 -->
+        <CaseInfoForm 
+          v-if="currentPage === 'caseForm'" 
+          ref="caseForm" 
+          :case-info="caseInfo" 
+          @submit="handleSubmit" 
+          @save="handleSave"
+          @transfer="handleTransfer" 
+        />
+        
+        <!-- 保单查询页面 -->
+        <PolicySearch 
+          v-if="currentPage === 'policySearch'" 
+        />
       </main>
 
-      <!-- 右侧固定导航栏 -->
-      <aside class="sidebar-fixed">
+      <!-- 右侧固定导航栏 - 只在案件录入页面显示 -->
+      <aside v-if="currentPage === 'caseForm'" class="sidebar-fixed">
         <SidebarNavigation :active-tab="activeTab" @tab-change="handleTabChange" />
       </aside>
     </div>
 
-    <!-- 固定在底部的按钮区域 - 从 CaseInfoForm 移至此处 -->
-    <div class="form-actions-sticky">
+    <!-- 固定在底部的按钮区域 - 只在案件录入页面显示 -->
+    <div v-if="currentPage === 'caseForm'" class="form-actions-sticky">
       <button type="button" @click="validateAndSubmit" class="btn-submit">
         <i class="iconfont icon-fasong"></i> 提交
       </button>
@@ -41,15 +70,18 @@
 <script>
 import CaseInfoForm from './components/CaseInfoForm.vue'
 import SidebarNavigation from './components/SidebarNavigation.vue'
+import PolicySearch from './components/policySearch.vue'  // 引入新组件
 
 export default {
   name: 'App',
   components: {
     CaseInfoForm,
-    SidebarNavigation
+    SidebarNavigation,
+    PolicySearch  // 注册新组件
   },
   data() {
     return {
+      currentPage: 'policySearch',  // 控制当前显示的页面
       caseInfo: {
         policyNo: '29932070365202500000008',
         appliName: '吴*行',
@@ -182,8 +214,28 @@ export default {
   }
 }
 </script>
-
 <style scoped>
+.tabs-nav {
+  display: flex;
+  margin: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  border-bottom: 2px solid #3B4DAA;
+  color: #3B4DAA;
+  font-weight: bold;
+}
+
+/* 其他样式保持不变 */
 /* 全局重置 */
 * {
   margin: 0;
@@ -244,8 +296,7 @@ body {
   display: flex;
   flex-direction: row;
   flex: 1;
-  /* 顶栏高度 */
-  padding: 6px 24px;
+  padding: 60px 24px 20px; /* 调整了顶部内边距以适应固定头部 */
   gap: 20px;
   width: 100%;
   position: relative;
@@ -258,6 +309,17 @@ body {
   max-width: calc(100% - 170px);
   padding-bottom: 160px !important;
   margin-left: 0;
+}
+
+/* 当显示保单查询页面时，主内容区占满宽度 */
+.main-content.full-width {
+  max-width: 100% !important;
+}
+
+/* 确保 policySearch 容器也充分利用空间 */
+.main-content.full-width .policy-search-container {
+  width: 100%;
+  margin: 0;
 }
 
 /* 右侧固定导航栏 */
@@ -326,13 +388,11 @@ body {
   color: #fff;
 }
 
-/* ------------------------------ */
-/* ✅ 响应式：平板 768~1024 */
-/* ------------------------------ */
+/* 响应式样式 */
 @media (max-width: 1024px) {
   .app-container {
     flex-direction: column;
-    padding: 12px 16px;
+    padding: 80px 16px 20px;
   }
 
   .main-content {
@@ -340,7 +400,7 @@ body {
     padding-bottom: 200px !important;
   }
 
-  /* 右侧导航变成顶部横向 */
+  /* 当在小屏幕上时，即使在案件录入页面也要调整侧边栏 */
   .sidebar-fixed {
     position: relative;
     width: 100%;
@@ -350,22 +410,33 @@ body {
     top: auto;
     margin-bottom: 12px;
   }
+  
+  .main-content.full-width .policy-search-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
-/* ------------------------------ */
-/* ✅ 响应式：手机 <768 */
-/* ------------------------------ */
 @media (max-width: 768px) {
   .app-header {
     padding: 0 12px;
   }
 
   .app-container {
-    padding: 8px 12px;
+    padding: 80px 12px 20px;
   }
 
   .main-content {
     padding-bottom: 220px !important;
+  }
+  
+  .main-content.full-width {
+    padding-right: 12px;
+  }
+  
+  .main-content.full-width .policy-search-container {
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   .form-actions-sticky {
@@ -381,9 +452,6 @@ body {
   }
 }
 
-/* ------------------------------ */
-/* ✅ 超小屏幕 <480 */
-/* ------------------------------ */
 @media (max-width: 480px) {
   .form-actions-sticky {
     justify-content: space-between;
